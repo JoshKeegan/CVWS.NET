@@ -19,7 +19,7 @@ namespace SharedHelpers
     public class ImageLoader
     {
         //Constants
-        private const string[] BITMAP_FILE_EXTENSIONS = { "bmp", "gif", "jpg", "jpeg", "exif", "png", "tiff" };
+        private static string[] BITMAP_FILE_EXTENSIONS = { "bmp", "gif", "jpg", "jpeg", "exif", "png", "tiff" };
 
         //Public Methods
         public static List<Bitmap> LoadAllImagesInSubdirs(string dirPath)
