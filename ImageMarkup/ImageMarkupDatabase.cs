@@ -114,7 +114,7 @@ namespace ImageMarkup
         }
 
         //Private Methods
-        private void loadDatabase()
+        private static void loadDatabase()
         {
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(XML_DOC_LOCATION);

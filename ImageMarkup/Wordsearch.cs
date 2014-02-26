@@ -15,7 +15,7 @@ using ImageMarkup.Exceptions;
 
 namespace ImageMarkup
 {
-    class Wordsearch
+    public class Wordsearch
     {
         //Private variables
 
