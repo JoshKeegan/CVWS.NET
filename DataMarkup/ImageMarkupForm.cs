@@ -35,6 +35,7 @@ namespace DataEntryGUI
         //Private vars
         private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
         private KeyValuePair<Bitmap, string> currentBitmap;
+        private Bitmap bitmapToShow;
         List<WordsearchImage> wordsearchImages; // For the images of word searches in the current image
 
         public ImageMarkupForm()
@@ -109,13 +110,16 @@ namespace DataEntryGUI
                 //Get the next image
                 currentBitmap = toProcess.Dequeue();
 
-                //Resize the picture box to the 
-                picBoxWordsearchImage.Image = currentBitmap.Key;
-
-                updateLblToProcessLength();
-
                 //Reset any variables specific to the previous image
                 wordsearchImages = new List<WordsearchImage>();
+
+                //Generate the Bitmap to be shown
+                bitmapToShow = drawWordsearchImagesOnCurrentWordsearch();
+
+                //Show the bitmap
+                picBoxWordsearchImage.Image = bitmapToShow;
+
+                updateLblToProcessLength();
 
                 //Reset all fields
                 resetFields();
@@ -263,7 +267,9 @@ namespace DataEntryGUI
                             //Reset the fields ready for the next WordsearchImage to be entered
                             resetWordsearchImageFields();
 
-                            //TODO: Draw all of the WordsearchImages for this Image onto the original bitmap and display it
+                            //Draw all of the WordsearchImages for this Image onto the original bitmap and display it
+                            bitmapToShow = drawWordsearchImagesOnCurrentWordsearch();
+                            picBoxWordsearchImage.Image = bitmapToShow;
                         }
                     }
                     else
@@ -311,6 +317,23 @@ namespace DataEntryGUI
             dataGridViewWordsearchImageMetaData.Rows.Clear();
         }
 
+        private Bitmap drawWordsearchImagesOnCurrentWordsearch()
+        {
+            Bitmap img = new Bitmap(currentBitmap.Key);
+
+            //Lock image for read write so we can alter it
+            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.ReadWrite, img.PixelFormat);
+
+            foreach(WordsearchImage wordsearchImage in wordsearchImages)
+            {
+                Drawing.Polygon(imgData, wordsearchImage.Coordinates.ToList(), Color.Red);
+            }
+
+            img.UnlockBits(imgData);
+            return img;
+        }
+
         private void drawRowsAndColsOnCurrentWordsearch()
         {
             //Get Rows & Cols
@@ -324,7 +347,7 @@ namespace DataEntryGUI
                 txtBottomRightX.Text != "" && txtBottomRightY.Text != "" &&
                 txtBottomLeftX.Text != "" && txtBottomLeftY.Text != "")
             {
-                Bitmap drawnOn = drawRowsAndColsOnImage(currentBitmap.Key, 
+                Bitmap drawnOn = drawRowsAndColsOnImage(bitmapToShow, 
                     getTopLeftCoordinate(), getTopRightCoordinate(), 
                     getBottomRightCoordinate(), getBottomLeftCoordinate(), 
                     rows, cols);
