@@ -68,6 +68,16 @@ namespace DataEntryGUI
             }
 
             updateLblToProcessLength();
+
+            //Add Event handlers to the coordinate Text Boxes
+            txtTopLeftX.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
+            txtTopLeftY.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
+            txtTopRightX.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
+            txtTopRightY.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
+            txtBottomRightX.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
+            txtBottomRightY.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
+            txtBottomLeftX.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
+            txtBottomLeftY.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
         }
 
         private void picBoxWordsearchImage_Click(object sender, EventArgs e)
@@ -147,10 +157,16 @@ namespace DataEntryGUI
 
         private void txtNumRows_TextChanged(object sender, EventArgs e)
         {
+            //Redraw the grid around the currend Wordsearch Image being entered with the newly modified data
             drawRowsAndColsOnCurrentWordsearch();
         }
 
         private void txtNumCols_TextChanged(object sender, EventArgs e)
+        {
+            drawRowsAndColsOnCurrentWordsearch();
+        }
+
+        private void txtCoordinates_TextChanges(object sender, EventArgs e)
         {
             drawRowsAndColsOnCurrentWordsearch();
         }
@@ -442,29 +458,33 @@ namespace DataEntryGUI
 
         private void drawRowsAndColsOnCurrentWordsearch()
         {
-            //Get Rows & Cols
-            uint rows, cols;
-            uint.TryParse(txtNumRows.Text, out rows);
-            uint.TryParse(txtNumCols.Text, out cols);
-
-            //Check we have all four coordinates of the wordsearch image
-            if(txtTopLeftX.Text != "" && txtTopLeftY.Text != "" &&
-                txtTopRightX.Text != "" && txtTopRightY.Text != "" &&
-                txtBottomRightX.Text != "" && txtBottomRightY.Text != "" &&
-                txtBottomLeftX.Text != "" && txtBottomLeftY.Text != "")
+            //If there is a currently loaded bitmap to draw on
+            if(bitmapToShow != null)
             {
-                Bitmap drawnOn = drawRowsAndColsOnImage(bitmapToShow, 
-                    getTopLeftCoordinate(), getTopRightCoordinate(), 
-                    getBottomRightCoordinate(), getBottomLeftCoordinate(), 
-                    rows, cols);
-                
-                //If this is a drawn on version  of the original image, dispose of it
-                if(bitmapToShow != picBoxWordsearchImage.Image)
-                {
-                    picBoxWordsearchImage.Image.Dispose();
-                }
+                //Get Rows & Cols
+                uint rows, cols;
+                uint.TryParse(txtNumRows.Text, out rows);
+                uint.TryParse(txtNumCols.Text, out cols);
 
-                picBoxWordsearchImage.Image = drawnOn;
+                //Check we have all four coordinates of the wordsearch image
+                if (txtTopLeftX.Text != "" && txtTopLeftY.Text != "" &&
+                    txtTopRightX.Text != "" && txtTopRightY.Text != "" &&
+                    txtBottomRightX.Text != "" && txtBottomRightY.Text != "" &&
+                    txtBottomLeftX.Text != "" && txtBottomLeftY.Text != "")
+                {
+                    Bitmap drawnOn = drawRowsAndColsOnImage(bitmapToShow,
+                        getTopLeftCoordinate(), getTopRightCoordinate(),
+                        getBottomRightCoordinate(), getBottomLeftCoordinate(),
+                        rows, cols);
+
+                    //If this is a drawn on version  of the original image, dispose of it
+                    if (bitmapToShow != picBoxWordsearchImage.Image)
+                    {
+                        picBoxWordsearchImage.Image.Dispose();
+                    }
+
+                    picBoxWordsearchImage.Image = drawnOn;
+                }
             }
         }
 
@@ -486,8 +506,15 @@ namespace DataEntryGUI
             BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
                 ImageLockMode.ReadWrite, img.PixelFormat);
 
+            //Draw the bounding box
+            List<IntPoint> points = new List<IntPoint>(4);
+            points.Add(topLeft);
+            points.Add(topRight);
+            points.Add(bottomRight);
+            points.Add(bottomLeft);
+            Drawing.Polygon(imgData, points, colour);
+
             //Draw Lines at regular intervals for rows
-            Drawing.Line(imgData, topLeft, topRight, colour);
             for(int i = 1; i <= rows; i++)
             {
                 int leftSideRowBottomX = (int)(((bottomLeft.X - topLeft.X) / (double)rows) * i + topLeft.X);
@@ -502,7 +529,6 @@ namespace DataEntryGUI
             }
 
             //Draw Lines at regular intervals for cols (same as rows, but rotate all of the points around -90 deg)
-            Drawing.Line(imgData, bottomLeft, topLeft, colour);
             for (int i = 1; i <= cols; i++)
             {
                 int bottomSideColRightX = (int)(((bottomRight.X - bottomLeft.X) / (double)cols) * i + bottomLeft.X);
