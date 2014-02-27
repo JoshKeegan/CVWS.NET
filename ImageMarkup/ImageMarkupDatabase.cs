@@ -3,6 +3,7 @@
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014
+ * Last Edit 27/02/2014
  */
 
 using System;
@@ -92,6 +93,19 @@ namespace ImageMarkup
             }
         }
 
+        public static bool ContainsImage(string hash)
+        {
+            //If the dataset has been loaded
+            if(images != null)
+            {
+                return images.ContainsKey(hash);
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
         public static Wordsearch GetWordsearch(string wordsearchId)
         {
             //If the dataset has been loaded
@@ -106,6 +120,19 @@ namespace ImageMarkup
                 {
                     throw new DataNotFoundException(String.Format("Wordsearch with ID \"{0}\" not found", wordsearchId));
                 }
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
+        public static bool ContainsWordsearch(string wordsearchId)
+        {
+            //If the dataset has been loaded
+            if (wordsearches != null)
+            {
+                return wordsearches.ContainsKey(wordsearchId);
             }
             else //Otherwise the data hasn't been loaded
             {
