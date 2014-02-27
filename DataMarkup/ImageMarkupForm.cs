@@ -33,6 +33,7 @@ namespace DataEntryGUI
         private const string RAW_IMAGE_DIR = "images";
 
         //Private vars
+        private string defaultLblToProcessLength;
         private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
         private KeyValuePair<Bitmap, string> currentBitmap;
         private Bitmap bitmapToShow = null;
@@ -41,6 +42,9 @@ namespace DataEntryGUI
         public ImageMarkupForm()
         {
             InitializeComponent();
+
+            //Store the lblToProcessLength default label so the number can be prepended
+            defaultLblToProcessLength = lblToPorcessLength.Text;
 
             //Load in the meta data for images that are already processed
             ImageMarkupDatabase.LoadDatabase();
@@ -389,7 +393,7 @@ namespace DataEntryGUI
          */
         private void updateLblToProcessLength()
         {
-            lblToPorcessLength.Text = toProcess.Count.ToString();
+            lblToPorcessLength.Text = toProcess.Count.ToString() + defaultLblToProcessLength;
         }
 
         private void resetFields()

@@ -73,9 +73,9 @@
             this.lblToPorcessLength.AutoSize = true;
             this.lblToPorcessLength.Location = new System.Drawing.Point(1504, 6);
             this.lblToPorcessLength.Name = "lblToPorcessLength";
-            this.lblToPorcessLength.Size = new System.Drawing.Size(64, 13);
+            this.lblToPorcessLength.Size = new System.Drawing.Size(97, 13);
             this.lblToPorcessLength.TabIndex = 1;
-            this.lblToPorcessLength.Text = " To Process";
+            this.lblToPorcessLength.Text = " Images to Process";
             // 
             // panel1
             // 
