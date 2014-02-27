@@ -210,7 +210,17 @@ namespace DataEntryGUI
                                     //Check the key isn't already taken
                                     if (!metaData.ContainsKey(key))
                                     {
-                                        string value = dataGridViewWordsearchImageMetaData.Rows[i].Cells[1].Value.ToString();
+                                        DataGridViewCell valueCell = dataGridViewWordsearchImageMetaData.Rows[i].Cells[1];
+                                        //Check that this has a value, if not make it empty
+                                        string value;
+                                        if(valueCell.Value == null)
+                                        {
+                                            value = "";
+                                        }
+                                        else
+                                        {
+                                            value = valueCell.Value.ToString();
+                                        }
 
                                         metaData.Add(key, value);
                                     }
