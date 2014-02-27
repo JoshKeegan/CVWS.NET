@@ -30,6 +30,7 @@ namespace DataEntryGUI
 
         //Private vars
         private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
+        private KeyValuePair<Bitmap, string> currentBitmap;
 
         public ImageMarkupGUI()
         {
@@ -55,11 +56,34 @@ namespace DataEntryGUI
                    processingQueueHashes.Add(bitmapHash);
                }
             }
+
+            updateLblToProcessLength();
         }
 
         private void picBoxWordsearchImage_Click(object sender, EventArgs e)
         {
             //TODO: Get the co-ords of the click & store them on this picture as wordsearch corner co-ords
+        }
+
+        private void btnNextImage_Click(object sender, EventArgs e)
+        {
+            //TODO: Save the markup on the current image
+
+            //Get the next image
+            currentBitmap = toProcess.Dequeue();
+
+            //Resize the picture box to the 
+            picBoxWordsearchImage.Image = currentBitmap.Key;
+
+            updateLblToProcessLength();
+        }
+
+        /*
+         * Private Helpers
+         */
+        private void updateLblToProcessLength()
+        {
+            lblToPorcessLength.Text = toProcess.Count.ToString();
         }
     }
 }
