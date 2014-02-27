@@ -382,6 +382,12 @@ namespace DataEntryGUI
 
                     ImageMarkup.Image image = new ImageMarkup.Image(path, hash, wordsearchImages.ToArray(), metaData);
 
+                    //If this image is already in the database, remove it
+                    if(ImageMarkupDatabase.ContainsImage(hash))
+                    {
+                        ImageMarkupDatabase.RemoveImage(hash);
+                    }
+
                     //Store the Image object in the database and write it out
                     ImageMarkupDatabase.AddImage(hash, image);
                     ImageMarkupDatabase.WriteDatabase();

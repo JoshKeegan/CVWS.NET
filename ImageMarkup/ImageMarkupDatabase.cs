@@ -133,6 +133,32 @@ namespace ImageMarkup
             }
         }
 
+        public static void RemoveImage(string hash)
+        {
+            //If the dataset has been loaded
+            if(images != null)
+            {
+                images.Remove(hash);
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
+        public static void AddWordsearch(string wordsearchId, Wordsearch wordsearch)
+        {
+            //If the dataset has been loaded
+            if(wordsearches != null)
+            {
+                wordsearches.Add(wordsearchId, wordsearch);
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
         public static Wordsearch GetWordsearch(string wordsearchId)
         {
             //If the dataset has been loaded
@@ -160,6 +186,19 @@ namespace ImageMarkup
             if (wordsearches != null)
             {
                 return wordsearches.ContainsKey(wordsearchId);
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
+        public static void RemoveWordsearch(string wordsearchId)
+        {
+            //If the dataset has been loaded
+            if(wordsearches != null)
+            {
+                wordsearches.Remove(wordsearchId);
             }
             else //Otherwise the data hasn't been loaded
             {
