@@ -113,6 +113,12 @@ namespace DataEntryGUI
                 picBoxWordsearchImage.Image = currentBitmap.Key;
 
                 updateLblToProcessLength();
+
+                //Reset any variables specific to the previous image
+                wordsearchImages = new List<WordsearchImage>();
+
+                //Reset all fields
+                resetFields();
             }
             else //Otherwise there are no more images to be processed
             {
@@ -133,7 +139,133 @@ namespace DataEntryGUI
 
         private void btnAddWordsearchImage_Click(object sender, EventArgs e)
         {
+            //Check that we currently have an image on screen
+            bool showingBitmap = !currentBitmap.Equals(default(KeyValuePair<Bitmap, string>));
 
+            if(showingBitmap)
+            {
+                //Fetch all of the data for the Wordsearch Image & Validate it
+
+                //Coordinates
+                IntPoint topLeft = new IntPoint(); //Must have defaults to compile
+                IntPoint topRight = new IntPoint();
+                IntPoint bottomRight = new IntPoint();
+                IntPoint bottomLeft = new IntPoint();
+                bool validCoords = false;
+                try
+                {
+                    topLeft = getTopLeftCoordinate();
+                    topRight = getTopRightCoordinate();
+                    bottomRight = getBottomRightCoordinate();
+                    bottomLeft = getBottomLeftCoordinate();
+
+                    //Check that the values we have received are in bounds
+                    IntPoint[] coords = new IntPoint[4];
+                    coords[0] = topLeft; //Winding Order: Clockwise starting in top left
+                    coords[1] = topRight;
+                    coords[2] = bottomRight;
+                    coords[3] = bottomLeft;
+
+                    foreach (IntPoint p in coords)
+                    {
+                        if (p.X < 0 || p.Y < 0 ||
+                            p.X >= currentBitmap.Key.Width || p.Y >= currentBitmap.Key.Height)
+                        {
+                            throw new Exception("Point outside of Bitmap Bounds");
+                        }
+                    }
+
+                    validCoords = true;
+                }
+                catch
+                {
+                    MessageBox.Show("Error parsing coordinates: please correct them and try again");
+                }
+
+                //If the coordinates are valid, get the next lot of data
+                if (validCoords)
+                {
+                    //Num rows & cols
+                    uint rows, cols;
+                    bool parsedRows = uint.TryParse(txtNumRows.Text, out rows);
+                    bool parsedCols = uint.TryParse(txtNumCols.Text, out cols);
+                    bool validRowsAndCols = parsedRows && parsedCols && rows != 0 && cols != 0;
+
+                    if (validRowsAndCols)
+                    {
+                        //Meta Data
+                        Dictionary<string, string> metaData = new Dictionary<string, string>();
+                        bool validMetaData = true;
+                        for (int i = 0; i < dataGridViewWordsearchImageMetaData.Rows.Count; i++)
+                        {
+                            DataGridViewCell keyCell = dataGridViewWordsearchImageMetaData.Rows[i].Cells[0];
+                            //If this cell has a value (i.e. is not the blank cell auto-inserted at the end)
+                            if (keyCell.Value != null)
+                            {
+                                string key = keyCell.Value.ToString().Trim();
+
+                                //Check the key isn't blank
+                                if (key != "")
+                                {
+                                    //Check the key isn't already taken
+                                    if (!metaData.ContainsKey(key))
+                                    {
+                                        string value = dataGridViewWordsearchImageMetaData.Rows[i].Cells[1].Value.ToString();
+
+                                        metaData.Add(key, value);
+                                    }
+                                    else
+                                    {
+                                        validMetaData = false;
+                                        MessageBox.Show("Invalid Meta Data: You cannot use the same key twice (" + key + ")");
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    validMetaData = false;
+                                    MessageBox.Show("Invalid Meta Data: You cannot have a blank Key");
+                                    break;
+                                }
+                            }
+                        }
+
+                        //If the Meta Data is valid, we have everything necessary to make a WordsearchImage
+                        if (validMetaData)
+                        {
+                            //Make a WordsearchImage
+                            string fromImageHash = currentBitmap.Value;
+
+                            WordsearchImage wordsearchImage;
+
+                            //Check for optional field Wordsearch ID
+                            string wordsearchId = txtWordsearchId.Text.Trim();
+                            if (wordsearchId != "")
+                            {
+                                wordsearchImage = new WordsearchImage(topLeft, topRight, bottomRight, bottomLeft, rows, cols, metaData, fromImageHash, wordsearchId);
+                            }
+                            else //Otherwise the optional Wordsearch ID field hasn't been filled in
+                            {
+                                wordsearchImage = new WordsearchImage(topLeft, topRight, bottomRight, bottomLeft, rows, cols, metaData, fromImageHash);
+                            }
+                            wordsearchImages.Add(wordsearchImage);
+
+                            //Reset the fields ready for the next WordsearchImage to be entered
+                            resetWordsearchImageFields();
+
+                            //TODO: Draw all of the WordsearchImages for this Image onto the original bitmap and display it
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error parsing number of rows and cols: please correct them and try again");
+                    }
+                }
+            }
+            else //Otherwise we aren't showing a bitmap
+            {
+                MessageBox.Show("No Image currently on screen to add a Word search Image to");
+            }
         }
 
         /*
@@ -142,6 +274,31 @@ namespace DataEntryGUI
         private void updateLblToProcessLength()
         {
             lblToPorcessLength.Text = toProcess.Count.ToString();
+        }
+
+        private void resetFields()
+        {
+            //TODO: Reset Image Fields
+
+            resetWordsearchImageFields();
+        }
+
+        private void resetWordsearchImageFields()
+        {
+            txtTopLeftX.Text = "";
+            txtTopLeftY.Text = "";
+            txtTopRightX.Text = "";
+            txtTopRightY.Text = "";
+            txtBottomRightX.Text = "";
+            txtBottomRightY.Text = "";
+            txtBottomLeftX.Text = "";
+            txtBottomLeftY.Text = "";
+
+            txtNumRows.Text = "";
+            txtNumCols.Text = "";
+            txtWordsearchId.Text = "";
+
+            dataGridViewWordsearchImageMetaData.Rows.Clear();
         }
 
         private void drawRowsAndColsOnCurrentWordsearch()

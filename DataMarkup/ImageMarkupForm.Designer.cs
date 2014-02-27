@@ -52,8 +52,14 @@
             this.txtNumCols = new System.Windows.Forms.TextBox();
             this.lblWordsearchId = new System.Windows.Forms.Label();
             this.txtWordsearchId = new System.Windows.Forms.TextBox();
+            this.dataGridViewWordsearchImageMetaData = new System.Windows.Forms.DataGridView();
+            this.wordsearchImageMetaDataColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.wordsearchImageMetaDataColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lblWordsearchImageMetaData = new System.Windows.Forms.Label();
+            this.lblWordsearchImageData = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImage)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWordsearchImageMetaData)).BeginInit();
             this.SuspendLayout();
             // 
             // picBoxWordsearchImage
@@ -97,7 +103,7 @@
             // 
             // btnAddWordsearchImage
             // 
-            this.btnAddWordsearchImage.Location = new System.Drawing.Point(1507, 783);
+            this.btnAddWordsearchImage.Location = new System.Drawing.Point(1808, 900);
             this.btnAddWordsearchImage.Name = "btnAddWordsearchImage";
             this.btnAddWordsearchImage.Size = new System.Drawing.Size(75, 48);
             this.btnAddWordsearchImage.TabIndex = 4;
@@ -108,7 +114,7 @@
             // lblTopLeft
             // 
             this.lblTopLeft.AutoSize = true;
-            this.lblTopLeft.Location = new System.Drawing.Point(1507, 495);
+            this.lblTopLeft.Location = new System.Drawing.Point(1507, 552);
             this.lblTopLeft.Name = "lblTopLeft";
             this.lblTopLeft.Size = new System.Drawing.Size(50, 13);
             this.lblTopLeft.TabIndex = 6;
@@ -117,7 +123,7 @@
             // lblCoordinates
             // 
             this.lblCoordinates.AutoSize = true;
-            this.lblCoordinates.Location = new System.Drawing.Point(1507, 473);
+            this.lblCoordinates.Location = new System.Drawing.Point(1507, 530);
             this.lblCoordinates.Name = "lblCoordinates";
             this.lblCoordinates.Size = new System.Drawing.Size(66, 13);
             this.lblCoordinates.TabIndex = 7;
@@ -125,28 +131,28 @@
             // 
             // txtTopLeftX
             // 
-            this.txtTopLeftX.Location = new System.Drawing.Point(1580, 492);
+            this.txtTopLeftX.Location = new System.Drawing.Point(1580, 549);
             this.txtTopLeftX.Name = "txtTopLeftX";
             this.txtTopLeftX.Size = new System.Drawing.Size(32, 20);
             this.txtTopLeftX.TabIndex = 8;
             // 
             // txtTopLeftY
             // 
-            this.txtTopLeftY.Location = new System.Drawing.Point(1618, 492);
+            this.txtTopLeftY.Location = new System.Drawing.Point(1618, 549);
             this.txtTopLeftY.Name = "txtTopLeftY";
             this.txtTopLeftY.Size = new System.Drawing.Size(32, 20);
             this.txtTopLeftY.TabIndex = 9;
             // 
             // txtTopRightY
             // 
-            this.txtTopRightY.Location = new System.Drawing.Point(1618, 518);
+            this.txtTopRightY.Location = new System.Drawing.Point(1618, 575);
             this.txtTopRightY.Name = "txtTopRightY";
             this.txtTopRightY.Size = new System.Drawing.Size(32, 20);
             this.txtTopRightY.TabIndex = 12;
             // 
             // txtTopRightX
             // 
-            this.txtTopRightX.Location = new System.Drawing.Point(1580, 518);
+            this.txtTopRightX.Location = new System.Drawing.Point(1580, 575);
             this.txtTopRightX.Name = "txtTopRightX";
             this.txtTopRightX.Size = new System.Drawing.Size(32, 20);
             this.txtTopRightX.TabIndex = 11;
@@ -154,7 +160,7 @@
             // lblTopRight
             // 
             this.lblTopRight.AutoSize = true;
-            this.lblTopRight.Location = new System.Drawing.Point(1507, 521);
+            this.lblTopRight.Location = new System.Drawing.Point(1507, 578);
             this.lblTopRight.Name = "lblTopRight";
             this.lblTopRight.Size = new System.Drawing.Size(57, 13);
             this.lblTopRight.TabIndex = 10;
@@ -162,14 +168,14 @@
             // 
             // txtBottomRightY
             // 
-            this.txtBottomRightY.Location = new System.Drawing.Point(1618, 544);
+            this.txtBottomRightY.Location = new System.Drawing.Point(1618, 601);
             this.txtBottomRightY.Name = "txtBottomRightY";
             this.txtBottomRightY.Size = new System.Drawing.Size(32, 20);
             this.txtBottomRightY.TabIndex = 15;
             // 
             // txtBottomRightX
             // 
-            this.txtBottomRightX.Location = new System.Drawing.Point(1580, 544);
+            this.txtBottomRightX.Location = new System.Drawing.Point(1580, 601);
             this.txtBottomRightX.Name = "txtBottomRightX";
             this.txtBottomRightX.Size = new System.Drawing.Size(32, 20);
             this.txtBottomRightX.TabIndex = 14;
@@ -177,7 +183,7 @@
             // lblBottomRight
             // 
             this.lblBottomRight.AutoSize = true;
-            this.lblBottomRight.Location = new System.Drawing.Point(1507, 547);
+            this.lblBottomRight.Location = new System.Drawing.Point(1507, 604);
             this.lblBottomRight.Name = "lblBottomRight";
             this.lblBottomRight.Size = new System.Drawing.Size(71, 13);
             this.lblBottomRight.TabIndex = 13;
@@ -185,14 +191,14 @@
             // 
             // txtBottomLeftY
             // 
-            this.txtBottomLeftY.Location = new System.Drawing.Point(1618, 570);
+            this.txtBottomLeftY.Location = new System.Drawing.Point(1618, 627);
             this.txtBottomLeftY.Name = "txtBottomLeftY";
             this.txtBottomLeftY.Size = new System.Drawing.Size(32, 20);
             this.txtBottomLeftY.TabIndex = 18;
             // 
             // txtBottomLeftX
             // 
-            this.txtBottomLeftX.Location = new System.Drawing.Point(1580, 570);
+            this.txtBottomLeftX.Location = new System.Drawing.Point(1580, 627);
             this.txtBottomLeftX.Name = "txtBottomLeftX";
             this.txtBottomLeftX.Size = new System.Drawing.Size(32, 20);
             this.txtBottomLeftX.TabIndex = 17;
@@ -200,7 +206,7 @@
             // lblBottomLeft
             // 
             this.lblBottomLeft.AutoSize = true;
-            this.lblBottomLeft.Location = new System.Drawing.Point(1507, 573);
+            this.lblBottomLeft.Location = new System.Drawing.Point(1507, 630);
             this.lblBottomLeft.Name = "lblBottomLeft";
             this.lblBottomLeft.Size = new System.Drawing.Size(64, 13);
             this.lblBottomLeft.TabIndex = 16;
@@ -209,7 +215,7 @@
             // lblNumRows
             // 
             this.lblNumRows.AutoSize = true;
-            this.lblNumRows.Location = new System.Drawing.Point(1513, 615);
+            this.lblNumRows.Location = new System.Drawing.Point(1513, 656);
             this.lblNumRows.Name = "lblNumRows";
             this.lblNumRows.Size = new System.Drawing.Size(37, 13);
             this.lblNumRows.TabIndex = 19;
@@ -218,7 +224,7 @@
             // lblNumCols
             // 
             this.lblNumCols.AutoSize = true;
-            this.lblNumCols.Location = new System.Drawing.Point(1513, 641);
+            this.lblNumCols.Location = new System.Drawing.Point(1513, 682);
             this.lblNumCols.Name = "lblNumCols";
             this.lblNumCols.Size = new System.Drawing.Size(50, 13);
             this.lblNumCols.TabIndex = 20;
@@ -226,7 +232,7 @@
             // 
             // txtNumRows
             // 
-            this.txtNumRows.Location = new System.Drawing.Point(1580, 612);
+            this.txtNumRows.Location = new System.Drawing.Point(1580, 653);
             this.txtNumRows.Name = "txtNumRows";
             this.txtNumRows.Size = new System.Drawing.Size(32, 20);
             this.txtNumRows.TabIndex = 21;
@@ -234,7 +240,7 @@
             // 
             // txtNumCols
             // 
-            this.txtNumCols.Location = new System.Drawing.Point(1580, 638);
+            this.txtNumCols.Location = new System.Drawing.Point(1580, 679);
             this.txtNumCols.Name = "txtNumCols";
             this.txtNumCols.Size = new System.Drawing.Size(32, 20);
             this.txtNumCols.TabIndex = 22;
@@ -243,7 +249,7 @@
             // lblWordsearchId
             // 
             this.lblWordsearchId.AutoSize = true;
-            this.lblWordsearchId.Location = new System.Drawing.Point(1527, 693);
+            this.lblWordsearchId.Location = new System.Drawing.Point(1507, 708);
             this.lblWordsearchId.Name = "lblWordsearchId";
             this.lblWordsearchId.Size = new System.Drawing.Size(85, 13);
             this.lblWordsearchId.TabIndex = 23;
@@ -251,16 +257,60 @@
             // 
             // txtWordsearchId
             // 
-            this.txtWordsearchId.Location = new System.Drawing.Point(1618, 690);
+            this.txtWordsearchId.Location = new System.Drawing.Point(1598, 705);
             this.txtWordsearchId.Name = "txtWordsearchId";
             this.txtWordsearchId.Size = new System.Drawing.Size(100, 20);
             this.txtWordsearchId.TabIndex = 24;
+            // 
+            // dataGridViewWordsearchImageMetaData
+            // 
+            this.dataGridViewWordsearchImageMetaData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewWordsearchImageMetaData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.wordsearchImageMetaDataColName,
+            this.wordsearchImageMetaDataColValue});
+            this.dataGridViewWordsearchImageMetaData.Location = new System.Drawing.Point(1507, 748);
+            this.dataGridViewWordsearchImageMetaData.Name = "dataGridViewWordsearchImageMetaData";
+            this.dataGridViewWordsearchImageMetaData.Size = new System.Drawing.Size(376, 146);
+            this.dataGridViewWordsearchImageMetaData.TabIndex = 25;
+            // 
+            // wordsearchImageMetaDataColName
+            // 
+            this.wordsearchImageMetaDataColName.HeaderText = "Name";
+            this.wordsearchImageMetaDataColName.Name = "wordsearchImageMetaDataColName";
+            // 
+            // wordsearchImageMetaDataColValue
+            // 
+            this.wordsearchImageMetaDataColValue.HeaderText = "Value";
+            this.wordsearchImageMetaDataColValue.Name = "wordsearchImageMetaDataColValue";
+            this.wordsearchImageMetaDataColValue.Width = 230;
+            // 
+            // lblWordsearchImageMetaData
+            // 
+            this.lblWordsearchImageMetaData.AutoSize = true;
+            this.lblWordsearchImageMetaData.Location = new System.Drawing.Point(1507, 732);
+            this.lblWordsearchImageMetaData.Name = "lblWordsearchImageMetaData";
+            this.lblWordsearchImageMetaData.Size = new System.Drawing.Size(52, 13);
+            this.lblWordsearchImageMetaData.TabIndex = 26;
+            this.lblWordsearchImageMetaData.Text = "Metadata";
+            // 
+            // lblWordsearchImageData
+            // 
+            this.lblWordsearchImageData.AutoSize = true;
+            this.lblWordsearchImageData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWordsearchImageData.Location = new System.Drawing.Point(1504, 513);
+            this.lblWordsearchImageData.Name = "lblWordsearchImageData";
+            this.lblWordsearchImageData.Size = new System.Drawing.Size(165, 17);
+            this.lblWordsearchImageData.TabIndex = 27;
+            this.lblWordsearchImageData.Text = "Word search Image Data";
             // 
             // ImageMarkupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 952);
+            this.Controls.Add(this.lblWordsearchImageData);
+            this.Controls.Add(this.lblWordsearchImageMetaData);
+            this.Controls.Add(this.dataGridViewWordsearchImageMetaData);
             this.Controls.Add(this.txtWordsearchId);
             this.Controls.Add(this.lblWordsearchId);
             this.Controls.Add(this.txtNumCols);
@@ -289,6 +339,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImage)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWordsearchImageMetaData)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -320,6 +371,11 @@
         private System.Windows.Forms.TextBox txtNumCols;
         private System.Windows.Forms.Label lblWordsearchId;
         private System.Windows.Forms.TextBox txtWordsearchId;
+        private System.Windows.Forms.DataGridView dataGridViewWordsearchImageMetaData;
+        private System.Windows.Forms.Label lblWordsearchImageMetaData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn wordsearchImageMetaDataColName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn wordsearchImageMetaDataColValue;
+        private System.Windows.Forms.Label lblWordsearchImageData;
     }
 }
 
