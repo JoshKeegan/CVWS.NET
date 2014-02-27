@@ -65,6 +65,10 @@ namespace DataEntryGUI
                    toProcess.Enqueue(new KeyValuePair<Bitmap, string>(b, bitmapHash));
                    processingQueueHashes.Add(bitmapHash);
                }
+               else //Otherwise we don't need this Bitmap any more, dispose of it
+               {
+                   b.Dispose();
+               }
             }
 
             updateLblToProcessLength();
