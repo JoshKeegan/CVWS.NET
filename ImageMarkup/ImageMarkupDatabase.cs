@@ -366,7 +366,7 @@ namespace ImageMarkup
                     //Write the Wordsearch Image to XML doc
                     writer.WriteStartElement(XML_WORDSEARCH_IMAGE_EL);
 
-                    writer.WriteElementString(XML_WORDSEARCH_IMAGE_COORDINATES_EL, String.Format("({0},{1}),({2},{3}),({4},{5}),({6},{7})", 
+                    writer.WriteElementString(XML_WORDSEARCH_IMAGE_COORDINATES_EL, String.Format("({0},{1}).({2},{3}).({4},{5}).({6},{7})", 
                         wordsearchImage.TopLeft.X, wordsearchImage.TopLeft.Y, wordsearchImage.TopRight.X, wordsearchImage.TopRight.Y, 
                         wordsearchImage.BottomRight.X, wordsearchImage.BottomRight.Y, wordsearchImage.BottomLeft.X, 
                         wordsearchImage.BottomLeft.Y));
