@@ -1,1 +1,2 @@
 right.png: Freeware image by PixelMixer, available at http://findicons.com/icon/2953/right?id=387091
+save.png: GNU/GPL image by GNOME icon artists, available at http://findicons.com/icon/67049/gnome_media_floppy?id=356312

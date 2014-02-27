@@ -302,6 +302,15 @@ namespace DataEntryGUI
             }
         }
 
+        private void btnSaveImageMetaData_Click(object sender, EventArgs e)
+        {
+            //TODO: Validate all of the data
+
+            //TODO: Make an Image object
+
+            //TODO: Store the Image object in the database and write it out
+        }
+
         /*
          * Private Helpers
          */
