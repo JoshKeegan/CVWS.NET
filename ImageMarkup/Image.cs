@@ -3,6 +3,7 @@
  * Image Markup
  * Image class
  * By Josh Keegan 26/02/2014
+ * Last Edit 27/02/2014
  */
 
 using System;
@@ -25,6 +26,8 @@ namespace ImageMarkup
         public WordsearchImage[] WordsearchImages { get; private set; }
         public Dictionary<string, string> MetaData { get; private set; }
 
+        //TODO: Consider the GC implications of holding onto an object that should be disposed of
+        //Provides a place for memory leaks to happen later
         public Bitmap Bitmap
         {
             get
