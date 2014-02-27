@@ -112,8 +112,6 @@ namespace DataEntryGUI
                 currentBitmap.Key.Dispose();
             }
 
-            //TODO: Save the markup on the current image (if we have just processed one)
-
             //If there is another image to get
             if(toProcess.Count > 0)
             {
@@ -398,9 +396,13 @@ namespace DataEntryGUI
 
         private void resetFields()
         {
-            //TODO: Reset Image Fields
-
+            resetImageFields();
             resetWordsearchImageFields();
+        }
+
+        private void resetImageFields()
+        {
+            dataGridViewImageMetaData.Rows.Clear();
         }
 
         private void resetWordsearchImageFields()
