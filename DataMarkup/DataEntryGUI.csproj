@@ -44,16 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageMarkupGUI.cs">
+    <Compile Include="ImageMarkupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ImageMarkupGUI.Designer.cs">
-      <DependentUpon>ImageMarkupGUI.cs</DependentUpon>
+    <Compile Include="ImageMarkupForm.Designer.cs">
+      <DependentUpon>ImageMarkupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ImageMarkupGUI.resx">
-      <DependentUpon>ImageMarkupGUI.cs</DependentUpon>
+    <EmbeddedResource Include="ImageMarkupForm.resx">
+      <DependentUpon>ImageMarkupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

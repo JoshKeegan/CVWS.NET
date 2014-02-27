@@ -23,7 +23,7 @@ using BaseObjectExtensions;
 
 namespace DataEntryGUI
 {
-    public partial class ImageMarkupGUI : Form
+    public partial class ImageMarkupForm : Form
     {
         //Constants
         private const string RAW_IMAGE_DIR = "images";
@@ -32,7 +32,7 @@ namespace DataEntryGUI
         private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
         private KeyValuePair<Bitmap, string> currentBitmap;
 
-        public ImageMarkupGUI()
+        public ImageMarkupForm()
         {
             InitializeComponent();
 

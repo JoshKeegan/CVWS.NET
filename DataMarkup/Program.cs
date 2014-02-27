@@ -16,7 +16,7 @@ namespace DataEntryGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ImageMarkupGUI());
+            Application.Run(new ImageMarkupForm());
         }
     }
 }
