@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageMarkup", "ImageMarkup\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedHelpers", "SharedHelpers\SharedHelpers.csproj", "{44618447-37EB-494F-BFD0-8DB453543E80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseObjectExtensions", "BaseObjectExtensions\BaseObjectExtensions.csproj", "{6FC68F2C-22B6-4909-895A-4C845B761422}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{44618447-37EB-494F-BFD0-8DB453543E80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44618447-37EB-494F-BFD0-8DB453543E80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44618447-37EB-494F-BFD0-8DB453543E80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FC68F2C-22B6-4909-895A-4C845B761422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FC68F2C-22B6-4909-895A-4C845B761422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FC68F2C-22B6-4909-895A-4C845B761422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FC68F2C-22B6-4909-895A-4C845B761422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

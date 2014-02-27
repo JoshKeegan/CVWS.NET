@@ -3,6 +3,7 @@
  * Data Markup
  * Main Form Class - Main GUI Window
  * By Josh Keegan 26/02/2014
+ * Last Edit 27/02/2014
  */
 
 using System;
@@ -18,6 +19,7 @@ using System.Windows.Forms;
 
 using ImageMarkup;
 using SharedHelpers;
+using BaseObjectExtensions;
 
 namespace DataMarkup
 {
@@ -27,7 +29,7 @@ namespace DataMarkup
         private const string RAW_IMAGE_DIR = "images";
 
         //Private vars
-        private Queue<Bitmap> toProcess;
+        private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
 
         public MainForm()
         {
@@ -38,7 +40,21 @@ namespace DataMarkup
 
             //Load in the raw images to process
             List<Bitmap> bitmaps = ImageLoader.LoadAllImagesInSubdirs(RAW_IMAGE_DIR);
-            toProcess = new Queue<Bitmap>(bitmaps);
+            toProcess = new Queue<KeyValuePair<Bitmap, string>>();
+
+            //Do not Load Bitmaps that we already have data for
+            HashSet<string> processingQueueHashes = new HashSet<string>();
+            foreach(Bitmap b in bitmaps)
+            {
+                string bitmapHash = b.GetDataHashCode();
+
+                //Only add this Bitmap to the processing queue if we don't already hold any data on it (in the dataset or on the processing queue)
+               if(!ImageMarkupDatabase.ContainsImage(bitmapHash) && !processingQueueHashes.Contains(bitmapHash))
+               {
+                   toProcess.Enqueue(new KeyValuePair<Bitmap, string>(b, bitmapHash));
+                   processingQueueHashes.Add(bitmapHash);
+               }
+            }
         }
 
         private void picBoxWordsearchImage_Click(object sender, EventArgs e)

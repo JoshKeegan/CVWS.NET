@@ -58,7 +58,7 @@ namespace ImageMarkup
             //Check if we have a file for the database
             if (File.Exists(XML_DOC_LOCATION))
             {
-
+                loadDatabase();
             }
             else //Otherwise the file doesn't exist, make a blank database
             {
@@ -68,6 +68,19 @@ namespace ImageMarkup
 
                 //Write the database to file
                 writeDatabase();
+            }
+        }
+
+        public static void WriteDatabase()
+        {
+            //If the dataset has been loaded
+            if(images != null && wordsearches != null)
+            {
+                writeDatabase();
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
             }
         }
 
