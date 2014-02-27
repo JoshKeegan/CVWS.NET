@@ -35,7 +35,7 @@ namespace DataEntryGUI
         //Private vars
         private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
         private KeyValuePair<Bitmap, string> currentBitmap;
-        private Bitmap bitmapToShow;
+        private Bitmap bitmapToShow = null;
         List<WordsearchImage> wordsearchImages; // For the images of word searches in the current image
 
         public ImageMarkupForm()
@@ -102,6 +102,12 @@ namespace DataEntryGUI
 
         private void btnNextImage_Click(object sender, EventArgs e)
         {
+            //If there is a Bitmap to dispose of, dispose of the current Bitmap
+            if(!currentBitmap.Equals(default(KeyValuePair<Bitmap, string>)))
+            {
+                currentBitmap.Key.Dispose();
+            }
+
             //TODO: Save the markup on the current image (if we have just processed one)
 
             //If there is another image to get
@@ -112,6 +118,12 @@ namespace DataEntryGUI
 
                 //Reset any variables specific to the previous image
                 wordsearchImages = new List<WordsearchImage>();
+
+                //If there is a bitmapToShow to be disposed of, dispose of it
+                if(bitmapToShow != null)
+                {
+                    bitmapToShow.Dispose();
+                }
 
                 //Generate the Bitmap to be shown
                 bitmapToShow = drawWordsearchImagesOnCurrentWordsearch();
@@ -267,6 +279,12 @@ namespace DataEntryGUI
                             //Reset the fields ready for the next WordsearchImage to be entered
                             resetWordsearchImageFields();
 
+                            //If the image being displayed isn't being used elsewhere, dispose of it
+                            if(bitmapToShow != picBoxWordsearchImage.Image)
+                            {
+                                picBoxWordsearchImage.Image.Dispose();
+                            }
+
                             //Draw all of the WordsearchImages for this Image onto the original bitmap and display it
                             bitmapToShow = drawWordsearchImagesOnCurrentWordsearch();
                             picBoxWordsearchImage.Image = bitmapToShow;
@@ -351,6 +369,13 @@ namespace DataEntryGUI
                     getTopLeftCoordinate(), getTopRightCoordinate(), 
                     getBottomRightCoordinate(), getBottomLeftCoordinate(), 
                     rows, cols);
+                
+                //If this is a drawn on version  of the original image, dispose of it
+                if(bitmapToShow != picBoxWordsearchImage.Image)
+                {
+                    picBoxWordsearchImage.Image.Dispose();
+                }
+
                 picBoxWordsearchImage.Image = drawnOn;
             }
         }
