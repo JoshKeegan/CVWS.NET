@@ -1,6 +1,6 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
- * Data Markup
+ * Data Entry GUI
  * Main Form Class - Main GUI Window
  * By Josh Keegan 26/02/2014
  * Last Edit 27/02/2014
@@ -21,9 +21,9 @@ using ImageMarkup;
 using SharedHelpers;
 using BaseObjectExtensions;
 
-namespace DataMarkup
+namespace DataEntryGUI
 {
-    public partial class MainForm : Form
+    public partial class ImageMarkupGUI : Form
     {
         //Constants
         private const string RAW_IMAGE_DIR = "images";
@@ -31,7 +31,7 @@ namespace DataMarkup
         //Private vars
         private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
 
-        public MainForm()
+        public ImageMarkupGUI()
         {
             InitializeComponent();
 

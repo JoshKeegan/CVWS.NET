@@ -1,6 +1,6 @@
-﻿namespace DataMarkup
+﻿namespace DataEntryGUI
 {
-    partial class MainForm
+    partial class ImageMarkupGUI
     {
         /// <summary>
         /// Required designer variable.
