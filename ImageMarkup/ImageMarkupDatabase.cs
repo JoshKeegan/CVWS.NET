@@ -84,6 +84,20 @@ namespace ImageMarkup
             }
         }
 
+        public static void AddImage(string hash, Image image)
+        {
+            //If the dataset has been loaded
+            if (images != null)
+            {
+                images.Add(hash, image);
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+
+        }
+
         public static Image GetImage(string hash)
         {
             //If the dataset has been loaded

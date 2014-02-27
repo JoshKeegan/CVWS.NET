@@ -240,14 +240,14 @@ namespace DataEntryGUI
 
                                         metaData.Add(key, value);
                                     }
-                                    else
+                                    else //Otherwise the key is already taken
                                     {
                                         validMetaData = false;
                                         MessageBox.Show("Invalid Meta Data: You cannot use the same key twice (" + key + ")");
                                         break;
                                     }
                                 }
-                                else
+                                else //Otherwise the key is blank
                                 {
                                     validMetaData = false;
                                     MessageBox.Show("Invalid Meta Data: You cannot have a blank Key");
@@ -304,11 +304,84 @@ namespace DataEntryGUI
 
         private void btnSaveImageMetaData_Click(object sender, EventArgs e)
         {
-            //TODO: Validate all of the data
+            //Check that we currently have an image on screen
+            bool showingBitmap = !currentBitmap.Equals(default(KeyValuePair<Bitmap, string>));
 
-            //TODO: Make an Image object
+            if(showingBitmap)
+            {
+                //Validate all of the data
+                Dictionary<string, string> metaData = new Dictionary<string, string>();
+                bool validMetaData = true;
+                for (int i = 0; i < dataGridViewImageMetaData.Rows.Count; i++)
+                {
+                    DataGridViewCell keyCell = dataGridViewImageMetaData.Rows[i].Cells[0];
+                    //If this cell has a value (i.e. is not the blank cell auto-inserted at the end)
+                    if (keyCell.Value != null)
+                    {
+                        string key = keyCell.Value.ToString().Trim();
 
-            //TODO: Store the Image object in the database and write it out
+                        //Check the key isn't blank
+                        if (key != "")
+                        {
+                            //Check the key isn't already taken
+                            if (!metaData.ContainsKey(key))
+                            {
+                                DataGridViewCell valueCell = dataGridViewImageMetaData.Rows[i].Cells[1];
+                                //Check that this cell has a value, if not make it empty
+                                string value;
+                                if (valueCell.Value == null)
+                                {
+                                    value = "";
+                                }
+                                else
+                                {
+                                    value = valueCell.Value.ToString();
+                                }
+
+                                metaData.Add(key, value);
+                            }
+                            else //Otherwise the key is already taken
+                            {
+                                validMetaData = false;
+                                MessageBox.Show("Invalid Meta Data: You cannot use the same key twice (" + key + ")");
+                                break;
+                            }
+                        }
+                        else //Otherwise the key is blank
+                        {
+                            validMetaData = false;
+                            MessageBox.Show("Invalid Meta Data: You cannot have a blank key");
+                            break;
+                        }
+                    }
+                }
+
+                if (validMetaData)
+                {
+                    //Get the values we already have stored and don't need to be validated (as they aren't from the user)
+                    string path = currentBitmap.Key.Tag as string;
+                    string hash = currentBitmap.Value;
+
+                    ImageMarkup.Image image = new ImageMarkup.Image(path, hash, wordsearchImages.ToArray(), metaData);
+
+                    //Store the Image object in the database and write it out
+                    ImageMarkupDatabase.AddImage(hash, image);
+                    ImageMarkupDatabase.WriteDatabase();
+
+                    //Show the image of the data that's just been written (so as to avoid the possibility of people forgetting to add the last WordsearchImage)
+
+                    //If the image currently being displayed won't be used elsewhere, the dispose of it
+                    if (picBoxWordsearchImage.Image != bitmapToShow)
+                    {
+                        picBoxWordsearchImage.Image.Dispose();
+                    }
+                    picBoxWordsearchImage.Image = bitmapToShow;
+                }
+            }
+            else //Otherwise we aren't showing a bitmap
+            {
+                MessageBox.Show("No Image currently on screen to save data for");
+            }
         }
 
         /*
