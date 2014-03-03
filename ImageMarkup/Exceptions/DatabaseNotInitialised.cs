@@ -3,6 +3,7 @@
  * Image Markup
  * Database Not Initialised Exception class
  * By Josh Keegan 26/02/2014
+ * Last Edit 03/03/2014
  */
 
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ImageMarkup.Exceptions
 {
-    class DatabaseNotInitialisedException : Exception
+    public class DatabaseNotInitialisedException : Exception
     {
         //Constructors
         public DatabaseNotInitialisedException() { }

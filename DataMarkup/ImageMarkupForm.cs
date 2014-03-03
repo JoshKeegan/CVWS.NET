@@ -23,6 +23,7 @@ using AForge.Imaging;
 using AForge.Imaging.Filters;
 
 using ImageMarkup;
+using ImageMarkup.Exceptions;
 using SharedHelpers;
 using SharedHelpers.Imaging;
 using BaseObjectExtensions;
@@ -175,6 +176,32 @@ namespace DataEntryGUI
         private void txtCoordinates_TextChanges(object sender, EventArgs e)
         {
             drawRowsAndColsOnCurrentWordsearch();
+        }
+
+        private void txtWordsearchId_TextChanged(object sender, EventArgs e)
+        {
+            //Check if we already have data for this wordsearch
+            if (ImageMarkupDatabase.ContainsWordsearch(txtWordsearchId.Text))
+            {
+                Wordsearch wordsearch = ImageMarkupDatabase.GetWordsearch(txtWordsearchId.Text);
+
+                //Set the rows and cols
+                txtNumRows.Text = wordsearch.Rows.ToString();
+                txtNumCols.Text = wordsearch.Cols.ToString();
+            }
+            //Don't have the wordsearch, check for wordsearch images with the same ID
+            else
+            {
+                try
+                {
+                    WordsearchImage wordsearchImage = ImageMarkupDatabase.GetWordsearchImage(txtWordsearchId.Text);
+
+                    //Set the rows and cols
+                    txtNumRows.Text = wordsearchImage.Rows.ToString();
+                    txtNumCols.Text = wordsearchImage.Cols.ToString();
+                }
+                catch (DataNotFoundException) { }
+            }
         }
 
         private void btnAddWordsearchImage_Click(object sender, EventArgs e)

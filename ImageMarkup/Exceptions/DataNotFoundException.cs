@@ -3,6 +3,7 @@
  * Image Markup
  * Data Not Found Exception Class
  * By Josh Keegan 26/02/2014
+ * Last Edit 03/03/2014
  */
 
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace ImageMarkup.Exceptions
 {
-    class DataNotFoundException : Exception
+    public class DataNotFoundException : Exception
     {
         //Constructors
         public DataNotFoundException() {  }

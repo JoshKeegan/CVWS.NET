@@ -3,6 +3,7 @@
  * Image Markup
  * Wordsearch class
  * By Josh Keegan 26/02/2014
+ * Last Edit 03/03/2013
  */
 
 using System;
@@ -23,6 +24,22 @@ namespace ImageMarkup
         public string Id { get; private set; }
         public char[,] Chars { get; private set; }
         public string[] Words { get; private set; }
+
+        public int Rows
+        {
+            get
+            {
+                return Chars.GetLength(1);
+            }
+        }
+
+        public int Cols
+        {
+            get
+            {
+                return Chars.GetLength(0);
+            }
+        }
 
         public string StrChars
         {

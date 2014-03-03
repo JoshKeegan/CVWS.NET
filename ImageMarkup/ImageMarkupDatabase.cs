@@ -3,7 +3,7 @@
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014
- * Last Edit 27/02/2014
+ * Last Edit 03/03/2014
  */
 
 using System;
@@ -204,6 +204,51 @@ namespace ImageMarkup
             {
                 throw new DatabaseNotInitialisedException();
             }
+        }
+
+        //Note: because of data structures will be considerably slower than other lookups available. If extensive usage of this is required
+        //consider an extra data structure for mapping wordsearchIds => WordsearchImages
+        public static List<WordsearchImage> GetWordsearchImages(string wordsearchId)
+        {
+            List<WordsearchImage> toRet = new List<WordsearchImage>();
+
+            foreach(Image image in images.Values)
+            {
+                foreach(WordsearchImage wordsearchImage in image.WordsearchImages)
+                {
+                    try
+                    {
+                        if(wordsearchImage.WordsearchId == wordsearchId)
+                        {
+                            toRet.Add(wordsearchImage);
+                        }
+                    }
+                    catch { }
+                }
+            }
+
+            return toRet;
+        }
+
+        //Get the first WordsearchImage of the specified wordsearch
+        public static WordsearchImage GetWordsearchImage(string wordsearchId)
+        {
+            foreach(Image image in images.Values)
+            {
+                foreach(WordsearchImage wordsearchImage in image.WordsearchImages)
+                {
+                    try
+                    {
+                        if (wordsearchImage.WordsearchId == wordsearchId)
+                        {
+                            return wordsearchImage;
+                        }
+                    }
+                    catch { }
+                }
+            }
+
+            throw new DataNotFoundException(String.Format("WordsearchImages with WordsearchID {0} not found", wordsearchId));
         }
 
         //Private Methods

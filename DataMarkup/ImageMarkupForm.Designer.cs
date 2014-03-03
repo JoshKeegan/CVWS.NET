@@ -276,6 +276,7 @@
             this.txtWordsearchId.Name = "txtWordsearchId";
             this.txtWordsearchId.Size = new System.Drawing.Size(100, 20);
             this.txtWordsearchId.TabIndex = 24;
+            this.txtWordsearchId.TextChanged += new System.EventHandler(this.txtWordsearchId_TextChanged);
             // 
             // dataGridViewWordsearchImageMetaData
             // 
