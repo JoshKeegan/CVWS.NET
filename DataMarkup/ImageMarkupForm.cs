@@ -133,6 +133,13 @@ namespace DataEntryGUI
                 currentBitmap.Key.Dispose();
             }
 
+            //If we're currently displaying the enlarged wordsearch image, switch back to the main image view
+            if(picBoxWordsearchImageLarge.Visible)
+            {
+                picBoxImage.Visible = true;
+                picBoxWordsearchImageLarge.Visible = false;
+            }
+
             //If there is another image to get
             if(toProcess.Count > 0)
             {
