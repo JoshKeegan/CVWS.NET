@@ -3,7 +3,7 @@
  * Data Entry GUI
  * Main Form Class - Main GUI Window
  * By Josh Keegan 26/02/2014
- * Last Edit 27/02/2014
+ * Last Edit 03/03/2014
  */
 
 using System;
@@ -20,9 +20,11 @@ using System.Windows.Forms;
 
 using AForge;
 using AForge.Imaging;
+using AForge.Imaging.Filters;
 
 using ImageMarkup;
 using SharedHelpers;
+using SharedHelpers.Imaging;
 using BaseObjectExtensions;
 
 namespace DataEntryGUI
@@ -145,7 +147,7 @@ namespace DataEntryGUI
                 bitmapToShow = drawWordsearchImagesOnCurrentWordsearch();
 
                 //Show the bitmap
-                picBoxWordsearchImage.Image = bitmapToShow;
+                picBoxImage.Image = bitmapToShow;
 
                 updateLblToProcessLength();
 
@@ -154,7 +156,7 @@ namespace DataEntryGUI
             }
             else //Otherwise there are no more images to be processed
             {
-                picBoxWordsearchImage.Image = new Bitmap(1, 1);
+                picBoxImage.Image = new Bitmap(1, 1);
             }
             
         }
@@ -302,14 +304,14 @@ namespace DataEntryGUI
                             resetWordsearchImageFields();
 
                             //If the image being displayed isn't being used elsewhere, dispose of it
-                            if(bitmapToShow != picBoxWordsearchImage.Image)
+                            if(bitmapToShow != picBoxImage.Image)
                             {
-                                picBoxWordsearchImage.Image.Dispose();
+                                picBoxImage.Image.Dispose();
                             }
 
                             //Draw all of the WordsearchImages for this Image onto the original bitmap and display it
                             bitmapToShow = drawWordsearchImagesOnCurrentWordsearch();
-                            picBoxWordsearchImage.Image = bitmapToShow;
+                            picBoxImage.Image = bitmapToShow;
                         }
                     }
                     else
@@ -399,11 +401,11 @@ namespace DataEntryGUI
                     //Show the image of the data that's just been written (so as to avoid the possibility of people forgetting to add the last WordsearchImage)
 
                     //If the image currently being displayed won't be used elsewhere, the dispose of it
-                    if (picBoxWordsearchImage.Image != bitmapToShow)
+                    if (picBoxImage.Image != bitmapToShow)
                     {
-                        picBoxWordsearchImage.Image.Dispose();
+                        picBoxImage.Image.Dispose();
                     }
-                    picBoxWordsearchImage.Image = bitmapToShow;
+                    picBoxImage.Image = bitmapToShow;
                 }
             }
             else //Otherwise we aren't showing a bitmap
@@ -482,18 +484,25 @@ namespace DataEntryGUI
                     txtBottomRightX.Text != "" && txtBottomRightY.Text != "" &&
                     txtBottomLeftX.Text != "" && txtBottomLeftY.Text != "")
                 {
-                    Bitmap drawnOn = drawRowsAndColsOnImage(bitmapToShow,
-                        getTopLeftCoordinate(), getTopRightCoordinate(),
-                        getBottomRightCoordinate(), getBottomLeftCoordinate(),
-                        rows, cols);
+                    List<IntPoint> corners = new List<IntPoint>();
+                    corners.Add(getTopLeftCoordinate());
+                    corners.Add(getTopRightCoordinate());
+                    corners.Add(getBottomRightCoordinate());
+                    corners.Add(getBottomLeftCoordinate());
 
-                    //If this is a drawn on version  of the original image, dispose of it
-                    if (bitmapToShow != picBoxWordsearchImage.Image)
+                    QuadrilateralTransformation quadTransform = new QuadrilateralTransformation(corners, 
+                        picBoxWordsearchImage.Width, picBoxWordsearchImage.Height);
+
+                    Bitmap transformed = quadTransform.Apply(bitmapToShow);
+                    SharedHelpers.Imaging.Draw.DrawGridInPlace(transformed, (int)rows, (int)cols);
+
+                    //If there is a Bitmap which will become unused in memory, dispose if it
+                    if(picBoxWordsearchImage.Image != null)
                     {
                         picBoxWordsearchImage.Image.Dispose();
                     }
 
-                    picBoxWordsearchImage.Image = drawnOn;
+                    picBoxWordsearchImage.Image = transformed;
                 }
             }
         }

@@ -30,6 +30,7 @@
         {
             this.lblToPorcessLength = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.picBoxImage = new System.Windows.Forms.PictureBox();
             this.btnAddWordsearchImage = new System.Windows.Forms.Button();
             this.lblTopLeft = new System.Windows.Forms.Label();
             this.lblCoordinates = new System.Windows.Forms.Label();
@@ -60,9 +61,10 @@
             this.imageDataColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblImageMetaData = new System.Windows.Forms.Label();
             this.btnSaveImageMetaData = new System.Windows.Forms.Button();
-            this.picBoxWordsearchImage = new System.Windows.Forms.PictureBox();
             this.btnNextImage = new System.Windows.Forms.Button();
+            this.picBoxWordsearchImage = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWordsearchImageMetaData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImageMetaData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImage)).BeginInit();
@@ -80,11 +82,21 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.picBoxWordsearchImage);
+            this.panel1.Controls.Add(this.picBoxImage);
             this.panel1.Location = new System.Drawing.Point(12, 9);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1489, 933);
             this.panel1.TabIndex = 3;
+            // 
+            // picBoxImage
+            // 
+            this.picBoxImage.Location = new System.Drawing.Point(3, 3);
+            this.picBoxImage.Name = "picBoxImage";
+            this.picBoxImage.Size = new System.Drawing.Size(1483, 927);
+            this.picBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picBoxImage.TabIndex = 0;
+            this.picBoxImage.TabStop = false;
+            this.picBoxImage.Click += new System.EventHandler(this.picBoxWordsearchImage_Click);
             // 
             // btnAddWordsearchImage
             // 
@@ -331,16 +343,6 @@
             this.btnSaveImageMetaData.UseVisualStyleBackColor = true;
             this.btnSaveImageMetaData.Click += new System.EventHandler(this.btnSaveImageMetaData_Click);
             // 
-            // picBoxWordsearchImage
-            // 
-            this.picBoxWordsearchImage.Location = new System.Drawing.Point(3, 3);
-            this.picBoxWordsearchImage.Name = "picBoxWordsearchImage";
-            this.picBoxWordsearchImage.Size = new System.Drawing.Size(1483, 927);
-            this.picBoxWordsearchImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picBoxWordsearchImage.TabIndex = 0;
-            this.picBoxWordsearchImage.TabStop = false;
-            this.picBoxWordsearchImage.Click += new System.EventHandler(this.picBoxWordsearchImage_Click);
-            // 
             // btnNextImage
             // 
             this.btnNextImage.Image = global::DataEntryGUI.Properties.Resources.right;
@@ -352,11 +354,20 @@
             this.btnNextImage.UseVisualStyleBackColor = true;
             this.btnNextImage.Click += new System.EventHandler(this.btnNextImage_Click);
             // 
+            // picBoxWordsearchImage
+            // 
+            this.picBoxWordsearchImage.Location = new System.Drawing.Point(1519, 717);
+            this.picBoxWordsearchImage.Name = "picBoxWordsearchImage";
+            this.picBoxWordsearchImage.Size = new System.Drawing.Size(367, 222);
+            this.picBoxWordsearchImage.TabIndex = 31;
+            this.picBoxWordsearchImage.TabStop = false;
+            // 
             // ImageMarkupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 952);
+            this.Controls.Add(this.picBoxWordsearchImage);
             this.Controls.Add(this.btnSaveImageMetaData);
             this.Controls.Add(this.lblImageMetaData);
             this.Controls.Add(this.dataGridViewImageMetaData);
@@ -390,6 +401,7 @@
             this.Text = "Image Markup";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWordsearchImageMetaData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImageMetaData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImage)).EndInit();
@@ -400,7 +412,7 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox picBoxWordsearchImage;
+        private System.Windows.Forms.PictureBox picBoxImage;
         private System.Windows.Forms.Label lblToPorcessLength;
         private System.Windows.Forms.Button btnNextImage;
         private System.Windows.Forms.Panel panel1;
@@ -434,6 +446,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn imageDataColValue;
         private System.Windows.Forms.Label lblImageMetaData;
         private System.Windows.Forms.Button btnSaveImageMetaData;
+        private System.Windows.Forms.PictureBox picBoxWordsearchImage;
     }
 }
 
