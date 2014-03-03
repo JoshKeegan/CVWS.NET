@@ -86,7 +86,7 @@ namespace DataEntryGUI
             txtBottomLeftY.TextChanged += new System.EventHandler(txtCoordinates_TextChanges);
         }
 
-        private void picBoxWordsearchImage_Click(object sender, EventArgs e)
+        private void picBoxImage_Click(object sender, EventArgs e)
         {
             //Get the co-ords of the click
             MouseEventArgs mousePress = e as MouseEventArgs;
@@ -449,6 +449,12 @@ namespace DataEntryGUI
             txtWordsearchId.Text = "";
 
             dataGridViewWordsearchImageMetaData.Rows.Clear();
+
+            if(picBoxWordsearchImage.Image != null)
+            {
+                picBoxWordsearchImage.Image.Dispose();
+                picBoxWordsearchImage.Image = null;
+            }
         }
 
         private Bitmap drawWordsearchImagesOnCurrentWordsearch()
@@ -484,16 +490,17 @@ namespace DataEntryGUI
                     txtBottomRightX.Text != "" && txtBottomRightY.Text != "" &&
                     txtBottomLeftX.Text != "" && txtBottomLeftY.Text != "")
                 {
-                    List<IntPoint> corners = new List<IntPoint>();
+                    List<IntPoint> corners = new List<IntPoint>(4);
                     corners.Add(getTopLeftCoordinate());
                     corners.Add(getTopRightCoordinate());
                     corners.Add(getBottomRightCoordinate());
                     corners.Add(getBottomLeftCoordinate());
 
+                    //Extract the wordsearch image & draw the grid on it
                     QuadrilateralTransformation quadTransform = new QuadrilateralTransformation(corners, 
                         picBoxWordsearchImage.Width, picBoxWordsearchImage.Height);
 
-                    Bitmap transformed = quadTransform.Apply(bitmapToShow);
+                    Bitmap transformed = quadTransform.Apply(currentBitmap.Key);
                     SharedHelpers.Imaging.Draw.DrawGridInPlace(transformed, (int)rows, (int)cols);
 
                     //If there is a Bitmap which will become unused in memory, dispose if it

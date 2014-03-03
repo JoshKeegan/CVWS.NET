@@ -96,7 +96,7 @@
             this.picBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picBoxImage.TabIndex = 0;
             this.picBoxImage.TabStop = false;
-            this.picBoxImage.Click += new System.EventHandler(this.picBoxWordsearchImage_Click);
+            this.picBoxImage.Click += new System.EventHandler(this.picBoxImage_Click);
             // 
             // btnAddWordsearchImage
             // 
