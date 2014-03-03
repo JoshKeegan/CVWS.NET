@@ -3,7 +3,7 @@
  * Image Markup
  * Image class
  * By Josh Keegan 26/02/2014
- * Last Edit 27/02/2014
+ * Last Edit 03/03/2014
  */
 
 using System;
@@ -27,7 +27,7 @@ namespace ImageMarkup
         public Dictionary<string, string> MetaData { get; private set; }
 
         //TODO: Consider the GC implications of holding onto an object that should be disposed of
-        //Provides a place for memory leaks to happen later
+        //Provides a place for memory leaks to happen later. Perhaps have functions to register/deregister interest in the Bitmap?
         public Bitmap Bitmap
         {
             get
