@@ -413,6 +413,23 @@ namespace DataEntryGUI
                 MessageBox.Show("No Image currently on screen to save data for");
             }
         }
+        private void picBoxWordsearchImage_Click(object sender, EventArgs e)
+        {
+            if(picBoxWordsearchImage.Image != null)
+            {
+                //Show the wordsearch image in the big box
+                picBoxWordsearchImageLarge.Image = picBoxWordsearchImage.Image;
+                picBoxWordsearchImageLarge.Visible = true;
+                picBoxImage.Visible = false;
+            }
+        }
+
+        private void pictureBoxWordsearchImageLarge_Click(object sender, EventArgs e)
+        {
+            //Hide the large wordsearch image box
+            picBoxImage.Visible = true;
+            picBoxWordsearchImageLarge.Visible = false;
+        }
 
         /*
          * Private Helpers
