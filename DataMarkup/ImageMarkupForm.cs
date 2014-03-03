@@ -3,7 +3,7 @@
  * Data Entry GUI
  * Main Form Class - Main GUI Window
  * By Josh Keegan 26/02/2014
- * Last Edit 27/02/2014
+ * Last Edit 03/03/2014
  */
 
 using System;
@@ -482,7 +482,11 @@ namespace DataEntryGUI
                     txtBottomRightX.Text != "" && txtBottomRightY.Text != "" &&
                     txtBottomLeftX.Text != "" && txtBottomLeftY.Text != "")
                 {
-                    Bitmap drawnOn = drawRowsAndColsOnImage(bitmapToShow,
+                    /*Bitmap drawnOn = drawRowsAndColsOnImage(bitmapToShow,
+                        getTopLeftCoordinate(), getTopRightCoordinate(),
+                        getBottomRightCoordinate(), getBottomLeftCoordinate(),
+                        rows, cols);*/
+                    Bitmap drawnOn = drawRowsAndColsOnImageSkewed(bitmapToShow,
                         getTopLeftCoordinate(), getTopRightCoordinate(),
                         getBottomRightCoordinate(), getBottomLeftCoordinate(),
                         rows, cols);
@@ -496,6 +500,91 @@ namespace DataEntryGUI
                     picBoxWordsearchImage.Image = drawnOn;
                 }
             }
+        }
+
+        private Bitmap drawRowsAndColsOnImageSkewed(Bitmap img, IntPoint topLeft,
+            IntPoint topRight, IntPoint bottomRight, IntPoint bottomLeft,
+            uint rows, uint cols)
+        {
+            return drawRowsAndColsOnImageSkewed(img, topLeft, topRight, 
+                bottomRight, bottomLeft, rows, cols, Color.Red);
+        }
+
+        //Account for the perspective that a rectange was taken at. See hand written notes on making up the image (27/02/2014 - 03/03/2014)
+        //Unfinished / Buggy! Do not know if this is a viable method because of IMG_0445.JPG
+        private Bitmap drawRowsAndColsOnImageSkewed(Bitmap imgOrig, IntPoint topLeft,
+            IntPoint topRight, IntPoint bottomRight, IntPoint bottomLeft,
+            uint rows, uint cols, Color colour)
+        {
+            Bitmap img = new Bitmap(imgOrig);
+
+            //Lock image for read write so we can alter it
+            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.ReadWrite, img.PixelFormat);
+
+            //Draw the bounding box
+            List<IntPoint> points = new List<IntPoint>(4);
+            points.Add(topLeft);
+            points.Add(topRight);
+            points.Add(bottomRight);
+            points.Add(bottomLeft);
+            Drawing.Polygon(imgData, points, colour);
+
+            //Draw lines at varying intervals over the image attempting to account for 3d depth transform on the page
+
+            //Calculate the average width & height (pythag)
+            double lengthTop = Math.Sqrt(((topLeft.X - topRight.X) * (topLeft.X - topRight.X)) +
+                ((topLeft.Y - topRight.Y) * (topLeft.Y - topRight.Y)));
+            double lengthBottom = Math.Sqrt(((bottomLeft.X - bottomRight.X) * (bottomLeft.X - bottomRight.X)) +
+                ((bottomLeft.Y - bottomRight.Y) * (bottomLeft.Y - bottomRight.Y)));
+            double avgWidth = (lengthTop + lengthBottom) / 2;
+
+            double lengthLeft = Math.Sqrt(((topLeft.X - bottomLeft.X) * (topLeft.X - bottomLeft.X)) +
+                ((topLeft.Y - bottomLeft.Y) * (topLeft.Y - bottomLeft.Y)));
+            double lengthRight = Math.Sqrt(((topRight.X - bottomRight.X) * (topRight.X - bottomRight.X)) +
+                ((topRight.Y - bottomRight.Y) * (topRight.Y - bottomRight.Y)));
+            double avgHeight = (lengthLeft + lengthRight) / 2;
+
+            double currentXLeft = topLeft.X;
+            double currentYLeft = topLeft.Y;
+            double currentXRight = topRight.X;
+            double currentYRight = topRight.Y;
+
+            //Angles of the slope (inclusing sign, so that later calculatecations for deltaX are signed) Positive => bottom bigger than top
+            double tanLeftToVerticalAngle = (double)(bottomLeft.X - topLeft.X) / (bottomLeft.Y - topLeft.Y);
+            double tanRightToVerticalAngle = (double)(bottomRight.X - topRight.X) / (bottomRight.Y - topRight.Y);
+
+            //Rows
+            for (int i = 0; i < rows; i++)
+            {
+                //Calculate the width of this row (at the top)
+                double thisRowWidth = Math.Sqrt(((currentXLeft - currentXRight) * (currentXLeft - currentXRight)) + 
+                    ((currentYLeft - currentYRight) * (currentYLeft - currentYRight)));
+
+                //Calculate the height of this row on each side of the quadrilateral (noe that these will be the y vals, not hypotenuse lengths)
+                double thisRowHeightLeft = (thisRowWidth / avgWidth) * (lengthLeft / rows);
+                double thisRowHeightRight = (thisRowWidth / avgWidth) * (lengthRight / rows);
+
+                //Calculate the (x, y) points for plotting
+                currentYLeft += thisRowHeightLeft;
+                currentYRight += thisRowHeightRight;
+                double deltaXLeft = thisRowHeightLeft * tanLeftToVerticalAngle;
+                double deltaXRight = thisRowHeightRight * tanRightToVerticalAngle;
+                currentXLeft += deltaXLeft;
+                currentXRight += deltaXRight;
+
+                //Plot Row
+                IntPoint rowLeft = new IntPoint((int)currentXLeft, (int)currentYLeft);
+                IntPoint rowRight = new IntPoint((int)currentXRight, (int)currentYRight);
+                Drawing.Line(imgData, rowLeft, rowRight, colour);
+            }
+
+            //TODO: Cols
+
+
+            //Clean up & return
+            img.UnlockBits(imgData);
+            return img;
         }
 
         private Bitmap drawRowsAndColsOnImage(Bitmap img, IntPoint topLeft, 
