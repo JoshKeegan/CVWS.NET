@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.lblToPorcessLength = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.picBoxWordsearchImageLarge = new System.Windows.Forms.PictureBox();
             this.picBoxImage = new System.Windows.Forms.PictureBox();
             this.btnAddWordsearchImage = new System.Windows.Forms.Button();
@@ -66,7 +65,6 @@
             this.btnNextImage = new System.Windows.Forms.Button();
             this.picBoxWordsearchImage = new System.Windows.Forms.PictureBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImageLarge)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWordsearchImageMetaData)).BeginInit();
@@ -83,19 +81,9 @@
             this.lblToPorcessLength.TabIndex = 1;
             this.lblToPorcessLength.Text = " Images to Process";
             // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.picBoxWordsearchImageLarge);
-            this.panel1.Controls.Add(this.picBoxImage);
-            this.panel1.Location = new System.Drawing.Point(12, 9);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1489, 933);
-            this.panel1.TabIndex = 3;
-            // 
             // picBoxWordsearchImageLarge
             // 
-            this.picBoxWordsearchImageLarge.Location = new System.Drawing.Point(3, 3);
+            this.picBoxWordsearchImageLarge.Location = new System.Drawing.Point(12, 12);
             this.picBoxWordsearchImageLarge.Name = "picBoxWordsearchImageLarge";
             this.picBoxWordsearchImageLarge.Size = new System.Drawing.Size(1483, 927);
             this.picBoxWordsearchImageLarge.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -107,10 +95,10 @@
             // 
             // picBoxImage
             // 
-            this.picBoxImage.Location = new System.Drawing.Point(3, 3);
+            this.picBoxImage.Location = new System.Drawing.Point(12, 12);
             this.picBoxImage.Name = "picBoxImage";
             this.picBoxImage.Size = new System.Drawing.Size(1483, 927);
-            this.picBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxImage.TabIndex = 0;
             this.picBoxImage.TabStop = false;
             this.toolTips.SetToolTip(this.picBoxImage, "Click to add wordsearch coordinate. Winding order: top left first, clockwise");
@@ -388,6 +376,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 952);
+            this.Controls.Add(this.picBoxImage);
+            this.Controls.Add(this.picBoxWordsearchImageLarge);
             this.Controls.Add(this.picBoxWordsearchImage);
             this.Controls.Add(this.btnSaveImageMetaData);
             this.Controls.Add(this.lblImageMetaData);
@@ -415,13 +405,10 @@
             this.Controls.Add(this.lblCoordinates);
             this.Controls.Add(this.lblTopLeft);
             this.Controls.Add(this.btnAddWordsearchImage);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnNextImage);
             this.Controls.Add(this.lblToPorcessLength);
             this.Name = "ImageMarkupForm";
             this.Text = "Image Markup";
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImageLarge)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewWordsearchImageMetaData)).EndInit();
@@ -437,7 +424,6 @@
         private System.Windows.Forms.PictureBox picBoxImage;
         private System.Windows.Forms.Label lblToPorcessLength;
         private System.Windows.Forms.Button btnNextImage;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnAddWordsearchImage;
         private System.Windows.Forms.Label lblTopLeft;
         private System.Windows.Forms.Label lblCoordinates;

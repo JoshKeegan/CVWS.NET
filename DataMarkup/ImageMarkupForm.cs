@@ -94,26 +94,30 @@ namespace DataEntryGUI
             int x = mousePress.X;
             int y = mousePress.Y;
 
+            //Convert the x & y values to image coordinate space
+            int imgX = (int)(x * ((double)bitmapToShow.Width / picBoxImage.Width));
+            int imgY = (int)(y * ((double)bitmapToShow.Height / picBoxImage.Height));
+
             //Put the coordinates in the relevant box
             if(txtTopLeftX.Text == "" && txtTopLeftY.Text == "")
             {
-                txtTopLeftX.Text = x.ToString();
-                txtTopLeftY.Text = y.ToString();
+                txtTopLeftX.Text = imgX.ToString();
+                txtTopLeftY.Text = imgY.ToString();
             }
             else if(txtTopRightX.Text == "" && txtTopRightY.Text == "")
             {
-                txtTopRightX.Text = x.ToString();
-                txtTopRightY.Text = y.ToString();
+                txtTopRightX.Text = imgX.ToString();
+                txtTopRightY.Text = imgY.ToString();
             }
             else if(txtBottomRightX.Text == "" && txtBottomRightY.Text == "")
             {
-                txtBottomRightX.Text = x.ToString();
-                txtBottomRightY.Text = y.ToString();
+                txtBottomRightX.Text = imgX.ToString();
+                txtBottomRightY.Text = imgY.ToString();
             }
             else if(txtBottomLeftX.Text == "" && txtBottomLeftY.Text == "")
             {
-                txtBottomLeftX.Text = x.ToString();
-                txtBottomLeftY.Text = y.ToString();
+                txtBottomLeftX.Text = imgX.ToString();
+                txtBottomLeftY.Text = imgY.ToString();
             }
             else
             {
