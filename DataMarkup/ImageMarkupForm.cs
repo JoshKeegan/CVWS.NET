@@ -568,64 +568,6 @@ namespace DataEntryGUI
             }
         }
 
-        private Bitmap drawRowsAndColsOnImage(Bitmap img, IntPoint topLeft, 
-            IntPoint topRight, IntPoint bottomRight, IntPoint bottomLeft, 
-            uint rows, uint cols)
-        {
-            return drawRowsAndColsOnImage(img, topLeft, topRight, bottomRight, 
-                bottomLeft, rows, cols, Color.Red);
-        }
-
-        private Bitmap drawRowsAndColsOnImage(Bitmap imgOrig, IntPoint topLeft, 
-            IntPoint topRight, IntPoint bottomRight, IntPoint bottomLeft, 
-            uint rows, uint cols, Color colour)
-        {
-            Bitmap img = new Bitmap(imgOrig);
-
-            //Lock image for read write so we can alter it
-            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
-                ImageLockMode.ReadWrite, img.PixelFormat);
-
-            //Draw the bounding box
-            List<IntPoint> points = new List<IntPoint>(4);
-            points.Add(topLeft);
-            points.Add(topRight);
-            points.Add(bottomRight);
-            points.Add(bottomLeft);
-            Drawing.Polygon(imgData, points, colour);
-
-            //Draw Lines at regular intervals for rows
-            for(int i = 1; i <= rows; i++)
-            {
-                int leftSideRowBottomX = (int)(((bottomLeft.X - topLeft.X) / (double)rows) * i + topLeft.X);
-                int leftSideRowBottomY = (int)(((bottomLeft.Y - topLeft.Y) / (double)rows) * i + topLeft.Y);
-                IntPoint leftSideRowBottom = new IntPoint(leftSideRowBottomX, leftSideRowBottomY);
-
-                int rightSideRowBottomX = (int)(((bottomRight.X - topRight.X) / (double)rows) * i + topRight.X);
-                int rightSideRowbottomY = (int)(((bottomRight.Y - topRight.Y) / (double)rows) * i + topRight.Y);
-                IntPoint rightSideRowBottom = new IntPoint(rightSideRowBottomX, rightSideRowbottomY);
-
-                Drawing.Line(imgData, leftSideRowBottom, rightSideRowBottom, colour);
-            }
-
-            //Draw Lines at regular intervals for cols (same as rows, but rotate all of the points around -90 deg)
-            for (int i = 1; i <= cols; i++)
-            {
-                int bottomSideColRightX = (int)(((bottomRight.X - bottomLeft.X) / (double)cols) * i + bottomLeft.X);
-                int bottomSideColRightY = (int)(((bottomRight.Y - bottomLeft.Y) / (double)cols) * i + bottomLeft.Y);
-                IntPoint bottomSideColRight = new IntPoint(bottomSideColRightX, bottomSideColRightY);
-
-                int topSideColRightX = (int)(((topRight.X - topLeft.X) / (double)cols) * i + topLeft.X);
-                int topSideColRightY = (int)(((topRight.Y - topLeft.Y) / (double)cols) * i + topLeft.Y);
-                IntPoint topSideColRight = new IntPoint(topSideColRightX, topSideColRightY);
-
-                Drawing.Line(imgData, bottomSideColRight, topSideColRight, colour);
-            }
-
-            img.UnlockBits(imgData);
-            return img;
-        }
-
         private IntPoint getTopLeftCoordinate()
         {
             int x = int.Parse(txtTopLeftX.Text);
