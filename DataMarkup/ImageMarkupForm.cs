@@ -558,6 +558,12 @@ namespace DataEntryGUI
                     }
 
                     picBoxWordsearchImage.Image = transformed;
+
+                    //If we're currently showing the picture box image in the larger display, show it there too
+                    if(picBoxWordsearchImageLarge.Visible)
+                    {
+                        picBoxWordsearchImageLarge.Image = transformed;
+                    }
                 }
             }
         }
