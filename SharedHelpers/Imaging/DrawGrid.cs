@@ -2,7 +2,8 @@
  * Dissertation CV Wordsearch Solver
  * Shared Helpers
  * Draw Grid class - various methods to draw grids on images
- * By Josh Keegan 03/03/2013
+ * By Josh Keegan 03/03/2014
+ * Last Edit 04/03/2014
  */
 
 using System;
@@ -20,14 +21,9 @@ namespace SharedHelpers.Imaging
 {
     public static class Draw
     {
-        //Constants
-        private static Color DEFAULT_COLOUR = Color.Red;
-        private static Color DEFAULT_START_COLOUR = Color.Blue;
-        private static Color DEFAULT_END_COLOUR = Color.Red;
-
         public static Bitmap DrawGrid(Bitmap img, int rows, int cols)
         {
-            return DrawGrid(img, rows, cols, DEFAULT_COLOUR);
+            return DrawGrid(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
         }
 
         public static Bitmap DrawGrid(Bitmap imgOrig, int rows, int cols, Color colour)
@@ -39,7 +35,7 @@ namespace SharedHelpers.Imaging
 
         public static void DrawGridInPlace(Bitmap img, int rows, int cols)
         {
-            DrawGridInPlace(img, rows, cols, DEFAULT_COLOUR);
+            DrawGridInPlace(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
         }
 
         public static void DrawGridInPlace(Bitmap img, int rows, int cols, Color colour)
@@ -70,7 +66,7 @@ namespace SharedHelpers.Imaging
 
         public static Bitmap DrawGrid(Bitmap img, uint[,] rows, uint[,] cols)
         {
-            return DrawGrid(img, rows, cols, DEFAULT_START_COLOUR, DEFAULT_END_COLOUR);
+            return DrawGrid(img, rows, cols, DrawDefaults.DEFAULT_START_COLOUR, DrawDefaults.DEFAULT_END_COLOUR);
         }
 
         public static Bitmap DrawGrid(Bitmap imgOrig, uint[,] rows, uint[,] cols, Color startColour, Color endColour)
@@ -82,7 +78,7 @@ namespace SharedHelpers.Imaging
 
         public static void DrawGridInPlace(Bitmap img, uint[,] rows, uint[,] cols)
         {
-            DrawGridInPlace(img, rows, cols, DEFAULT_START_COLOUR, DEFAULT_END_COLOUR);
+            DrawGridInPlace(img, rows, cols, DrawDefaults.DEFAULT_START_COLOUR, DrawDefaults.DEFAULT_END_COLOUR);
         }
 
         public static void DrawGridInPlace(Bitmap img, uint[,] rows, uint[,] cols, Color startColour, Color endColour)

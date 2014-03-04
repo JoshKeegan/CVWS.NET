@@ -558,6 +558,17 @@ namespace DataEntryGUI
                     corners.Add(getBottomRightCoordinate());
                     corners.Add(getBottomLeftCoordinate());
 
+                    //Draw the bounding box onto the main image
+                    Bitmap drawnOn = new Bitmap(bitmapToShow);
+                    DrawShapes.PolygonInPlace(drawnOn, corners, Color.Red);
+
+                    //If there is a Bitmap which will become unused in memory, dispose of it
+                    if(picBoxImage.Image != bitmapToShow)
+                    {
+                        picBoxImage.Image.Dispose();
+                    }
+                    picBoxImage.Image = drawnOn;
+
                     //Extract the wordsearch image & draw the grid on it
                     QuadrilateralTransformation quadTransform = new QuadrilateralTransformation(corners, 
                         picBoxWordsearchImage.Width, picBoxWordsearchImage.Height);
