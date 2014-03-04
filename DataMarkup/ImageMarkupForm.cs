@@ -553,11 +553,20 @@ namespace DataEntryGUI
                     txtBottomLeftX.Text != "" && txtBottomLeftY.Text != "")
                 {
                     List<IntPoint> corners = new List<IntPoint>(4);
-                    corners.Add(getTopLeftCoordinate());
-                    corners.Add(getTopRightCoordinate());
-                    corners.Add(getBottomRightCoordinate());
-                    corners.Add(getBottomLeftCoordinate());
-
+                    try
+                    {
+                        corners.Add(getTopLeftCoordinate());
+                        corners.Add(getTopRightCoordinate());
+                        corners.Add(getBottomRightCoordinate());
+                        corners.Add(getBottomLeftCoordinate());
+                    }
+                    catch (FormatException) 
+                    {
+                        //There was an error parsing one of the coordinates
+                        MessageBox.Show("Unable to parse coordinates as integers, please check they are valid");
+                        return;
+                    }
+                    
                     //Draw the bounding box onto the main image
                     Bitmap drawnOn = new Bitmap(bitmapToShow);
                     DrawShapes.PolygonInPlace(drawnOn, corners, Color.Red);
