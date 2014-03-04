@@ -3,7 +3,7 @@
  * Data Entry GUI
  * Main Form Class - Main GUI Window
  * By Josh Keegan 26/02/2014
- * Last Edit 03/03/2014
+ * Last Edit 04/03/2014
  */
 
 using System;
@@ -350,6 +350,13 @@ namespace DataEntryGUI
                             //Draw all of the WordsearchImages for this Image onto the original bitmap and display it
                             bitmapToShow = drawWordsearchImagesOnCurrentWordsearch();
                             picBoxImage.Image = bitmapToShow;
+
+                            //If we were showing an enlarged wordsearch image, switch back to the main image
+                            if(picBoxWordsearchImageLarge.Visible)
+                            {
+                                picBoxImage.Visible = true;
+                                picBoxWordsearchImageLarge.Visible = false;
+                            }
                         }
                     }
                     else
