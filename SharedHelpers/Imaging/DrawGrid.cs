@@ -19,26 +19,26 @@ using AForge.Imaging;
 
 namespace SharedHelpers.Imaging
 {
-    public static class Draw
+    public static class DrawGrid
     {
-        public static Bitmap DrawGrid(Bitmap img, int rows, int cols)
+        public static Bitmap Grid(Bitmap img, int rows, int cols)
         {
-            return DrawGrid(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
+            return Grid(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
         }
 
-        public static Bitmap DrawGrid(Bitmap imgOrig, int rows, int cols, Color colour)
+        public static Bitmap Grid(Bitmap imgOrig, int rows, int cols, Color colour)
         {
             Bitmap img = new Bitmap(imgOrig);
-            DrawGridInPlace(img, rows, cols, colour);
+            GridInPlace(img, rows, cols, colour);
             return img;
         }
 
-        public static void DrawGridInPlace(Bitmap img, int rows, int cols)
+        public static void GridInPlace(Bitmap img, int rows, int cols)
         {
-            DrawGridInPlace(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
+            GridInPlace(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
         }
 
-        public static void DrawGridInPlace(Bitmap img, int rows, int cols, Color colour)
+        public static void GridInPlace(Bitmap img, int rows, int cols, Color colour)
         {
             //Lock image for read write so we can alter it
             BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
@@ -64,24 +64,24 @@ namespace SharedHelpers.Imaging
             img.UnlockBits(imgData);
         }
 
-        public static Bitmap DrawGrid(Bitmap img, uint[,] rows, uint[,] cols)
+        public static Bitmap Grid(Bitmap img, uint[,] rows, uint[,] cols)
         {
-            return DrawGrid(img, rows, cols, DrawDefaults.DEFAULT_START_COLOUR, DrawDefaults.DEFAULT_END_COLOUR);
+            return Grid(img, rows, cols, DrawDefaults.DEFAULT_START_COLOUR, DrawDefaults.DEFAULT_END_COLOUR);
         }
 
-        public static Bitmap DrawGrid(Bitmap imgOrig, uint[,] rows, uint[,] cols, Color startColour, Color endColour)
+        public static Bitmap Grid(Bitmap imgOrig, uint[,] rows, uint[,] cols, Color startColour, Color endColour)
         {
             Bitmap img = new Bitmap(imgOrig);
-            DrawGridInPlace(img, rows, cols, startColour, endColour);
+            GridInPlace(img, rows, cols, startColour, endColour);
             return img;
         }
 
-        public static void DrawGridInPlace(Bitmap img, uint[,] rows, uint[,] cols)
+        public static void GridInPlace(Bitmap img, uint[,] rows, uint[,] cols)
         {
-            DrawGridInPlace(img, rows, cols, DrawDefaults.DEFAULT_START_COLOUR, DrawDefaults.DEFAULT_END_COLOUR);
+            GridInPlace(img, rows, cols, DrawDefaults.DEFAULT_START_COLOUR, DrawDefaults.DEFAULT_END_COLOUR);
         }
 
-        public static void DrawGridInPlace(Bitmap img, uint[,] rows, uint[,] cols, Color startColour, Color endColour)
+        public static void GridInPlace(Bitmap img, uint[,] rows, uint[,] cols, Color startColour, Color endColour)
         {
             //Lock image for read write so we can alter it
             BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),

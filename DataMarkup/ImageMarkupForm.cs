@@ -574,7 +574,7 @@ namespace DataEntryGUI
                         picBoxWordsearchImage.Width, picBoxWordsearchImage.Height);
 
                     Bitmap transformed = quadTransform.Apply(currentBitmap.Key);
-                    SharedHelpers.Imaging.Draw.DrawGridInPlace(transformed, (int)rows, (int)cols);
+                    DrawGrid.GridInPlace(transformed, (int)rows, (int)cols);
 
                     //If there is a Bitmap which will become unused in memory, dispose if it
                     if(picBoxWordsearchImage.Image != null)
