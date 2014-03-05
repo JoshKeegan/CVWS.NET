@@ -3,7 +3,7 @@
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014
- * Last Edit 03/03/2014
+ * Last Edit 05/03/2014
  */
 
 using System;
@@ -51,6 +51,15 @@ namespace ImageMarkup
         //Private Variables
         private static Dictionary<string, Image> images = null;
         private static Dictionary<string, Wordsearch> wordsearches = null;
+
+        //Public Variables
+        public static bool Loaded //Is the database currently loaded into memory
+        {
+            get
+            {
+                return images != null && wordsearches != null;
+            }
+        }
 
         //Public Methods
         public static void LoadDatabase()

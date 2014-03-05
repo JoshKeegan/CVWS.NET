@@ -1,9 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Data Entry GUI
- * Main Form Class - Main GUI Window
+ * Image Markup Form class
  * By Josh Keegan 26/02/2014
- * Last Edit 04/03/2014
+ * Last Edit 05/03/2014
  */
 
 using System;
@@ -49,8 +49,12 @@ namespace DataEntryGUI
             //Store the lblToProcessLength default label so the number can be prepended
             defaultLblToProcessLength = lblToPorcessLength.Text;
 
-            //Load in the meta data for images that are already processed
-            ImageMarkupDatabase.LoadDatabase();
+            //If the Image Markup Database hasn't already been loaded
+            if(!ImageMarkupDatabase.Loaded)
+            {
+                //Load in the meta data for images that are already processed
+                ImageMarkupDatabase.LoadDatabase();
+            }
 
             //Load in the raw images to process
             List<Bitmap> bitmaps = ImageLoader.LoadAllImagesInSubdirs(RAW_IMAGE_DIR);
