@@ -93,39 +93,43 @@ namespace DataEntryGUI
 
         private void picBoxImage_Click(object sender, EventArgs e)
         {
-            //Get the co-ords of the click
-            MouseEventArgs mousePress = e as MouseEventArgs;
-            int x = mousePress.X;
-            int y = mousePress.Y;
+            //If we're showing an image to be entering coordinates for
+            if (!currentBitmap.Equals(default(KeyValuePair<Bitmap, string>)))
+            {
+                //Get the co-ords of the click
+                MouseEventArgs mousePress = e as MouseEventArgs;
+                int x = mousePress.X;
+                int y = mousePress.Y;
 
-            //Convert the x & y values to image coordinate space
-            int imgX = (int)(x * ((double)bitmapToShow.Width / picBoxImage.Width));
-            int imgY = (int)(y * ((double)bitmapToShow.Height / picBoxImage.Height));
+                //Convert the x & y values to image coordinate space
+                int imgX = (int)(x * ((double)bitmapToShow.Width / picBoxImage.Width));
+                int imgY = (int)(y * ((double)bitmapToShow.Height / picBoxImage.Height));
 
-            //Put the coordinates in the relevant box
-            if(txtTopLeftX.Text == "" && txtTopLeftY.Text == "")
-            {
-                txtTopLeftX.Text = imgX.ToString();
-                txtTopLeftY.Text = imgY.ToString();
-            }
-            else if(txtTopRightX.Text == "" && txtTopRightY.Text == "")
-            {
-                txtTopRightX.Text = imgX.ToString();
-                txtTopRightY.Text = imgY.ToString();
-            }
-            else if(txtBottomRightX.Text == "" && txtBottomRightY.Text == "")
-            {
-                txtBottomRightX.Text = imgX.ToString();
-                txtBottomRightY.Text = imgY.ToString();
-            }
-            else if(txtBottomLeftX.Text == "" && txtBottomLeftY.Text == "")
-            {
-                txtBottomLeftX.Text = imgX.ToString();
-                txtBottomLeftY.Text = imgY.ToString();
-            }
-            else
-            {
-                MessageBox.Show("All points have been entered for this Wordsearch Image");
+                //Put the coordinates in the relevant box
+                if (txtTopLeftX.Text == "" && txtTopLeftY.Text == "")
+                {
+                    txtTopLeftX.Text = imgX.ToString();
+                    txtTopLeftY.Text = imgY.ToString();
+                }
+                else if (txtTopRightX.Text == "" && txtTopRightY.Text == "")
+                {
+                    txtTopRightX.Text = imgX.ToString();
+                    txtTopRightY.Text = imgY.ToString();
+                }
+                else if (txtBottomRightX.Text == "" && txtBottomRightY.Text == "")
+                {
+                    txtBottomRightX.Text = imgX.ToString();
+                    txtBottomRightY.Text = imgY.ToString();
+                }
+                else if (txtBottomLeftX.Text == "" && txtBottomLeftY.Text == "")
+                {
+                    txtBottomLeftX.Text = imgX.ToString();
+                    txtBottomLeftY.Text = imgY.ToString();
+                }
+                else
+                {
+                    MessageBox.Show("All points have been entered for this Wordsearch Image");
+                }
             }
         }
 

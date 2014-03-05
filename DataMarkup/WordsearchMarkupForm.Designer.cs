@@ -32,14 +32,19 @@
             this.lblToProcessLength = new System.Windows.Forms.Label();
             this.btnNextWordsearch = new System.Windows.Forms.Button();
             this.picBoxWordsearchImage = new System.Windows.Forms.PictureBox();
+            this.lblChars = new System.Windows.Forms.Label();
+            this.lblWords = new System.Windows.Forms.Label();
+            this.rtbWords = new System.Windows.Forms.RichTextBox();
+            this.lblWordsearchId = new System.Windows.Forms.Label();
+            this.btnSaveWordsearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImage)).BeginInit();
             this.SuspendLayout();
             // 
             // rtbChars
             // 
-            this.rtbChars.Location = new System.Drawing.Point(13, 441);
+            this.rtbChars.Location = new System.Drawing.Point(15, 473);
             this.rtbChars.Name = "rtbChars";
-            this.rtbChars.Size = new System.Drawing.Size(661, 330);
+            this.rtbChars.Size = new System.Drawing.Size(317, 330);
             this.rtbChars.TabIndex = 1;
             this.rtbChars.Text = "";
             this.rtbChars.TextChanged += new System.EventHandler(this.rtbChars_TextChanged);
@@ -66,18 +71,70 @@
             // 
             // picBoxWordsearchImage
             // 
-            this.picBoxWordsearchImage.Location = new System.Drawing.Point(13, 13);
+            this.picBoxWordsearchImage.Location = new System.Drawing.Point(12, 29);
             this.picBoxWordsearchImage.Name = "picBoxWordsearchImage";
             this.picBoxWordsearchImage.Size = new System.Drawing.Size(661, 421);
             this.picBoxWordsearchImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxWordsearchImage.TabIndex = 0;
             this.picBoxWordsearchImage.TabStop = false;
             // 
+            // lblChars
+            // 
+            this.lblChars.AutoSize = true;
+            this.lblChars.Location = new System.Drawing.Point(12, 453);
+            this.lblChars.Name = "lblChars";
+            this.lblChars.Size = new System.Drawing.Size(58, 13);
+            this.lblChars.TabIndex = 4;
+            this.lblChars.Text = "Characters";
+            // 
+            // lblWords
+            // 
+            this.lblWords.AutoSize = true;
+            this.lblWords.Location = new System.Drawing.Point(339, 457);
+            this.lblWords.Name = "lblWords";
+            this.lblWords.Size = new System.Drawing.Size(73, 13);
+            this.lblWords.TabIndex = 5;
+            this.lblWords.Text = "Words to Find";
+            // 
+            // rtbWords
+            // 
+            this.rtbWords.Location = new System.Drawing.Point(339, 474);
+            this.rtbWords.Name = "rtbWords";
+            this.rtbWords.Size = new System.Drawing.Size(191, 329);
+            this.rtbWords.TabIndex = 6;
+            this.rtbWords.Text = "";
+            // 
+            // lblWordsearchId
+            // 
+            this.lblWordsearchId.AutoSize = true;
+            this.lblWordsearchId.Location = new System.Drawing.Point(11, 12);
+            this.lblWordsearchId.Name = "lblWordsearchId";
+            this.lblWordsearchId.Size = new System.Drawing.Size(82, 13);
+            this.lblWordsearchId.TabIndex = 7;
+            this.lblWordsearchId.Text = "Wordsearch ID ";
+            // 
+            // btnSaveWordsearch
+            // 
+            this.btnSaveWordsearch.Image = global::DataEntryGUI.Properties.Resources.save;
+            this.btnSaveWordsearch.Location = new System.Drawing.Point(684, 106);
+            this.btnSaveWordsearch.Name = "btnSaveWordsearch";
+            this.btnSaveWordsearch.Size = new System.Drawing.Size(139, 71);
+            this.btnSaveWordsearch.TabIndex = 31;
+            this.btnSaveWordsearch.Text = "Save Wordsearch to Database";
+            this.btnSaveWordsearch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnSaveWordsearch.UseVisualStyleBackColor = true;
+            this.btnSaveWordsearch.Click += new System.EventHandler(this.btnSaveWordsearch_Click);
+            // 
             // WordsearchMarkupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(919, 971);
+            this.Controls.Add(this.btnSaveWordsearch);
+            this.Controls.Add(this.lblWordsearchId);
+            this.Controls.Add(this.rtbWords);
+            this.Controls.Add(this.lblWords);
+            this.Controls.Add(this.lblChars);
             this.Controls.Add(this.btnNextWordsearch);
             this.Controls.Add(this.lblToProcessLength);
             this.Controls.Add(this.rtbChars);
@@ -96,5 +153,10 @@
         private System.Windows.Forms.RichTextBox rtbChars;
         private System.Windows.Forms.Label lblToProcessLength;
         private System.Windows.Forms.Button btnNextWordsearch;
+        private System.Windows.Forms.Label lblChars;
+        private System.Windows.Forms.Label lblWords;
+        private System.Windows.Forms.RichTextBox rtbWords;
+        private System.Windows.Forms.Label lblWordsearchId;
+        private System.Windows.Forms.Button btnSaveWordsearch;
     }
 }

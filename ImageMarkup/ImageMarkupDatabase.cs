@@ -93,6 +93,11 @@ namespace ImageMarkup
             }
         }
 
+        public static void AddImage(Image image)
+        {
+            AddImage(image.Hash, image);
+        }
+
         public static void AddImage(string hash, Image image)
         {
             //If the dataset has been loaded
@@ -153,6 +158,11 @@ namespace ImageMarkup
             {
                 throw new DatabaseNotInitialisedException();
             }
+        }
+
+        public static void AddWordsearch(Wordsearch wordsearch)
+        {
+            AddWordsearch(wordsearch.Id, wordsearch);
         }
 
         public static void AddWordsearch(string wordsearchId, Wordsearch wordsearch)
