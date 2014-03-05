@@ -30,6 +30,8 @@ namespace DataEntryGUI
     {
         //Constants
         private static Color HIGHLIGHT_CHAR_COLOUR = Color.Blue;
+        private const int WORDSEARCH_IMAGE_BITMAP_WIDTH = 400;
+        private const int WORDSEARCH_IMAGE_BITMAP_HEIGHT = 400;
 
         //Private vars
         private string defaultLblToProcessLength;
@@ -70,9 +72,6 @@ namespace DataEntryGUI
                     picBoxWordsearchImage.Image.Dispose();
                 }
                 currentBitmapWithGrid.Dispose();
-
-                //Deregister interest in the wordsearch image bitmap
-                currentWordsearchImage.DeregisterInterestInBitmap();
             }
 
             //If there is another wordsearch to mark up
@@ -84,12 +83,10 @@ namespace DataEntryGUI
                 //Get the clearest image of this wordsearch
                 currentWordsearchImage = ImageMarkupDatabase.GetClearestWordsearchImage(currentWordsearchId);
 
-                //Register interest in the bitmap so we can use it
-                currentWordsearchImage.RegisterInterestInBitmap();
-
-                //Draw the full grid & store for further drawing
-                currentBitmapWithGrid = DrawGrid.Grid(currentWordsearchImage.Bitmap,
-                    currentWordsearchImage.Rows, currentWordsearchImage.Cols);
+                //Get the bitmap of this wordsearch image and draw the grid on it
+                currentBitmapWithGrid = currentWordsearchImage.GetBitmapCustomResolution(
+                    WORDSEARCH_IMAGE_BITMAP_WIDTH, WORDSEARCH_IMAGE_BITMAP_HEIGHT);
+                DrawGrid.GridInPlace(currentBitmapWithGrid, currentWordsearchImage.Rows, currentWordsearchImage.Cols);
 
                 //Highlight 0, 0 (current index) & display the image
                 highlightCharacter(0, 0);

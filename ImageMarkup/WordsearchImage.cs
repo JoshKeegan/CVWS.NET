@@ -174,5 +174,23 @@ namespace ImageMarkup
                 throw new RegisteredInterestException(String.Format("Cannot deregister interest in Bitmap for WordsearchImage of wordsearchID {0}, Image hash {1} as there are currently no registered interests", wordsearchId, FromImageHash));
             }
         }
+
+        public Bitmap GetBitmapCustomResolution(int width, int height)
+        {
+            //Fetch the bitmap of the main image this wordsearch image is in
+            Image fromImage = FromImage;
+            fromImage.RegisterInterestInBitmap();
+
+            //Transform the region containing this wordsearch into a new image
+            QuadrilateralTransformation quadTransform = new QuadrilateralTransformation(
+                new List<IntPoint>(Coordinates), width, height);
+
+            Bitmap customResBitmap = quadTransform.Apply(fromImage.Bitmap);
+
+            //Deregister interest in the main Image's Bitmap to allow for it to dispose of it appropriately
+            fromImage.DeregisterInterestInBitmap();
+
+            return customResBitmap;
+        }
     }
 }
