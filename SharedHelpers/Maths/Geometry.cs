@@ -42,24 +42,37 @@ namespace SharedHelpers.Maths
             return Area(points[0], points[1], points[2], points[3]);
         }
 
-        //Implements general equation from http://www.wikihow.com/Find-the-Area-of-a-Quadrilateral. Might be better to change to more general implementation for any polygon at some point (e.g Shoelace formula)
         public static double Area(IntPoint topLeft, IntPoint topRight, IntPoint bottomRight, IntPoint bottomLeft)
         {
-            double a = EuclideanDistance(topLeft, bottomLeft);
-            double b = EuclideanDistance(bottomLeft, bottomRight);
-            double c = EuclideanDistance(bottomRight, topRight);
-            double d = EuclideanDistance(topRight, topLeft);
+            return Area(new IntPoint[] { topLeft, topRight, bottomRight, bottomLeft });
+        }
 
-            double bottomLeftToTopRight = EuclideanDistance(bottomLeft, topRight);
-            //double topLeftToBottomRight = EuclideanDistance(topLeft, bottomRight);
+        public static double Area(ICollection<IntPoint> points)
+        {
+            IntPoint[] arrPoints = points.ToArray();
+            return Area(arrPoints);
+        }
 
-            double A = TriangleAngle(a, bottomLeftToTopRight, d);
-            double C = TriangleAngle(c, bottomLeftToTopRight, c);
+        //Implements the Shoelace algorithm http://en.wikipedia.org/wiki/Shoelace_formula
+        public static double Area(IntPoint[] points)
+        {
+            //TODO: Check there are at least 3 points (for any valid shape that has an area)
 
-            double topLeftTriangleArea = (a * d * Math.Sin(A)) / 2;
-            double bottomRightTriangleArea = (b * c * Math.Sin(C)) / 2;
+            //TODO: Check the order of the points are valid & reorder before calculations??
 
-            return topLeftTriangleArea + bottomRightTriangleArea;
+            //TODO: Switch to ulong for even bigger areas
+            long sumA = 0;
+            long sumB = 0;
+            for(int i = 0; i < points.Length - 1; i++)
+            {
+                sumA += points[i].X * points[i + 1].Y;
+                sumB += points[i + 1].X * points[i].Y;
+            }
+            sumA += points[points.Length - 1].X * points[0].Y;
+            sumB += points[0].X * points[points.Length - 1].Y;
+
+            long diff = Math.Abs(sumA - sumB);
+            return (double)diff / 2;
         }
 
         //get the angle between side a & c (i.e. angle B) in any triangle where all 3 sides are known
