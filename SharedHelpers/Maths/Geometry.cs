@@ -56,22 +56,33 @@ namespace SharedHelpers.Maths
         //Implements the Shoelace algorithm http://en.wikipedia.org/wiki/Shoelace_formula
         public static double Area(IntPoint[] points)
         {
-            //TODO: Check there are at least 3 points (for any valid shape that has an area)
+            //There must be at least 3 points in any shape with an area
+            if(points.Length < 3)
+            {
+                throw new InvalidShapeException("A shape requires at least 3 points in order to have an Area");
+            }
 
             //TODO: Check the order of the points are valid & reorder before calculations??
 
-            //TODO: Switch to ulong for even bigger areas
-            long sumA = 0;
-            long sumB = 0;
+            ulong sumA = 0;
+            ulong sumB = 0;
             for(int i = 0; i < points.Length - 1; i++)
             {
-                sumA += points[i].X * points[i + 1].Y;
-                sumB += points[i + 1].X * points[i].Y;
+                sumA += (ulong)(points[i].X * points[i + 1].Y);
+                sumB += (ulong)(points[i + 1].X * points[i].Y);
             }
-            sumA += points[points.Length - 1].X * points[0].Y;
-            sumB += points[0].X * points[points.Length - 1].Y;
+            sumA += (ulong)(points[points.Length - 1].X * points[0].Y);
+            sumB += (ulong)(points[0].X * points[points.Length - 1].Y);
 
-            long diff = Math.Abs(sumA - sumB);
+            ulong diff;
+            if(sumA > sumB)
+            {
+                diff = sumA - sumB;
+            }
+            else
+            {
+                diff = sumB - sumA;
+            }
             return (double)diff / 2;
         }
 
