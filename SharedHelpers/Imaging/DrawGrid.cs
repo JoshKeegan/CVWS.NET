@@ -74,6 +74,7 @@ namespace SharedHelpers.Imaging
                 ImageLockMode.ReadWrite, img.PixelFormat);
 
             //Draw lines at regular intervals along the image both vertically & horizontally
+            //TODO: Fix bug where sometimes draws a line at the end, other times doesn't (because of double precision)
             double colWidth = img.Width / (double)cols;
             for (double i = colWidth; i < img.Width; i += colWidth)
             {
@@ -91,6 +92,41 @@ namespace SharedHelpers.Imaging
             }
 
             img.UnlockBits(imgData);
+        }
+
+        public static IntPoint[] GetImageCoordinatesForChar(int width, int height, int rows, int cols, int rowNum, int colNum)
+        {
+            if (rows < 0 || cols < 0 || rowNum < 0 || colNum < 0)
+            {
+                throw new InvalidRowsAndColsException("Rows or Cols must not be negative");
+            }
+
+            return GetImageCoordinatesForChar(width, height, (uint)rows, (uint)cols, (uint)rowNum, (uint)colNum);
+        }
+
+        public static IntPoint[] GetImageCoordinatesForChar(int width, int height, uint rows, uint cols, uint rowNum, uint colNum)
+        {
+            double colWidth = width / (double)cols;
+            double rowHeight = height / (double)rows;
+
+            int leftX = (int)(colWidth * colNum);
+            int rightX = (int)(colWidth * (colNum + 1));
+
+            int topY = (int)(rowHeight * rowNum);
+            int bottomY = (int)(rowHeight * (rowNum + 1));
+
+            IntPoint topLeft = new IntPoint(leftX, topY);
+            IntPoint topRight = new IntPoint(rightX, topY);
+            IntPoint bottomRight = new IntPoint(rightX, bottomY);
+            IntPoint bottomLeft = new IntPoint(leftX, bottomY);
+
+            IntPoint[] toRet = new IntPoint[4];
+            toRet[0] = topLeft;
+            toRet[1] = topRight;
+            toRet[2] = bottomRight;
+            toRet[3] = bottomLeft;
+
+            return toRet;
         }
 
         public static Bitmap Grid(Bitmap img, uint[,] rows, uint[,] cols)

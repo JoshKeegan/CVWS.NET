@@ -172,7 +172,7 @@ namespace DataEntryGUI
             }
             else //Otherwise there are no more images to be processed
             {
-                picBoxImage.Image = new Bitmap(1, 1); //Set visible to false instead??
+                picBoxImage.Visible = false;
             }
             
         }

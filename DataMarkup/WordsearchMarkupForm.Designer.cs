@@ -42,6 +42,7 @@
             this.rtbChars.Size = new System.Drawing.Size(661, 330);
             this.rtbChars.TabIndex = 1;
             this.rtbChars.Text = "";
+            this.rtbChars.TextChanged += new System.EventHandler(this.rtbChars_TextChanged);
             // 
             // lblToProcessLength
             // 
@@ -68,6 +69,7 @@
             this.picBoxWordsearchImage.Location = new System.Drawing.Point(13, 13);
             this.picBoxWordsearchImage.Name = "picBoxWordsearchImage";
             this.picBoxWordsearchImage.Size = new System.Drawing.Size(661, 421);
+            this.picBoxWordsearchImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxWordsearchImage.TabIndex = 0;
             this.picBoxWordsearchImage.TabStop = false;
             // 
@@ -81,7 +83,7 @@
             this.Controls.Add(this.rtbChars);
             this.Controls.Add(this.picBoxWordsearchImage);
             this.Name = "WordsearchMarkupForm";
-            this.Text = "h";
+            this.Text = "Word search Markup";
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -15,20 +15,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using AForge;
+using AForge.Imaging;
+
 using ImageMarkup;
 using ImageMarkup.Exceptions;
 using SharedHelpers;
 using SharedHelpers.Imaging;
+using SharedHelpers.Exceptions;
 
 namespace DataEntryGUI
 {
     public partial class WordsearchMarkupForm : Form
     {
+        //Constants
+        private static Color HIGHLIGHT_CHAR_COLOUR = Color.Blue;
+
         //Private vars
         private string defaultLblToProcessLength;
         private Queue<string> toProcess;
         private string currentWordsearchId = null;
         private WordsearchImage currentWordsearchImage = null;
+        private Bitmap currentBitmapWithGrid = null;
 
         public WordsearchMarkupForm()
         {
@@ -51,6 +59,79 @@ namespace DataEntryGUI
             updateLblToProcess();
         }
 
+        private void btnNextWordsearch_Click(object sender, EventArgs e)
+        {
+            //If there is a Bitmap to dispose of
+            if (currentWordsearchImage != null)
+            {
+                //Dispose of bitmap(s) derived from WordsearchImage bitmap
+                if(picBoxWordsearchImage.Image != currentBitmapWithGrid)
+                {
+                    picBoxWordsearchImage.Image.Dispose();
+                }
+                currentBitmapWithGrid.Dispose();
+
+                //Deregister interest in the wordsearch image bitmap
+                currentWordsearchImage.DeregisterInterestInBitmap();
+            }
+
+            //If there is another wordsearch to mark up
+            if (toProcess.Count > 0)
+            {
+                //Get the next wordsearch ID
+                currentWordsearchId = toProcess.Dequeue();
+
+                //Get the clearest image of this wordsearch
+                currentWordsearchImage = ImageMarkupDatabase.GetClearestWordsearchImage(currentWordsearchId);
+
+                //Register interest in the bitmap so we can use it
+                currentWordsearchImage.RegisterInterestInBitmap();
+
+                //Draw the full grid & store for further drawing
+                currentBitmapWithGrid = DrawGrid.Grid(currentWordsearchImage.Bitmap,
+                    currentWordsearchImage.Rows, currentWordsearchImage.Cols);
+
+                //Highlight 0, 0 (current index) & display the image
+                highlightCharacter(0, 0);
+
+                //Update the label showing how many wordsearches are left to be processed
+                updateLblToProcess();
+            }
+            else //Otherwise there are no more wordsearches to mark up
+            {
+                picBoxWordsearchImage.Visible = false;
+            }
+        }
+
+        private void rtbChars_TextChanged(object sender, EventArgs e)
+        {
+            string[] lines = rtbChars.Text.Split('\n');
+            
+
+            //TODO: Check that the text entered hasn't gone out of bounds
+
+
+            //Get the row & col number of the caret
+            Tuple<int, int> rowColPos = getRowsAndColsFromCaretPos(rtbChars.SelectionStart);
+            int rowIdx = rowColPos.Item1;
+            int colIdx = rowColPos.Item2;
+
+            //If the user has typed in the last character of a row, and there are more rows to be entered, add a new line
+            if(colIdx >= currentWordsearchImage.Cols)
+            {
+                rtbChars.Text += "\n";
+                rtbChars.Focus(); //Give the RTB focus to ensure it's safe to move the caret
+                rtbChars.SelectionStart = rtbChars.Text.Length;
+
+                //Update the indexes we're using
+                rowIdx++;
+                colIdx = 0;
+            }
+
+            //Highlight the next character for the user to enter
+            highlightCharacter(rowIdx, colIdx);
+        }
+
         /*
          * Private Helpers
          */
@@ -59,40 +140,34 @@ namespace DataEntryGUI
             lblToProcessLength.Text = toProcess.Count.ToString() + defaultLblToProcessLength;
         }
 
-        private void btnNextWordsearch_Click(object sender, EventArgs e)
+        private Tuple<int, int> getRowsAndColsFromCaretPos(int caretPos)
         {
-            //If there is a Bitmap to dispose of
-            if(currentWordsearchImage != null)
+            int rowIdx = caretPos / ((int)currentWordsearchImage.Cols + 1); //+1 to account for newline characters
+            int colIdx = caretPos % ((int)currentWordsearchImage.Cols + 1);
+
+            return new Tuple<int, int>(rowIdx, colIdx);
+        }
+
+        private void highlightCharacter(int row, int col)
+        {
+            if(row < 0 || col < 0)
             {
-                //TODO: Dispose of bitmap(s) derived from WordsearchImage bitmap
-
-                //TODO: Deregister interest in the wordsearch image bitmap
-
+                throw new InvalidRowsAndColsException("Rows or Cols must not be negative");
             }
 
-            //If there is another wordsearch to mark up
-            if(toProcess.Count > 0)
+            IntPoint[] charPoints = DrawGrid.GetImageCoordinatesForChar(currentBitmapWithGrid.Width, currentBitmapWithGrid.Height,
+                currentWordsearchImage.Rows, currentWordsearchImage.Cols, (uint)row, (uint)col);
+
+            Bitmap highlighted = DrawShapes.Polygon(currentBitmapWithGrid, new List<IntPoint>(charPoints), HIGHLIGHT_CHAR_COLOUR);
+
+            //If there is a highlighted image currently being show, dispose of it
+            if(picBoxWordsearchImage.Image != null &&
+                picBoxWordsearchImage.Image != currentBitmapWithGrid)
             {
-                //Get the next wordsearch ID
-                currentWordsearchId = toProcess.Dequeue();
-
-                //Get the clearest image of this wordsearch
-                currentWordsearchImage = ImageMarkupDatabase.GetClearestWordsearchImage(currentWordsearchId);
-
-                //TODO: Register interest in the bitmap, & fetch it
-
-                //TODO: Draw the full grid & store for further drawing
-
-                //TODO: Highlight 0, 0 (current index)
-
-                //TODO: Display wordsearch image
-
+                picBoxWordsearchImage.Image.Dispose();
             }
-            else //Otherwise there are no more wordsearches to mark up
-            {
-                picBoxWordsearchImage.Image = new Bitmap(1, 1); //Set visible to false instead??
-            }
-            
+
+            picBoxWordsearchImage.Image = highlighted;
         }
     }
 }
