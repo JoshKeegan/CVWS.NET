@@ -105,6 +105,7 @@ namespace DataEntryGUI
                 lblWordsearchId.Text = defaultLblWordsearchId + currentWordsearchId;
 
                 //Reset all fields
+                resetFields();
             }
             else //Otherwise there are no more wordsearches to mark up
             {

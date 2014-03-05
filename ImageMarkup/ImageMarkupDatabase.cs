@@ -440,19 +440,20 @@ namespace ImageMarkup
                 string wordsearchId = wordsearchNode.SelectSingleNode(XML_WORDSEARCH_ID_EL).InnerText;
 
                 //Chars
-                string strChars = wordsearchNode.SelectSingleNode(XML_WORDSEARCH_CHARS_EL).InnerText;
+                string strChars = wordsearchNode.SelectSingleNode(XML_WORDSEARCH_CHARS_EL).InnerText.Replace("\r", ""); //Strip carriage returns
                 string[] strCharsRows = strChars.Split('\n');
                 char[,] chars = new char[strCharsRows[0].Length, strCharsRows.Length];
                 for(int i = 0; i < strCharsRows.Length; i++)
                 {
                     for(int j = 0; j < strCharsRows[i].Length; j++)
                     {
-                        chars[j, i] = strCharsRows[i][j];//TODO: Check this is the right way arround
+                        chars[j, i] = strCharsRows[i][j];
                     }
                 }
 
                 //Words
-                XmlNodeList wordNodes = wordsearchNode.SelectNodes(XML_WORDSEARCH_WORDS_EL);
+                XmlNode wordsNode = wordsearchNode.SelectSingleNode(XML_WORDSEARCH_WORDS_EL);
+                XmlNodeList wordNodes = wordsNode.SelectNodes(XML_WORDSEARCH_WORD_EL);
                 List<string> words = new List<string>();
                 foreach(XmlNode wordNode in wordNodes)
                 {

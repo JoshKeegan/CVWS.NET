@@ -52,7 +52,12 @@ namespace ImageMarkup
                     {
                         builder.Append(Chars[i, j]);
                     }
-                    builder.Append("\n");
+
+                    //Don't append a newline on the last line
+                    if(i != Chars.GetLength(0) - 1)
+                    {
+                        builder.Append("\n");
+                    }
                 }
                 return builder.ToString();
             }

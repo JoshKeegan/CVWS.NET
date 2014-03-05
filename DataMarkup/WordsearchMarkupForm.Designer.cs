@@ -42,6 +42,7 @@
             // 
             // rtbChars
             // 
+            this.rtbChars.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbChars.Location = new System.Drawing.Point(15, 473);
             this.rtbChars.Name = "rtbChars";
             this.rtbChars.Size = new System.Drawing.Size(317, 330);
@@ -98,6 +99,7 @@
             // 
             // rtbWords
             // 
+            this.rtbWords.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbWords.Location = new System.Drawing.Point(339, 474);
             this.rtbWords.Name = "rtbWords";
             this.rtbWords.Size = new System.Drawing.Size(191, 329);
