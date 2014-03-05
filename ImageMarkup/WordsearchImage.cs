@@ -44,7 +44,7 @@ namespace ImageMarkup
             }
         }
 
-        public double Area
+        public double ScreenSpaceArea
         {
             get
             {

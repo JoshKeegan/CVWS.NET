@@ -288,13 +288,13 @@ namespace ImageMarkup
             }
 
             //Find the image with the largest screen space area
-            double largest = wordsearchImages[0].Area;
+            double largest = wordsearchImages[0].ScreenSpaceArea;
             int largestIdx = 0;
 
             for(int i = 1; i < wordsearchImages.Count; i++)
             {
-                double area = wordsearchImages[i].Area;
-                if(wordsearchImages[i].Area > largest)
+                double area = wordsearchImages[i].ScreenSpaceArea;
+                if(wordsearchImages[i].ScreenSpaceArea > largest)
                 {
                     largest = area;
                     largestIdx = i;
