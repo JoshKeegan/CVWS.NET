@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
     <Compile Include="Exceptions\RegisteredInterestException.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\DrawDefaults.cs" />

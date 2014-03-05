@@ -3,7 +3,7 @@
  * Shared Helpers
  * Draw Grid class - various methods to draw grids on images
  * By Josh Keegan 03/03/2014
- * Last Edit 04/03/2014
+ * Last Edit 05/03/2014
  */
 
 using System;
@@ -17,11 +17,18 @@ using System.Threading.Tasks;
 using AForge;
 using AForge.Imaging;
 
+using SharedHelpers.Exceptions;
+
 namespace SharedHelpers.Imaging
 {
     public static class DrawGrid
     {
         public static Bitmap Grid(Bitmap img, int rows, int cols)
+        {
+            return Grid(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
+        }
+
+        public static Bitmap Grid(Bitmap img, uint rows, uint cols)
         {
             return Grid(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
         }
@@ -33,12 +40,34 @@ namespace SharedHelpers.Imaging
             return img;
         }
 
+        public static Bitmap Grid(Bitmap imgOrig, uint rows, uint cols, Color colour)
+        {
+            Bitmap img = new Bitmap(imgOrig);
+            GridInPlace(img, rows, cols, colour);
+            return img;
+        }
+
         public static void GridInPlace(Bitmap img, int rows, int cols)
         {
             GridInPlace(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
         }
 
+        public static void GridInPlace(Bitmap img, uint rows, uint cols)
+        {
+            GridInPlace(img, rows, cols, DrawDefaults.DEFAULT_COLOUR);
+        }
+
         public static void GridInPlace(Bitmap img, int rows, int cols, Color colour)
+        {
+            if(rows < 0 || cols < 0)
+            {
+                throw new InvalidRowsAndColsException("Rows or Cols must not be negative");
+            }
+
+            GridInPlace(img, (uint)rows, (uint)cols, colour);
+        }
+
+        public static void GridInPlace(Bitmap img, uint rows, uint cols, Color colour)
         {
             //Lock image for read write so we can alter it
             BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
