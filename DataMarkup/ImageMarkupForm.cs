@@ -40,14 +40,14 @@ namespace DataEntryGUI
         private Queue<KeyValuePair<Bitmap, string>> toProcess; //Store the hash along with the Bitmap so we don't have to recompute it later
         private KeyValuePair<Bitmap, string> currentBitmap;
         private Bitmap bitmapToShow = null;
-        List<WordsearchImage> wordsearchImages; // For the images of word searches in the current image
+        private List<WordsearchImage> wordsearchImages; // For the images of word searches in the current image
 
         public ImageMarkupForm()
         {
             InitializeComponent();
 
             //Store the lblToProcessLength default label so the number can be prepended
-            defaultLblToProcessLength = lblToPorcessLength.Text;
+            defaultLblToProcessLength = lblToProcessLength.Text;
 
             //If the Image Markup Database hasn't already been loaded
             if(!ImageMarkupDatabase.Loaded)
@@ -172,7 +172,7 @@ namespace DataEntryGUI
             }
             else //Otherwise there are no more images to be processed
             {
-                picBoxImage.Image = new Bitmap(1, 1);
+                picBoxImage.Image = new Bitmap(1, 1); //Set visible to false instead??
             }
             
         }
@@ -485,7 +485,7 @@ namespace DataEntryGUI
          */
         private void updateLblToProcessLength()
         {
-            lblToPorcessLength.Text = toProcess.Count.ToString() + defaultLblToProcessLength;
+            lblToProcessLength.Text = toProcess.Count.ToString() + defaultLblToProcessLength;
         }
 
         private void resetFields()

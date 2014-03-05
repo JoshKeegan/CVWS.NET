@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.lblToPorcessLength = new System.Windows.Forms.Label();
+            this.lblToProcessLength = new System.Windows.Forms.Label();
             this.picBoxWordsearchImageLarge = new System.Windows.Forms.PictureBox();
             this.picBoxImage = new System.Windows.Forms.PictureBox();
             this.btnAddWordsearchImage = new System.Windows.Forms.Button();
@@ -72,14 +72,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImage)).BeginInit();
             this.SuspendLayout();
             // 
-            // lblToPorcessLength
+            // lblToProcessLength
             // 
-            this.lblToPorcessLength.AutoSize = true;
-            this.lblToPorcessLength.Location = new System.Drawing.Point(1504, 6);
-            this.lblToPorcessLength.Name = "lblToPorcessLength";
-            this.lblToPorcessLength.Size = new System.Drawing.Size(97, 13);
-            this.lblToPorcessLength.TabIndex = 1;
-            this.lblToPorcessLength.Text = " Images to Process";
+            this.lblToProcessLength.AutoSize = true;
+            this.lblToProcessLength.Location = new System.Drawing.Point(1504, 6);
+            this.lblToProcessLength.Name = "lblToProcessLength";
+            this.lblToProcessLength.Size = new System.Drawing.Size(97, 13);
+            this.lblToProcessLength.TabIndex = 1;
+            this.lblToProcessLength.Text = " Images to Process";
             // 
             // picBoxWordsearchImageLarge
             // 
@@ -406,7 +406,7 @@
             this.Controls.Add(this.lblTopLeft);
             this.Controls.Add(this.btnAddWordsearchImage);
             this.Controls.Add(this.btnNextImage);
-            this.Controls.Add(this.lblToPorcessLength);
+            this.Controls.Add(this.lblToProcessLength);
             this.Name = "ImageMarkupForm";
             this.Text = "Image Markup";
             ((System.ComponentModel.ISupportInitialize)(this.picBoxWordsearchImageLarge)).EndInit();
@@ -422,7 +422,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox picBoxImage;
-        private System.Windows.Forms.Label lblToPorcessLength;
+        private System.Windows.Forms.Label lblToProcessLength;
         private System.Windows.Forms.Button btnNextImage;
         private System.Windows.Forms.Button btnAddWordsearchImage;
         private System.Windows.Forms.Label lblTopLeft;

@@ -3,6 +3,7 @@
  * Image Markup
  * Wordsearch Image Class
  * By Josh Keegan 26/02/2014
+ * Last Edit 05/03/2014
  */
 
 using System;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 using AForge;
 
 using ImageMarkup.Exceptions;
+using SharedHelpers.Maths;
 
 namespace ImageMarkup
 {
@@ -39,6 +41,14 @@ namespace ImageMarkup
                 toRet[3] = BottomLeft;
 
                 return toRet;
+            }
+        }
+
+        public double Area
+        {
+            get
+            {
+                return Geometry.Area(TopLeft, TopRight, BottomRight, BottomLeft);
             }
         }
 

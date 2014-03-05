@@ -219,45 +219,109 @@ namespace ImageMarkup
         //consider an extra data structure for mapping wordsearchIds => WordsearchImages
         public static List<WordsearchImage> GetWordsearchImages(string wordsearchId)
         {
-            List<WordsearchImage> toRet = new List<WordsearchImage>();
-
-            foreach(Image image in images.Values)
+            //If the dataset has been loaded
+            if(images != null)
             {
-                foreach(WordsearchImage wordsearchImage in image.WordsearchImages)
-                {
-                    try
-                    {
-                        if(wordsearchImage.WordsearchId == wordsearchId)
-                        {
-                            toRet.Add(wordsearchImage);
-                        }
-                    }
-                    catch { }
-                }
-            }
+                List<WordsearchImage> toRet = new List<WordsearchImage>();
 
-            return toRet;
+                foreach (Image image in images.Values)
+                {
+                    foreach (WordsearchImage wordsearchImage in image.WordsearchImages)
+                    {
+                        try
+                        {
+                            if (wordsearchImage.WordsearchId == wordsearchId)
+                            {
+                                toRet.Add(wordsearchImage);
+                            }
+                        }
+                        catch { }
+                    }
+                }
+
+                return toRet;
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
         }
 
         //Get the first WordsearchImage of the specified wordsearch
         public static WordsearchImage GetWordsearchImage(string wordsearchId)
         {
+            //If the dataset has been loaded
+            if(images != null)
+            {
+                foreach (Image image in images.Values)
+                {
+                    foreach (WordsearchImage wordsearchImage in image.WordsearchImages)
+                    {
+                        try
+                        {
+                            if (wordsearchImage.WordsearchId == wordsearchId)
+                            {
+                                return wordsearchImage;
+                            }
+                        }
+                        catch { }
+                    }
+                }
+
+                throw new DataNotFoundException(String.Format("WordsearchImages with WordsearchID {0} not found", wordsearchId));
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
+        //Get the best WordsearchImage of the specified wordsearch (currently based on area, extra metrics could be added later, e.g. checks for metadata about lighting etc...)
+        public static WordsearchImage GetClearestWordsearchImage(string wordsearchId)
+        {
+            List<WordsearchImage> wordsearchImages = GetWordsearchImages(wordsearchId);
+
+            //check there are some WordsearchImages with this wordsearch ID
+            if(wordsearchImages.Count == 0)
+            {
+                throw new DataNotFoundException(String.Format("WordsearchImages with WordsearchID {0} not found", wordsearchId));
+            }
+
+            //Find the image with the largest screen space area
+            double largest = wordsearchImages[0].Area;
+            int largestIdx = 0;
+
+            for(int i = 1; i < wordsearchImages.Count; i++)
+            {
+                double area = wordsearchImages[i].Area;
+                if(wordsearchImages[i].Area > largest)
+                {
+                    largest = area;
+                    largestIdx = i;
+                }
+            }
+
+            return wordsearchImages[largestIdx];
+        }
+
+        //Get a list of wordsearchID's that need marking up
+        public static HashSet<string> GetWordsearchIDsToBeMarkedUp()
+        {
+            HashSet<string> toRet = new HashSet<string>();
+
             foreach(Image image in images.Values)
             {
                 foreach(WordsearchImage wordsearchImage in image.WordsearchImages)
                 {
-                    try
+                    if(!ContainsWordsearch(wordsearchImage.WordsearchId)
+                        && !toRet.Contains(wordsearchImage.WordsearchId))
                     {
-                        if (wordsearchImage.WordsearchId == wordsearchId)
-                        {
-                            return wordsearchImage;
-                        }
+                        toRet.Add(wordsearchImage.WordsearchId);
                     }
-                    catch { }
                 }
             }
 
-            throw new DataNotFoundException(String.Format("WordsearchImages with WordsearchID {0} not found", wordsearchId));
+            return toRet;
         }
 
         //Private Methods
