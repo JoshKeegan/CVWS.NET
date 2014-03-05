@@ -129,7 +129,8 @@ namespace DataEntryGUI
                 int colIdx = rowColPos.Item2;
 
                 //If the user has typed in the last character of a row, and there are more rows to be entered, add a new line
-                if (colIdx >= currentWordsearchImage.Cols)
+                if (colIdx >= currentWordsearchImage.Cols
+                    && rowIdx < currentWordsearchImage.Rows - 1)
                 {
                     rtbChars.Text += "\n";
                     rtbChars.Focus(); //Give the RTB focus to ensure it's safe to move the caret
