@@ -52,6 +52,8 @@
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />
     <Compile Include="Imaging\DrawShapes.cs" />
+    <Compile Include="Maths\Exceptions\InvalidShapeException.cs" />
+    <Compile Include="Maths\Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
