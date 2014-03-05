@@ -212,7 +212,7 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Test with 
+        //Test with an arbitrary quadrilateral
         public void TestArea3()
         {
             IntPoint topLeft = new IntPoint(12, 123);
@@ -227,10 +227,66 @@ namespace UnitTests.SharedHelpers.Maths
             Assert.AreEqual(expected, actual);
         }
 
+        [TestMethod]
+        //Test with array
+        public void TestArea4()
+        {
+            Assert.AreEqual(VALID_QUADRILATERAL_AREA, Geometry.Area(getValidQuadrilateral()));
+        }
+
+        [TestMethod]
+        //Test with a non-array collection
+        public void TestArea5()
+        {
+            Assert.AreEqual(VALID_QUADRILATERAL_AREA, Geometry.Area(new List<IntPoint>(getValidQuadrilateral())));
+        }
+
+        [TestMethod]
+        //Test with triangle
+        public void TestArea6()
+        {
+            Assert.AreEqual(VALID_TRIANGLE_AREA, Geometry.Area(getValidTriangle()));
+        }
+
+        [TestMethod]
+        //Test with anticlockwise winding order
+        public void TestArea7()
+        {
+            IntPoint[] points = new IntPoint[4];
+            points[0] = new IntPoint(12, 123);
+            points[1] = new IntPoint(5, 42);
+            points[2] = new IntPoint(324, 12);
+            points[3] = new IntPoint(136, 203);
+
+            double actual = Geometry.Area(points);
+
+            double expected = 32386.5; //Calculated by hand with the shoelace formula
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        //Test with points out of order
+        public void TestArea8()
+        {
+            IntPoint[] points = new IntPoint[4];
+            points[0] = new IntPoint(136, 203);
+            points[1] = new IntPoint(12, 123);
+            points[2] = new IntPoint(324, 12);
+            points[3] = new IntPoint(5, 42);
+
+            double actual = Geometry.Area(points);
+
+            double expected = 32386.5; //Calculated by hand with the shoelace formula
+
+            Assert.AreEqual(expected, actual);
+        }
+
 
         /*
          * Private Helpers
          */
+        private const double VALID_TRIANGLE_AREA = 0.5;
         private static IntPoint[] getValidTriangle()
         {
             IntPoint[] toRet = new IntPoint[3];

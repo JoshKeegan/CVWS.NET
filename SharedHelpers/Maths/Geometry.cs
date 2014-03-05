@@ -53,7 +53,7 @@ namespace SharedHelpers.Maths
             return Area(arrPoints);
         }
 
-        //Implements the Shoelace algorithm http://en.wikipedia.org/wiki/Shoelace_formula
+        //Calculates the area of an arbitrary polygon using the Shoelace algorithm http://en.wikipedia.org/wiki/Shoelace_formula
         public static double Area(IntPoint[] points)
         {
             //There must be at least 3 points in any shape with an area
@@ -63,6 +63,7 @@ namespace SharedHelpers.Maths
             }
 
             //TODO: Check the order of the points are valid & reorder before calculations??
+            //see http://code.activestate.com/recipes/578047-area-of-polygon-using-shoelace-formula/?in=lang-python for an example
 
             ulong sumA = 0;
             ulong sumB = 0;
