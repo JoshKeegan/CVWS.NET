@@ -19,6 +19,7 @@ using AForge.Imaging.Filters;
 using ImageMarkup.Exceptions;
 using SharedHelpers.Maths;
 using SharedHelpers.Exceptions;
+using SharedHelpers.Imaging;
 
 namespace ImageMarkup
 {
@@ -195,29 +196,14 @@ namespace ImageMarkup
 
         public Bitmap[,] GetCharBitmaps(int width, int height)
         {
-            Bitmap[,] chars = new Bitmap[Cols, Rows];
-
             int wordsearchWidth = width * (int)Cols;
             int wordsearchHeight = height * (int)Rows;
 
+            //get a bitmap of this wordsearch image, but make the resolution correct for the desired character resolutions
             Bitmap wordsearchImageBitmap = GetBitmapCustomResolution(wordsearchWidth, wordsearchHeight);
 
-            //TODO: Optimise by using pointers to the pixel values in the original image
-            for (int col = 0; col < Cols; col++)
-            {
-                for(int row = 0; row < Rows; row++)
-                {
-                    List<IntPoint> coordinates = new List<IntPoint>();
-                    coordinates.Add(new IntPoint(col * width, row * height));
-                    coordinates.Add(new IntPoint((col + 1) * width, row * height));
-                    coordinates.Add(new IntPoint((col + 1) * width, row * height));
-                    coordinates.Add(new IntPoint(col * width, (row + 1) * height));
-
-                    QuadrilateralTransformation quadTransform = new QuadrilateralTransformation(coordinates, width, height);
-
-                    chars[col, row] = quadTransform.Apply(wordsearchImageBitmap);
-                }
-            }
+            //Split the bitmap up into a 2D array of bitmaps
+            Bitmap[,] chars = SplitImage.Grid(wordsearchImageBitmap, Rows, Cols);
 
             wordsearchImageBitmap.Dispose();
 
