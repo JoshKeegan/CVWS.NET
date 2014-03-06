@@ -35,7 +35,8 @@ namespace DevCharClassification
         private const int NUM_CLASSES = 26;
         private const double LEARNING_RATE = 0.5;
         private const double LEARNED_AT_ERROR = 0.5; //The error returned by the neural network. When less than this class as learned
-        private const int MAX_LEARNING_ITERATIONS = 10000; //The maximum number of iterations to train the network for
+        private const int MAX_LEARNING_ITERATIONS = 1000; //The maximum number of iterations to train the network for
+        private const int ITERATIONS_PER_PROGRESS_UPDATE = 25;
 
         static void Main(string[] args)
         {
@@ -119,14 +120,55 @@ namespace DevCharClassification
             {
                 error = teacher.RunEpoch(input, output);
 
+                //Progress update
+                if(iterNum % ITERATIONS_PER_PROGRESS_UPDATE == 0)
+                {
+                    Console.WriteLine("Learned for {0} iterations. Error: {1}", iterNum, error);
+                }
+
                 if(iterNum >= MAX_LEARNING_ITERATIONS)
                 {
                     Console.WriteLine("Reached the maximum number of learning iterations ({0}), with error {1}", MAX_LEARNING_ITERATIONS, error);
+                    break;
                 }
+                iterNum++;
             }
             while (error > LEARNED_AT_ERROR);
 
             Console.WriteLine("Data learned to an error of {0}", error);
+
+            //Compute the number of characters in the input data that are being misclassified
+            int numMisclassified = 0;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                double[] actualOutput = neuralNet.Compute(input[i]);
+                double[] desiredOutput = output[i];
+
+                //Work out which neuron gave the highest probability and which one should have given the highest probability
+                int actualMaxIdx = 0;
+                int desiredMaxIdx = 0;
+
+                for (int j = 1; j < actualOutput.Length; j++)
+                {
+                    if(actualOutput[j] > actualOutput[actualMaxIdx])
+                    {
+                        actualMaxIdx = j;
+                    }
+                    if(desiredOutput[j] > desiredOutput[desiredMaxIdx])
+                    {
+                        desiredMaxIdx = j;
+                    }
+                }
+
+                //If the highest valued neuron wasn't the one it should have been, add one to the number of characters that would have been misclassified
+                if(actualMaxIdx != desiredMaxIdx)
+                {
+                    numMisclassified++;
+                }
+            }
+
+            Console.WriteLine("{0} / {1} characters from the training data would have been misclassified", numMisclassified, numInputs);
         }
 
         private static Dictionary<char, List<double[]>> getCharData(List<WordsearchImage> wordsearchImages)
