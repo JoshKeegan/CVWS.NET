@@ -73,6 +73,7 @@ namespace DevCharClassification
             BradleyLocalThresholding bradleyLocalThreshold = new BradleyLocalThresholding();
             ExtractBiggestBlob extractBiggestBlob = new ExtractBiggestBlob();
             ResizeNearestNeighbor resize = new ResizeNearestNeighbor(CHAR_WITHOUT_WHITESPACE_WIDTH, CHAR_WITHOUT_WHITESPACE_HEIGHT);
+            Invert invert = new Invert();
 
             //Construct Data Structure to be returned
             Dictionary<char, List<float[]>> data = new Dictionary<char, List<float[]>>();
@@ -98,6 +99,9 @@ namespace DevCharClassification
 
                         //Bradley Local Thresholding
                         bradleyLocalThreshold.ApplyInPlace(greyImg);
+
+                        //Invert the image (required for blob detection)
+                        invert.ApplyInPlace(greyImg);
 
                         //Extract the largest blob (the character)
                         Bitmap charWithoutWhitespace = extractBiggestBlob.Apply(greyImg);
