@@ -3,7 +3,7 @@
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014
- * Last Edit 05/03/2014
+ * Last Edit 06/03/2014
  */
 
 using System;
@@ -223,6 +223,18 @@ namespace ImageMarkup
             {
                 throw new DatabaseNotInitialisedException();
             }
+        }
+
+        public static List<WordsearchImage> GetWordsearchImages()
+        {
+            List<WordsearchImage> wordsearchImages = new List<WordsearchImage>();
+
+            foreach (Image image in images.Values)
+            {
+                wordsearchImages.AddRange(image.WordsearchImages);
+            }
+
+            return wordsearchImages;
         }
 
         //Note: because of data structures will be considerably slower than other lookups available. If extensive usage of this is required
