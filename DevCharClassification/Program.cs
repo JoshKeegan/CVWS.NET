@@ -73,33 +73,12 @@ namespace DevCharClassification
             Console.WriteLine("Loaded training character data");
 
             //Convert the training data into a format the Neural network accepts
-            int numInputs = 0;
-            foreach(List<double[]> arr in trainingData.Values)
-            {
-                numInputs += arr.Count;
-            }
-
-            Console.WriteLine("There are {0} training input character samples", numInputs);
-
             Console.WriteLine("Converting data to format for Neural Network . . .");
-            double[][] input = new double[numInputs][];
-            double[][] output = new double[numInputs][];
-            int idx = 0;
-            foreach(KeyValuePair<char, List<double[]>> entry in trainingData)
-            {
-                char c = entry.Key;
-                List<double[]> images = entry.Value;
-
-                double[] thisCharOutput = desiredOutputForChar(c);
-                
-                foreach(double[] image in images)
-                {
-                    input[idx] = image;
-                    output[idx] = thisCharOutput;
-                    idx++;
-                }
-            }
+            double[][] input;
+            double[][] output;
+            convertDataToNeuralNetworkFormat(trainingData, out input, out output);
             Console.WriteLine("Conversion Complete");
+            Console.WriteLine("There are {0} training input character samples", input.Length);
 
             //Create the neural network
             BipolarSigmoidFunction sigmoidFunction = new BipolarSigmoidFunction(2.0f);
@@ -137,6 +116,43 @@ namespace DevCharClassification
 
             Console.WriteLine("Data learned to an error of {0}", error);
 
+            //Evaluate the system on the training data
+            int numTrainingMisclassified = evaluateNetwork(neuralNet, input, output);
+            Console.WriteLine("{0} / {1} characters from the training data would have been misclassified", numTrainingMisclassified, input.Length);
+
+            //Evaluate the system on the evaluation data (which it's never seen before & should therefore indicate real performace)
+
+        }
+
+        private static void convertDataToNeuralNetworkFormat(Dictionary<char, List<double[]>> data, out double[][] input, out double[][] output)
+        {
+            int numInputs = 0;
+            foreach (List<double[]> arr in data.Values)
+            {
+                numInputs += arr.Count;
+            }
+
+            input = new double[numInputs][];
+            output = new double[numInputs][];
+            int idx = 0;
+            foreach (KeyValuePair<char, List<double[]>> entry in data)
+            {
+                char c = entry.Key;
+                List<double[]> images = entry.Value;
+
+                double[] thisCharOutput = desiredOutputForChar(c);
+
+                foreach (double[] image in images)
+                {
+                    input[idx] = image;
+                    output[idx] = thisCharOutput;
+                    idx++;
+                }
+            }
+        }
+
+        private static int evaluateNetwork(Network neuralNet, double[][] input, double[][] output)
+        {
             //Compute the number of characters in the input data that are being misclassified
             int numMisclassified = 0;
 
@@ -151,24 +167,23 @@ namespace DevCharClassification
 
                 for (int j = 1; j < actualOutput.Length; j++)
                 {
-                    if(actualOutput[j] > actualOutput[actualMaxIdx])
+                    if (actualOutput[j] > actualOutput[actualMaxIdx])
                     {
                         actualMaxIdx = j;
                     }
-                    if(desiredOutput[j] > desiredOutput[desiredMaxIdx])
+                    if (desiredOutput[j] > desiredOutput[desiredMaxIdx])
                     {
                         desiredMaxIdx = j;
                     }
                 }
 
                 //If the highest valued neuron wasn't the one it should have been, add one to the number of characters that would have been misclassified
-                if(actualMaxIdx != desiredMaxIdx)
+                if (actualMaxIdx != desiredMaxIdx)
                 {
                     numMisclassified++;
                 }
             }
-
-            Console.WriteLine("{0} / {1} characters from the training data would have been misclassified", numMisclassified, numInputs);
+            return numMisclassified;
         }
 
         private static Dictionary<char, List<double[]>> getCharData(List<WordsearchImage> wordsearchImages)
