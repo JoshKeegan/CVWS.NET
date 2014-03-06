@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,9 +52,11 @@
     <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
     <Compile Include="Exceptions\RegisteredInterestException.cs" />
     <Compile Include="ImageLoader.cs" />
+    <Compile Include="Imaging\Converters.cs" />
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />
     <Compile Include="Imaging\DrawShapes.cs" />
+    <Compile Include="Imaging\Exceptions\UnexpectedPixelFormatException.cs" />
     <Compile Include="Maths\Exceptions\InvalidShapeException.cs" />
     <Compile Include="Maths\Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
