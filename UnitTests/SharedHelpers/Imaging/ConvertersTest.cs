@@ -160,8 +160,8 @@ namespace UnitTests.SharedHelpers.Imaging
         {
             Bitmap b = get8bppConvertedSinglePixelBitmap(Color.Black);
 
-            float[,] expected = new float[1, 1];
-            expected[0, 0] = 0.5f;
+            float[] expected = new float[1];
+            expected[0] = 0.5f;
 
             CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(b));
 
@@ -169,16 +169,38 @@ namespace UnitTests.SharedHelpers.Imaging
         }
 
         [TestMethod]
-        public void TestThresholdedBitmapToFloatArray()
+        public void TestThresholdedBitmapToFloatArray2()
         {
             Bitmap b = get8bppConvertedSinglePixelBitmap(Color.White);
 
-            float[,] expected = new float[1, 1];
-            expected[0, 0] = -0.5f;
+            float[] expected = new float[1];
+            expected[0] = -0.5f;
 
             CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(b));
 
             b.Dispose();
+        }
+
+        [TestMethod]
+        public void TestThresholdedbitmapToFloatArray3()
+        {
+            //Test multi-dimensional bitmap
+            Bitmap b = new Bitmap(2, 2);
+            b.SetPixel(0, 0, Color.Black);
+            b.SetPixel(1, 0, Color.White);
+            b.SetPixel(0, 1, Color.Black);
+            b.SetPixel(1, 1, Color.White);
+
+            Bitmap greyImg = Grayscale.CommonAlgorithms.BT709.Apply(b);
+            Threshold threshold = new Threshold(128);
+            threshold.ApplyInPlace(greyImg);
+            b.Dispose();
+
+            float[] expected = new float[] { 0.5f, -0.5f, 0.5f, -0.5f };
+
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(greyImg));
+
+            greyImg.Dispose();
         }
 
         /*
