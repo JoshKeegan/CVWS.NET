@@ -19,6 +19,9 @@ namespace UnitTests.SharedHelpers.Imaging
     [TestClass]
     public class ConvertersTest
     {
+        /*
+         * ThresholdedBitmapToBoolArray Function Tests
+         */
         [TestMethod]
         public void TestThresholdedBitmapToBoolArray1()
         {
@@ -90,6 +93,63 @@ namespace UnitTests.SharedHelpers.Imaging
             {
                 greyImg.Dispose();
             }
+        }
+
+        /*
+         * BitmapToBoolArray Function Tests
+         */
+        [TestMethod]
+        public void TestBitmapToBoolArray1()
+        {
+            //tests involving this function must have both black and white pixels because of the adaptive thresholding
+            Bitmap b = new Bitmap(2, 1);
+            b.SetPixel(0, 0, Color.Black);
+            b.SetPixel(1, 0, Color.White);
+
+            bool[,] expected = new bool[2, 1];
+            expected[0, 0] = true;
+            expected[1, 0] = false;
+
+            CollectionAssert.AreEqual(expected, Converters.BitmapToBoolArray(b));
+
+            b.Dispose();
+        }
+
+        [TestMethod]
+        public void TestBitmapToBoolArray2()
+        {
+            //Check it works with 8bpp thresholded images
+            Bitmap black = get8bppConvertedSinglePixelBitmap(Color.Black);
+            Bitmap white = get8bppConvertedSinglePixelBitmap(Color.White);
+
+            bool[,] expectedBlack = new bool[1, 1];
+            expectedBlack[0, 0] = true;
+
+            bool[,] expectedWhite = new bool[1, 1];
+            expectedBlack[0, 0] = false;
+
+            CollectionAssert.AreEqual(expectedBlack, Converters.BitmapToBoolArray(black));
+            CollectionAssert.AreEqual(expectedWhite, Converters.BitmapToBoolArray(white));
+
+            black.Dispose();
+            white.Dispose();
+        }
+        
+        [TestMethod]
+        public void TestBitmapToBoolArray3()
+        {
+            //Test works with non-black dark colour & non-white light colour
+            Bitmap b = new Bitmap(2, 1);
+            b.SetPixel(0, 0, Color.DarkBlue);
+            b.SetPixel(1, 0, Color.LightCyan);
+
+            bool[,] expected = new bool[2, 1];
+            expected[0, 0] = true;
+            expected[1, 0] = false;
+
+            CollectionAssert.AreEqual(expected, Converters.BitmapToBoolArray(b));
+
+            b.Dispose();
         }
 
         /*

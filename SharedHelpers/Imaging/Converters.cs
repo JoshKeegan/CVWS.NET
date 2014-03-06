@@ -13,12 +13,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using AForge.Imaging.Filters;
+
 using SharedHelpers.Imaging.Exceptions;
 
 namespace SharedHelpers.Imaging
 {
     public static class Converters
     {
+        public static bool[,] BitmapToBoolArray(Bitmap img)
+        {
+            Bitmap greyImg;
+
+            //If the image is 8bpp
+            if(img.PixelFormat == PixelFormat.Format8bppIndexed)
+            {
+                greyImg = img;
+            }
+            else //Otherwise the image needs converting to greyscale before any further processing
+            {
+                greyImg = Grayscale.CommonAlgorithms.BT709.Apply(img);
+            }
+
+            //Threshold the image
+            BradleyLocalThresholding bradleyLocalThreshold = new BradleyLocalThresholding();
+            Bitmap bradleyLocalImg = bradleyLocalThreshold.Apply(greyImg);
+
+            //Convert to bool array
+            bool[,] toRet = ThresholdedBitmapToBoolArray(bradleyLocalImg);
+
+            //Clean up
+            if(greyImg != img)
+            {
+                greyImg.Dispose();
+            }
+            bradleyLocalImg.Dispose();
+
+            return toRet;
+        }
+
         public static unsafe bool[,] ThresholdedBitmapToBoolArray(Bitmap img)
         {
             //Check the image is greyscale/8bpp (required in order to be thresholded)
