@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 using AForge;
 using AForge.Imaging;
@@ -21,6 +22,7 @@ using AForge.Neuro.Learning;
 using ImageMarkup;
 using SharedHelpers;
 using SharedHelpers.Imaging;
+using System.Drawing.Imaging;
 
 namespace DevCharClassification
 {
@@ -35,8 +37,9 @@ namespace DevCharClassification
         private const int NUM_CLASSES = 26;
         private const double LEARNING_RATE = 0.5;
         private const double LEARNED_AT_ERROR = 0.5; //The error returned by the neural network. When less than this class as learned
-        private const int MAX_LEARNING_ITERATIONS = 1000; //The maximum number of iterations to train the network for
+        private const int MAX_LEARNING_ITERATIONS = 100; //The maximum number of iterations to train the network for
         private const int ITERATIONS_PER_PROGRESS_UPDATE = 25;
+        private const string MISCLASSIFIED_IMAGES_DIR_PATH = "Misclassified";
 
         static void Main(string[] args)
         {
@@ -135,6 +138,94 @@ namespace DevCharClassification
 
             int numEvalMisclassified = evaluateNetwork(neuralNet, evalInput, evalOutput);
             Console.WriteLine("{0} / {1} characters from the evaluation data would have been misclassified", numEvalMisclassified, evalInput.Length);
+
+            //Convert the misclassified images back into bitmaps for inspection & write them to disk
+            Console.WriteLine("Writing misclassified images to disk for manual inspection");
+            exportMisclassifiedImages(neuralNet, input, output);
+            Console.WriteLine("Finished writing misclassified images to disk");
+        }
+
+        private static void exportMisclassifiedImages(Network neuralNet, double[][] input, double[][] output)
+        {
+            //Create a directory to store the image exports in
+            if(!Directory.Exists(MISCLASSIFIED_IMAGES_DIR_PATH))
+            {
+                Directory.CreateDirectory(MISCLASSIFIED_IMAGES_DIR_PATH);
+            }
+            string dirPath;
+            for (int dirCount = 1; true; dirCount++)
+            {
+                dirPath = MISCLASSIFIED_IMAGES_DIR_PATH + "/" + dirCount;
+
+                if(!Directory.Exists(dirPath))
+                {
+                    Directory.CreateDirectory(dirPath);
+                    break;
+                }
+            }
+            int imageNum = 1;
+
+            //Iterate over all of the inputs, checking if they get misclassified
+            for (int i = 0; i < input.Length; i++)
+            {
+                double[] actualOutput = neuralNet.Compute(input[i]);
+                double[] desiredOutput = output[i];
+
+                //Work out which neuron gave the highest probability and which one should have given the highest probability
+                int actualMaxIdx = 0;
+                int desiredMaxIdx = 0;
+
+                for (int j = 1; j < actualOutput.Length; j++)
+                {
+                    if (actualOutput[j] > actualOutput[actualMaxIdx])
+                    {
+                        actualMaxIdx = j;
+                    }
+                    if (desiredOutput[j] > desiredOutput[desiredMaxIdx])
+                    {
+                        desiredMaxIdx = j;
+                    }
+                }
+
+                //If the highest valued neuron wasn't the one it should have been, this is a misclassification
+                if (actualMaxIdx != desiredMaxIdx)
+                {
+                    //Convert this input to a Bitmap
+                    Bitmap img = new Bitmap(CHAR_WITHOUT_WHITESPACE_WIDTH, CHAR_WITHOUT_WHITESPACE_HEIGHT,
+                        PixelFormat.Format8bppIndexed);
+
+                    //Lock image for write so we can set it's data
+                    BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                        ImageLockMode.ReadOnly, img.PixelFormat);
+
+                    unsafe
+                    {
+                        byte* ptrData = (byte*)imgData.Scan0;
+
+                        for (int j = 0; j < img.Width; j++)
+                        {
+                            for (int k = 0; k < img.Height; k++)
+                            {
+                                int offset = k * imgData.Stride + j; // If the image wasn't 8bpp would need to multiply i by the number of BYTES per pixel (as the offset is in bytes not bits)
+                                int inputIdx = (k * CHAR_WITHOUT_WHITESPACE_WIDTH) + j;
+
+                                byte pxVal = input[i][inputIdx] == 0.5 ? (byte)0 : (byte)255;
+
+                                ptrData[offset] = pxVal;
+                            }
+                        }
+                    }
+
+                    img.UnlockBits(imgData);
+
+                    //Write out the image to file
+                    img.Save(dirPath + "/" + imageNum + ".jpg", ImageFormat.Jpeg);
+                    imageNum++;
+
+                    //Clear up
+                    img.Dispose();
+                }
+            }
         }
 
         private static void convertDataToNeuralNetworkFormat(Dictionary<char, List<double[]>> data, out double[][] input, out double[][] output)
