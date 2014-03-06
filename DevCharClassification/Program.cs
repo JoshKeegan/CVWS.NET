@@ -31,6 +31,11 @@ namespace DevCharClassification
         private const int CHAR_WITH_WHITESPACE_HEIGHT = 25;
         private const int CHAR_WITHOUT_WHITESPACE_WIDTH = 16;
         private const int CHAR_WITHOUT_WHITESPACE_HEIGHT = 16;
+        private const int NUM_INPUT_VALUES = CHAR_WITHOUT_WHITESPACE_WIDTH * CHAR_WITHOUT_WHITESPACE_HEIGHT;
+        private const int NUM_CLASSES = 26;
+        private const double LEARNING_RATE = 0.5;
+        private const double LEARNED_AT_ERROR = 0.5; //The error returned by the neural network. When less than this class as learned
+        private const int MAX_LEARNING_ITERATIONS = 10000; //The maximum number of iterations to train the network for
 
         static void Main(string[] args)
         {
@@ -65,6 +70,63 @@ namespace DevCharClassification
             Console.WriteLine("Loading & processing the character data (training)");
             Dictionary<char, List<float[]>> trainingData = getCharData(trainingWordsearchImages);
             Console.WriteLine("Loaded training character data");
+
+            //Convert the training data into a format the Neural network accepts
+            int numInputs = 0;
+            foreach(List<float[]> arr in trainingData.Values)
+            {
+                numInputs += arr.Count;
+            }
+
+            Console.WriteLine("There are {0} training input character samples", numInputs);
+
+            Console.WriteLine("Converting data to format for Neural Network . . .");
+            float[][] input = new float[numInputs][];
+            float[][] output = new float[numInputs][];
+            int idx = 0;
+            foreach(KeyValuePair<char, List<float[]>> entry in trainingData)
+            {
+                char c = entry.Key;
+                List<float[]> images = entry.Value;
+
+                float[] thisCharOutput = desiredOutputForChar(c);
+                
+                foreach(float[] image in images)
+                {
+                    input[idx] = image;
+                    output[idx] = thisCharOutput;
+                    idx++;
+                }
+            }
+            Console.WriteLine("Conversion Complete");
+
+            //Create the neural network
+            BipolarSigmoidFunction sigmoidFunction = new BipolarSigmoidFunction(2.0f);
+            ActivationNetwork neuralNet = new ActivationNetwork(sigmoidFunction, NUM_INPUT_VALUES, NUM_CLASSES);
+
+            //Randomise the networks weights
+            neuralNet.Randomize();
+
+            //Create teacher that the network will use to learn the data
+            BackPropagationLearning teacher = new BackPropagationLearning(neuralNet);
+            teacher.LearningRate = LEARNING_RATE;
+
+            //Make the network learn the data
+            Console.WriteLine("Training the neural network . . .");
+            double error;
+            int iterNum = 0;
+            do
+            {
+                error = teacher.RunEpoch(input, output);
+
+                if(iterNum >= MAX_LEARNING_ITERATIONS)
+                {
+                    Console.WriteLine("Reached the maximum number of learning iterations ({0}), with error {1}", MAX_LEARNING_ITERATIONS, error);
+                }
+            }
+            while (error > LEARNED_AT_ERROR);
+
+            Console.WriteLine("Data learned");
         }
 
         private static Dictionary<char, List<float[]>> getCharData(List<WordsearchImage> wordsearchImages)
@@ -103,6 +165,7 @@ namespace DevCharClassification
                         //Invert the image (required for blob detection)
                         invert.ApplyInPlace(greyImg);
 
+                        //TODO: The biggest blob might be something else (when in a corner of a bounded wordsearch it's often the 2 lines making a square). Account for this
                         //Extract the largest blob (the character)
                         Bitmap charWithoutWhitespace = extractBiggestBlob.Apply(greyImg);
 
@@ -131,6 +194,19 @@ namespace DevCharClassification
             }
 
             return data;
+        }
+
+        //The output desired from the neural network for the specified character
+        private static float[] desiredOutputForChar(char c)
+        {
+            int cIdx = c - 'A';
+            float[] toRet = new float[NUM_CLASSES];
+
+            for (int i = 0; i < toRet.Length; i++)
+            {
+                toRet[i] = i == cIdx ? 0.5f : -0.5f;
+            }
+            return toRet;
         }
     }
 }
