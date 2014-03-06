@@ -3,7 +3,7 @@
  * Image Markup
  * Wordsearch Image Class
  * By Josh Keegan 26/02/2014
- * Last Edit 05/03/2014
+ * Last Edit 06/03/2014
  */
 
 using System;
@@ -191,6 +191,37 @@ namespace ImageMarkup
             fromImage.DeregisterInterestInBitmap();
 
             return customResBitmap;
+        }
+
+        public Bitmap[,] GetCharBitmaps(int width, int height)
+        {
+            Bitmap[,] chars = new Bitmap[Cols, Rows];
+
+            int wordsearchWidth = width * (int)Cols;
+            int wordsearchHeight = height * (int)Rows;
+
+            Bitmap wordsearchImageBitmap = GetBitmapCustomResolution(wordsearchWidth, wordsearchHeight);
+
+            //TODO: Optimise by using pointers to the pixel values in the original image
+            for (int col = 0; col < Cols; col++)
+            {
+                for(int row = 0; row < Rows; row++)
+                {
+                    List<IntPoint> coordinates = new List<IntPoint>();
+                    coordinates.Add(new IntPoint(col * width, row * height));
+                    coordinates.Add(new IntPoint((col + 1) * width, row * height));
+                    coordinates.Add(new IntPoint((col + 1) * width, row * height));
+                    coordinates.Add(new IntPoint(col * width, (row + 1) * height));
+
+                    QuadrilateralTransformation quadTransform = new QuadrilateralTransformation(coordinates, width, height);
+
+                    chars[col, row] = quadTransform.Apply(wordsearchImageBitmap);
+                }
+            }
+
+            wordsearchImageBitmap.Dispose();
+
+            return chars;
         }
     }
 }
