@@ -125,11 +125,11 @@ namespace DevCharClassification
             Dictionary<char, List<double[]>> evaluationData = getCharData(evaluationWordsearchImages);
             Console.WriteLine("Loaded evaluation character data");
 
-            //Convert the training data into a format the Neural network accepts
+            //Convert the evaluation data into a format the Neural network accepts
             Console.WriteLine("Converting data to format for Neural Network . . .");
             double[][] evalInput;
             double[][] evalOutput;
-            convertDataToNeuralNetworkFormat(trainingData, out evalInput, out evalOutput);
+            convertDataToNeuralNetworkFormat(evaluationData, out evalInput, out evalOutput);
             Console.WriteLine("Conversion Complete");
             Console.WriteLine("There are {0} evaluation input character samples", evalInput.Length);
 
