@@ -23,7 +23,8 @@ namespace ImageMarkup
     public static class ImageMarkupDatabase
     {
         //Constants
-        private const string XML_DOC_LOCATION = "markup.xml";
+        public const string DATA_DIRECTORY_PATH = "../../../data/";
+        private const string XML_DOC_LOCATION = DATA_DIRECTORY_PATH + "markup.xml";
 
         private const string XML_ROOT_EL = "ImageMarkupData";
 
@@ -227,14 +228,22 @@ namespace ImageMarkup
 
         public static List<WordsearchImage> GetWordsearchImages()
         {
-            List<WordsearchImage> wordsearchImages = new List<WordsearchImage>();
-
-            foreach (Image image in images.Values)
+            //If the dataaset has been loaded
+            if(images != null)
             {
-                wordsearchImages.AddRange(image.WordsearchImages);
-            }
+                List<WordsearchImage> wordsearchImages = new List<WordsearchImage>();
 
-            return wordsearchImages;
+                foreach (Image image in images.Values)
+                {
+                    wordsearchImages.AddRange(image.WordsearchImages);
+                }
+
+                return wordsearchImages;
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
         }
 
         //Note: because of data structures will be considerably slower than other lookups available. If extensive usage of this is required

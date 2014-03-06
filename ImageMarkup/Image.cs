@@ -3,7 +3,7 @@
  * Image Markup
  * Image class
  * By Josh Keegan 26/02/2014
- * Last Edit 05/03/2014
+ * Last Edit 06/03/2014
  */
 
 using System;
@@ -41,7 +41,7 @@ namespace ImageMarkup
                     //Check that an interest has been registered in the bitmap (not necessary but should act as an early indicator rather than letting memory leaks happen)
                     if(riCountBitmap > 0)
                     {
-                        bitmap = new Bitmap(Path);
+                        bitmap = new Bitmap(ImageMarkupDatabase.DATA_DIRECTORY_PATH + Path);
                     }
                     else //Otherwise the caller hasn't registered their interest in the resource before attempting to access it
                     {
