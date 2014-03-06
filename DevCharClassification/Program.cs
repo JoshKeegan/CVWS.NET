@@ -29,9 +29,9 @@ namespace DevCharClassification
     class Program
     {
         //Constants
-        private const int CHAR_WITH_WHITESPACE_WIDTH = 25;
+        private const int CHAR_WITH_WHITESPACE_WIDTH = 20;
         private const int CHAR_WITH_WHITESPACE_HEIGHT = 25;
-        private const int CHAR_WITHOUT_WHITESPACE_WIDTH = 16;
+        private const int CHAR_WITHOUT_WHITESPACE_WIDTH = 12;
         private const int CHAR_WITHOUT_WHITESPACE_HEIGHT = 16;
         private const int NUM_INPUT_VALUES = CHAR_WITHOUT_WHITESPACE_WIDTH * CHAR_WITHOUT_WHITESPACE_HEIGHT;
         private const int NUM_CLASSES = 26;
