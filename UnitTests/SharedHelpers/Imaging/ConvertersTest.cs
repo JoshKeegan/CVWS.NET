@@ -153,36 +153,36 @@ namespace UnitTests.SharedHelpers.Imaging
         }
 
         /*
-         * ThresholdedBitmapToFloatArray Function Tests
+         * ThresholdedBitmapToDoubleArray Function Tests
          */
         [TestMethod]
-        public void TestThresholdedBitmapToFloatArray1()
+        public void TestThresholdedBitmapToDoubleArray1()
         {
             Bitmap b = get8bppConvertedSinglePixelBitmap(Color.Black);
 
-            float[] expected = new float[1];
-            expected[0] = 0.5f;
+            double[] expected = new double[1];
+            expected[0] = 0.5;
 
-            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(b));
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToDoubleArray(b));
 
             b.Dispose();
         }
 
         [TestMethod]
-        public void TestThresholdedBitmapToFloatArray2()
+        public void TestThresholdedBitmapToDoubleArray2()
         {
             Bitmap b = get8bppConvertedSinglePixelBitmap(Color.White);
 
-            float[] expected = new float[1];
-            expected[0] = -0.5f;
+            double[] expected = new double[1];
+            expected[0] = -0.5;
 
-            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(b));
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToDoubleArray(b));
 
             b.Dispose();
         }
 
         [TestMethod]
-        public void TestThresholdedbitmapToFloatArray3()
+        public void TestThresholdedBitmapToDoubleArray3()
         {
             //Test multi-dimensional bitmap
             Bitmap b = new Bitmap(2, 2);
@@ -196,9 +196,9 @@ namespace UnitTests.SharedHelpers.Imaging
             threshold.ApplyInPlace(greyImg);
             b.Dispose();
 
-            float[] expected = new float[] { 0.5f, -0.5f, 0.5f, -0.5f };
+            double[] expected = new double[] { 0.5, -0.5, 0.5, -0.5 };
 
-            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(greyImg));
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToDoubleArray(greyImg));
 
             greyImg.Dispose();
         }

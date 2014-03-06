@@ -68,12 +68,12 @@ namespace DevCharClassification
 
             // Get the training data for the Neural Network
             Console.WriteLine("Loading & processing the character data (training)");
-            Dictionary<char, List<float[]>> trainingData = getCharData(trainingWordsearchImages);
+            Dictionary<char, List<double[]>> trainingData = getCharData(trainingWordsearchImages);
             Console.WriteLine("Loaded training character data");
 
             //Convert the training data into a format the Neural network accepts
             int numInputs = 0;
-            foreach(List<float[]> arr in trainingData.Values)
+            foreach(List<double[]> arr in trainingData.Values)
             {
                 numInputs += arr.Count;
             }
@@ -81,17 +81,17 @@ namespace DevCharClassification
             Console.WriteLine("There are {0} training input character samples", numInputs);
 
             Console.WriteLine("Converting data to format for Neural Network . . .");
-            float[][] input = new float[numInputs][];
-            float[][] output = new float[numInputs][];
+            double[][] input = new double[numInputs][];
+            double[][] output = new double[numInputs][];
             int idx = 0;
-            foreach(KeyValuePair<char, List<float[]>> entry in trainingData)
+            foreach(KeyValuePair<char, List<double[]>> entry in trainingData)
             {
                 char c = entry.Key;
-                List<float[]> images = entry.Value;
+                List<double[]> images = entry.Value;
 
-                float[] thisCharOutput = desiredOutputForChar(c);
+                double[] thisCharOutput = desiredOutputForChar(c);
                 
-                foreach(float[] image in images)
+                foreach(double[] image in images)
                 {
                     input[idx] = image;
                     output[idx] = thisCharOutput;
@@ -126,10 +126,10 @@ namespace DevCharClassification
             }
             while (error > LEARNED_AT_ERROR);
 
-            Console.WriteLine("Data learned");
+            Console.WriteLine("Data learned to an error of {0}", error);
         }
 
-        private static Dictionary<char, List<float[]>> getCharData(List<WordsearchImage> wordsearchImages)
+        private static Dictionary<char, List<double[]>> getCharData(List<WordsearchImage> wordsearchImages)
         {
             //Make some objects now for reuse later
             BradleyLocalThresholding bradleyLocalThreshold = new BradleyLocalThresholding();
@@ -138,13 +138,13 @@ namespace DevCharClassification
             Invert invert = new Invert();
 
             //Construct Data Structure to be returned
-            Dictionary<char, List<float[]>> data = new Dictionary<char, List<float[]>>();
+            Dictionary<char, List<double[]>> data = new Dictionary<char, List<double[]>>();
 
             //Make a blank entry for each valid char
             for (int i = (int)'A'; i <= (int)'Z'; i++)
             {
                 char c = (char)i;
-                List<float[]> charImgs = new List<float[]>();
+                List<double[]> charImgs = new List<double[]>();
                 data.Add(c, charImgs);
             }
 
@@ -172,8 +172,8 @@ namespace DevCharClassification
                         //Resize the image of the char without whitespace to some normalised size (using nearest neighbour because we've already thresholded)
                         Bitmap normalisedCharWithoutWhitespace = resize.Apply(charWithoutWhitespace);
 
-                        //Convert Bitmap to float[,] (+-0.5) (what's used to train the neural network)
-                        float[] floatImg = Converters.ThresholdedBitmapToFloatArray(normalisedCharWithoutWhitespace);
+                        //Convert Bitmap to double[,] (+-0.5) (what's used to train the neural network)
+                        double[] doubleImg = Converters.ThresholdedBitmapToDoubleArray(normalisedCharWithoutWhitespace);
                         char charImg = wordsearchImage.Wordsearch.Chars[i, j];
 
                         //Check the char is valid
@@ -182,7 +182,7 @@ namespace DevCharClassification
                             throw new Exception("Chars must be in range A-Z. Found " + charImg);
                         }
 
-                        data[charImg].Add(floatImg);
+                        data[charImg].Add(doubleImg);
 
                         //Clean up
                         rawCharImages[i, j].Dispose();
@@ -197,10 +197,10 @@ namespace DevCharClassification
         }
 
         //The output desired from the neural network for the specified character
-        private static float[] desiredOutputForChar(char c)
+        private static double[] desiredOutputForChar(char c)
         {
             int cIdx = c - 'A';
-            float[] toRet = new float[NUM_CLASSES];
+            double[] toRet = new double[NUM_CLASSES];
 
             for (int i = 0; i < toRet.Length; i++)
             {
