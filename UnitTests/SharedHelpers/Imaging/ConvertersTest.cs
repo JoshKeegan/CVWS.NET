@@ -153,6 +153,35 @@ namespace UnitTests.SharedHelpers.Imaging
         }
 
         /*
+         * ThresholdedBitmapToFloatArray Function Tests
+         */
+        [TestMethod]
+        public void TestThresholdedBitmapToFloatArray1()
+        {
+            Bitmap b = get8bppConvertedSinglePixelBitmap(Color.Black);
+
+            float[,] expected = new float[1, 1];
+            expected[0, 0] = 0.5f;
+
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(b));
+
+            b.Dispose();
+        }
+
+        [TestMethod]
+        public void TestThresholdedBitmapToFloatArray()
+        {
+            Bitmap b = get8bppConvertedSinglePixelBitmap(Color.White);
+
+            float[,] expected = new float[1, 1];
+            expected[0, 0] = -0.5f;
+
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToFloatArray(b));
+
+            b.Dispose();
+        }
+
+        /*
          * Private helpers
          */
         private Bitmap get8bppConvertedSinglePixelBitmap(Color colour)
