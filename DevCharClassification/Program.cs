@@ -121,7 +121,20 @@ namespace DevCharClassification
             Console.WriteLine("{0} / {1} characters from the training data would have been misclassified", numTrainingMisclassified, input.Length);
 
             //Evaluate the system on the evaluation data (which it's never seen before & should therefore indicate real performace)
+            Console.WriteLine("Loading & processing the character data (evaluation)");
+            Dictionary<char, List<double[]>> evaluationData = getCharData(evaluationWordsearchImages);
+            Console.WriteLine("Loaded evaluation character data");
 
+            //Convert the training data into a format the Neural network accepts
+            Console.WriteLine("Converting data to format for Neural Network . . .");
+            double[][] evalInput;
+            double[][] evalOutput;
+            convertDataToNeuralNetworkFormat(trainingData, out evalInput, out evalOutput);
+            Console.WriteLine("Conversion Complete");
+            Console.WriteLine("There are {0} evaluation input character samples", evalInput.Length);
+
+            int numEvalMisclassified = evaluateNetwork(neuralNet, evalInput, evalOutput);
+            Console.WriteLine("{0} / {1} characters from the evaluation data would have been misclassified", numEvalMisclassified, evalInput.Length);
         }
 
         private static void convertDataToNeuralNetworkFormat(Dictionary<char, List<double[]>> data, out double[][] input, out double[][] output)
