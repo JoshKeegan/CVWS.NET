@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
- * Shared Helpers
+ * Shared Helpers Exceptions
  * Invalid Shape Exception class
  * By Josh Keegan 05/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.Maths.Exceptions
+namespace SharedHelpers.Exceptions
 {
     public class InvalidShapeException : Exception
     {

@@ -57,9 +57,9 @@
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />
     <Compile Include="Imaging\DrawShapes.cs" />
-    <Compile Include="Imaging\Exceptions\UnexpectedPixelFormatException.cs" />
+    <Compile Include="Exceptions\UnexpectedPixelFormatException.cs" />
     <Compile Include="Imaging\SplitImage.cs" />
-    <Compile Include="Maths\Exceptions\InvalidShapeException.cs" />
+    <Compile Include="Exceptions\InvalidShapeException.cs" />
     <Compile Include="Maths\Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

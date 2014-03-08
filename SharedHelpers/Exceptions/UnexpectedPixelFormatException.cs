@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
- * Shared Helpers Imaging Exceptions
+ * Shared Helpers Exceptions
  * UnexpectedPixelFormatException
  * By Josh Keegan 06/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.Imaging.Exceptions
+namespace SharedHelpers.Exceptions
 {
     public class UnexpectedPixelFormatException : Exception
     {

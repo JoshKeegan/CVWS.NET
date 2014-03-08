@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AForge;
 
 using SharedHelpers.Maths;
-using SharedHelpers.Maths.Exceptions;
+using SharedHelpers.Exceptions;
 
 namespace UnitTests.SharedHelpers.Maths
 {

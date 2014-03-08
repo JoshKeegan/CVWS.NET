@@ -3,6 +3,7 @@
  * Shared Helpers
  * Converters class - convert Images to other formats
  * By Josh Keegan 06/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 using AForge.Imaging.Filters;
 
-using SharedHelpers.Imaging.Exceptions;
+using SharedHelpers.Exceptions;
 
 namespace SharedHelpers.Imaging
 {

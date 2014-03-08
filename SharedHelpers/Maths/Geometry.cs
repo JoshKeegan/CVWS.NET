@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 using AForge;
 
-using SharedHelpers.Maths.Exceptions;
+using SharedHelpers.Exceptions;
 
 namespace SharedHelpers.Maths
 {
