@@ -3,6 +3,7 @@
  * Unit Tests
  * SharedHelpers.Maths.Geometry Tests
  * By Josh Keegan 05/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -23,9 +24,9 @@ namespace UnitTests.SharedHelpers.Maths
          * Euclidean Distance Function Tests
          */
         [TestMethod]
-        //Basic test
         public void TestEuclideanDistance1()
         {
+            //Basic test
             IntPoint a = new IntPoint(1, 1);
             IntPoint b = new IntPoint(2, 2);
 
@@ -34,9 +35,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Parameter order doesn't matter
         public void TestEuclideanDistance2()
         {
+            //Parameter order doesn't matter
             IntPoint a = new IntPoint(2, 2);
             IntPoint b = new IntPoint(1, 1);
 
@@ -45,9 +46,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Non-unit lengths test
         public void TestEuclideanDistance3()
         {
+            //Non-unit lengths test
             IntPoint a = new IntPoint(324, 12);
             IntPoint b = new IntPoint(12, 123);
 
@@ -56,9 +57,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Negative coordinates
         public void TestEuclideanDistance4()
         {
+            //Negative coordinates
             IntPoint a = new IntPoint(-1, -1);
             IntPoint b = new IntPoint(-2, -2);
 
@@ -67,9 +68,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //0 distance / points equal
         public void TestQuclideanDistance5()
         {
+            //0 distance / points equal
             IntPoint a = new IntPoint(0, 0);
             IntPoint b = new IntPoint(0, 0);
 
@@ -81,38 +82,38 @@ namespace UnitTests.SharedHelpers.Maths
          * IsQuadrilateral Tests
          */
         [TestMethod]
-        //Basic test
         public void TestIsQuadrilateral1()
         {
+            //Basic test
             Assert.IsTrue(Geometry.IsQuadrilateral(getValidQuadrilateral()));
         }
 
         [TestMethod]
-        //Test with a non-array collection
         public void TestIsQuadrilateral2()
         {
+            //Test with a non-array collection
             List<IntPoint> points = new List<IntPoint>(getValidQuadrilateral());
             Assert.IsTrue(Geometry.IsQuadrilateral(points));
         }
 
         [TestMethod]
-        //Test with too many points
         public void TestIsQuadrilateral3()
         {
+            //Test with too many points
             Assert.IsFalse(Geometry.IsQuadrilateral(getValidPentagon()));
         }
 
         [TestMethod]
-        //Test with too few points
         public void TestIsQuadrilateral4()
         {
+            //Test with too few points
             Assert.IsFalse(Geometry.IsQuadrilateral(getValidTriangle()));
         }
 
         [TestMethod]
-        //Test errors with null array
         public void TestIsQuadrilateral5()
         {
+            //Test errors with null array
             IntPoint[] arr = null;
             try
             {
@@ -128,9 +129,9 @@ namespace UnitTests.SharedHelpers.Maths
          * TriangleAngle Tests
          */
         [TestMethod]
-        //Basic test
         public void TestTriangleAngle1()
         {
+            //Basic test
             double a = 8;
             double b = 6;
             double c = 7;
@@ -144,9 +145,9 @@ namespace UnitTests.SharedHelpers.Maths
          * AreaQuadrilateral Tests
          */
         [TestMethod]
-        //Basic test
         public void TestAreaQuadrilateral1()
         {
+            //Basic test
             IntPoint[] points = getValidQuadrilateral();
             double expected = VALID_QUADRILATERAL_AREA;
 
@@ -156,9 +157,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Test with a non-array collection
         public void TestAreaQuadrilatera2()
         {
+            //Test with a non-array collection
             List<IntPoint> points = new List<IntPoint>(getValidQuadrilateral());
             double expected = VALID_QUADRILATERAL_AREA;
 
@@ -168,9 +169,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Test with invalid Quadrilateral
         public void TestAreaQuadrilateral3()
         {
+            //Test with invalid Quadrilateral
             IntPoint[] points = getValidPentagon();
 
             try
@@ -188,9 +189,9 @@ namespace UnitTests.SharedHelpers.Maths
          * Area Tests
          */
         [TestMethod]
-        //Test with a unit rectangle
         public void TestArea1()
         {
+            //Test with a unit rectangle
             IntPoint topLeft = new IntPoint(0, 1);
             IntPoint topRight = new IntPoint(1, 1);
             IntPoint bottomRight = new IntPoint(1, 0);
@@ -200,9 +201,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Test with a non-unit rectangle
         public void TestArea2()
         {
+            //Test with a non-unit rectangle
             IntPoint topLeft = new IntPoint(0, 2);
             IntPoint topRight = new IntPoint(2, 2);
             IntPoint bottomRight = new IntPoint(2, 0);
@@ -212,9 +213,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Test with an arbitrary quadrilateral
         public void TestArea3()
         {
+            //Test with an arbitrary quadrilateral
             IntPoint topLeft = new IntPoint(12, 123);
             IntPoint topRight = new IntPoint(136, 203);
             IntPoint bottomRight = new IntPoint(324, 12);
@@ -228,30 +229,30 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Test with array
         public void TestArea4()
         {
+            //Test with array
             Assert.AreEqual(VALID_QUADRILATERAL_AREA, Geometry.Area(getValidQuadrilateral()));
         }
 
         [TestMethod]
-        //Test with a non-array collection
         public void TestArea5()
         {
+            //Test with a non-array collection
             Assert.AreEqual(VALID_QUADRILATERAL_AREA, Geometry.Area(new List<IntPoint>(getValidQuadrilateral())));
         }
 
         [TestMethod]
-        //Test with triangle
         public void TestArea6()
         {
+            //Test with triangle
             Assert.AreEqual(VALID_TRIANGLE_AREA, Geometry.Area(getValidTriangle()));
         }
 
         [TestMethod]
-        //Test with anticlockwise winding order
         public void TestArea7()
         {
+            //Test with anticlockwise winding order
             IntPoint[] points = new IntPoint[4];
             points[0] = new IntPoint(12, 123);
             points[1] = new IntPoint(5, 42);
@@ -266,9 +267,9 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        //Test with points out of order
         public void TestArea8()
         {
+            //Test with points out of order
             IntPoint[] points = new IntPoint[4];
             points[0] = new IntPoint(136, 203);
             points[1] = new IntPoint(12, 123);
@@ -280,6 +281,111 @@ namespace UnitTests.SharedHelpers.Maths
             double expected = 32386.5; //Calculated by hand with the shoelace formula
 
             Assert.AreEqual(expected, actual);
+        }
+
+        /*
+         * SortPointsClockwise Tests
+         */
+        [TestMethod]
+        public void TestSortPointsClockwise1()
+        {
+            //Standard test returns points already ordered
+            IntPoint[] expected = getValidQuadrilateral();
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise2()
+        {
+            //Test with points given in anticlockwise order
+            IntPoint[] expected = getValidQuadrilateral();
+            IntPoint[] input = new IntPoint[expected.Length];
+            input[0] = expected[0]; //Keep the starting position
+            input[2] = expected[1];
+            input[1] = expected[2];
+
+            CollectionAssert.AreEqual(expected, Geometry.SortPointsClockwise(input)); 
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise3()
+        {
+            //Test with triangle
+            IntPoint[] expected = getValidTriangle();
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise4()
+        {
+            //Test with pentagon
+            IntPoint[] expected = getValidPentagon();
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise5()
+        {
+            //Test with points in random order
+            IntPoint[] unordered = new IntPoint[4];
+            unordered[0] = new IntPoint(136, 203);
+            unordered[1] = new IntPoint(12, 123);
+            unordered[2] = new IntPoint(324, 12);
+            unordered[3] = new IntPoint(5, 42);
+
+            IntPoint[] expected = new IntPoint[4];
+            expected[0] = new IntPoint(136, 203);
+            expected[1] = new IntPoint(324, 12);
+            expected[2] = new IntPoint(5, 42);
+            expected[3] = new IntPoint(12, 123);
+
+            IntPoint[] actual = Geometry.SortPointsClockwise(unordered);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise6()
+        {
+            //Test with a single point
+            IntPoint[] expected = new IntPoint[] { new IntPoint(0, 0) };
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise7()
+        {
+            //Test with no points
+            IntPoint[] expected = new IntPoint[0];
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise8()
+        {
+            //Test with line (already clockwise)
+            IntPoint[] points = new IntPoint[] { new IntPoint(0, 0), new IntPoint(1, 1) };
+
+            CollectionAssert.AreEqual(points, Geometry.SortPointsClockwise(points));
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise9()
+        {
+            //Test with line (anticlockwise, but should remain anticlockwise due to the first point being maintained)
+            IntPoint[] points = new IntPoint[] { new IntPoint(1, 1), new IntPoint(0, 0) };
+
+            CollectionAssert.AreEqual(points, Geometry.SortPointsClockwise(points));
         }
 
 
