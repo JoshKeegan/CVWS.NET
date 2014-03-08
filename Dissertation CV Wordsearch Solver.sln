@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseObjectExtensions", "Bas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{B03F81B5-1398-4C8E-9CB4-B571331EDAAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeEvaluation", "QuantitativeEvaluation\QuantitativeEvaluation.csproj", "{7998DE9C-B128-4D86-942F-B74C5985C1AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B03F81B5-1398-4C8E-9CB4-B571331EDAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B03F81B5-1398-4C8E-9CB4-B571331EDAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B03F81B5-1398-4C8E-9CB4-B571331EDAAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7998DE9C-B128-4D86-942F-B74C5985C1AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7998DE9C-B128-4D86-942F-B74C5985C1AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7998DE9C-B128-4D86-942F-B74C5985C1AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7998DE9C-B128-4D86-942F-B74C5985C1AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
