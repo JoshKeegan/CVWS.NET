@@ -76,16 +76,8 @@ namespace SharedHelpers.Maths
             sumA += (ulong)(clockwisePoints[clockwisePoints.Length - 1].X * clockwisePoints[0].Y);
             sumB += (ulong)(clockwisePoints[0].X * clockwisePoints[clockwisePoints.Length - 1].Y);
 
-            ulong diff;
-            if(sumA > sumB)
-            {
-                diff = sumA - sumB;
-            }
-            else
-            {
-                diff = sumB - sumA;
-            }
-            return (double)diff / 2;
+            //Because the points are ordered clockwise, sumB will always be greater than sumA so for half their difference we don't need to check for neg
+            return (double)(sumB - sumA) / 2;
         }
 
         //Sort Points into a clockwise rotation. Maintain the starting point incase it is for a specific winding order (as is used for wordsearch images)
