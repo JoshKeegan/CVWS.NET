@@ -3,6 +3,7 @@
  * Unit Tests
  * SharedHelpers.Imaging.Converters Tests
  * By Josh Keegan 06/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -17,7 +18,7 @@ using AForge.Imaging.Filters;
 namespace UnitTests.SharedHelpers.Imaging
 {
     [TestClass]
-    public class ConvertersTest
+    public class ConvertersTests
     {
         /*
          * ThresholdedBitmapToBoolArray Function Tests
