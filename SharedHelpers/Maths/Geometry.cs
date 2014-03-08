@@ -3,6 +3,7 @@
  * Shared Helpers
  * Maths.Geometry class
  * By Josh Keegan 05/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -62,18 +63,18 @@ namespace SharedHelpers.Maths
                 throw new InvalidShapeException("A shape requires at least 3 points in order to have an Area");
             }
 
-            //TODO: Check the order of the points are valid & reorder before calculations??
-            //see http://code.activestate.com/recipes/578047-area-of-polygon-using-shoelace-formula/?in=lang-python for an example
+            //Order the points before computing the area (since the algorithm requires them to be ordered)
+            IntPoint[] clockwisePoints = SortPointsClockwise(points);
 
             ulong sumA = 0;
             ulong sumB = 0;
-            for(int i = 0; i < points.Length - 1; i++)
+            for(int i = 0; i < clockwisePoints.Length - 1; i++)
             {
-                sumA += (ulong)(points[i].X * points[i + 1].Y);
-                sumB += (ulong)(points[i + 1].X * points[i].Y);
+                sumA += (ulong)(clockwisePoints[i].X * clockwisePoints[i + 1].Y);
+                sumB += (ulong)(clockwisePoints[i + 1].X * clockwisePoints[i].Y);
             }
-            sumA += (ulong)(points[points.Length - 1].X * points[0].Y);
-            sumB += (ulong)(points[0].X * points[points.Length - 1].Y);
+            sumA += (ulong)(clockwisePoints[clockwisePoints.Length - 1].X * clockwisePoints[0].Y);
+            sumB += (ulong)(clockwisePoints[0].X * clockwisePoints[clockwisePoints.Length - 1].Y);
 
             ulong diff;
             if(sumA > sumB)
@@ -85,6 +86,88 @@ namespace SharedHelpers.Maths
                 diff = sumB - sumA;
             }
             return (double)diff / 2;
+        }
+
+        //Sort Points into a clockwise rotation. Maintain the starting point incase it is for a specific winding order (as is used for wordsearch images)
+        public static IntPoint[] SortPointsClockwise(IntPoint[] unsorted)
+        {
+            //Implementation of http://stackoverflow.com/a/6989383 with additional constraint of maintaining the starting coordinate
+
+            //Calculate centre of the polygon (mean of all points)
+            double centreX = 0;
+            double centreY = 0;
+            foreach(IntPoint p in unsorted)
+            {
+                centreX += p.X;
+                centreY += p.Y;
+            }
+            centreX /= unsorted.Length;
+            centreY /= unsorted.Length;
+
+            //Sort the points around 12 noon
+            List<IntPoint> points = new List<IntPoint>(unsorted);
+            points.Sort((a, b) =>
+                {
+                    //Compare the 2 points, relative to the centre
+
+                    //If one point is left of the centre and the other is to the right, problem is trivial:
+                    if(a.X - centreX >= 0 && b.X - centreX < 0)
+                    {
+                        return -1;
+                    }
+                    if(a.X - centreX < 0 && b.X - centreX >= 0)
+                    {
+                        return 1;
+                    }
+
+                    //If both points lie on the centre line
+                    if(a.X - centreX == 0 && b.X - centreX == 0)
+                    {
+                        //Order by points furthest out
+                        if(a.Y - centreY >= 0 || b.Y - centreY >=0)
+                        {
+                            return a.Y > b.Y ? -1 : 1;
+                        }
+                        return b.Y > a.Y ? -1 : 1;
+                    }
+
+                    //Compute the cross product of the vectors (centre -> a) x (centre -> b)
+                    double det = (a.X - centreX) * (b.Y - centreY) - (b.X - centreX) * (a.Y - centreY);
+                    if(det < 0)
+                    {
+                        return -1;
+                    }
+                    if(det > 0)
+                    {
+                        return 1;
+                    }
+
+                    //det = 0 => points are on the same line from the centre, check which point is closer to the centre
+                    double dA = ((a.X - centreX) * (a.X - centreX)) + ((a.Y - centreY) * (a.Y - centreY));
+                    double dB = ((b.X - centreX) * (b.X - centreX)) + ((b.Y - centreY) * (b.Y - centreY));
+                    return dA > dB ? -1 : 1;
+                });
+
+            //Maintain the first point
+            
+            //Locate the first point in the ordered points
+            int firstPointIdx = 0;
+            for(; firstPointIdx < points.Count; firstPointIdx++)
+            {
+                //If we've found the position of the first point
+                if (points[firstPointIdx].X == unsorted[0].X && points[firstPointIdx].Y == unsorted[0].Y)
+                {
+                    break;
+                }
+            }
+
+            //Create a new array of points with the first one back in first position
+            IntPoint[] sorted = new IntPoint[unsorted.Length];
+            for(int i = 0; i < sorted.Length; i++)
+            {
+                sorted[i] = points[(i + firstPointIdx) % points.Count];
+            }
+            return sorted;
         }
 
         //get the angle between side a & c (i.e. angle B) in any triangle where all 3 sides are known

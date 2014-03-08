@@ -3,6 +3,7 @@
  * Unit Tests
  * SharedHelpers.Maths.Geometry Tests
  * By Josh Keegan 05/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -280,6 +281,111 @@ namespace UnitTests.SharedHelpers.Maths
             double expected = 32386.5; //Calculated by hand with the shoelace formula
 
             Assert.AreEqual(expected, actual);
+        }
+
+        /*
+         * SortPointsClockwise Tests
+         */
+        [TestMethod]
+        public void TestSortPointsClockwise1()
+        {
+            //Standard test returns points already ordered
+            IntPoint[] expected = getValidQuadrilateral();
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise2()
+        {
+            //Test with points given in anticlockwise order
+            IntPoint[] expected = getValidQuadrilateral();
+            IntPoint[] input = new IntPoint[expected.Length];
+            input[0] = expected[0]; //Keep the starting position
+            input[2] = expected[1];
+            input[1] = expected[2];
+
+            CollectionAssert.AreEqual(expected, Geometry.SortPointsClockwise(input)); 
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise3()
+        {
+            //Test with triangle
+            IntPoint[] expected = getValidTriangle();
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise4()
+        {
+            //Test with pentagon
+            IntPoint[] expected = getValidPentagon();
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise5()
+        {
+            //Test with points in random order
+            IntPoint[] unordered = new IntPoint[4];
+            unordered[0] = new IntPoint(136, 203);
+            unordered[1] = new IntPoint(12, 123);
+            unordered[2] = new IntPoint(324, 12);
+            unordered[3] = new IntPoint(5, 42);
+
+            IntPoint[] expected = new IntPoint[4];
+            expected[0] = new IntPoint(136, 203);
+            expected[1] = new IntPoint(324, 12);
+            expected[2] = new IntPoint(5, 42);
+            expected[3] = new IntPoint(12, 123);
+
+            IntPoint[] actual = Geometry.SortPointsClockwise(unordered);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise6()
+        {
+            //Test with a single point
+            IntPoint[] expected = new IntPoint[] { new IntPoint(0, 0) };
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise7()
+        {
+            //Test with no points
+            IntPoint[] expected = new IntPoint[0];
+            IntPoint[] actual = Geometry.SortPointsClockwise(expected);
+
+            CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise8()
+        {
+            //Test with line (already clockwise)
+            IntPoint[] points = new IntPoint[] { new IntPoint(0, 0), new IntPoint(1, 1) };
+
+            CollectionAssert.AreEqual(points, Geometry.SortPointsClockwise(points));
+        }
+
+        [TestMethod]
+        public void TestSortPointsClockwise9()
+        {
+            //Test with line (anticlockwise, but should remain anticlockwise due to the first point being maintained)
+            IntPoint[] points = new IntPoint[] { new IntPoint(1, 1), new IntPoint(0, 0) };
+
+            CollectionAssert.AreEqual(points, Geometry.SortPointsClockwise(points));
         }
 
 
