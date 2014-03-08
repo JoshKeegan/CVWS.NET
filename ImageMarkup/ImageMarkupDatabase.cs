@@ -3,7 +3,7 @@
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014
- * Last Edit 05/03/2014
+ * Last Edit 06/03/2014
  */
 
 using System;
@@ -23,7 +23,8 @@ namespace ImageMarkup
     public static class ImageMarkupDatabase
     {
         //Constants
-        private const string XML_DOC_LOCATION = "markup.xml";
+        public const string DATA_DIRECTORY_PATH = "../../../data/";
+        private const string XML_DOC_LOCATION = DATA_DIRECTORY_PATH + "markup.xml";
 
         private const string XML_ROOT_EL = "ImageMarkupData";
 
@@ -218,6 +219,26 @@ namespace ImageMarkup
             if(wordsearches != null)
             {
                 wordsearches.Remove(wordsearchId);
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
+        public static List<WordsearchImage> GetWordsearchImages()
+        {
+            //If the dataaset has been loaded
+            if(images != null)
+            {
+                List<WordsearchImage> wordsearchImages = new List<WordsearchImage>();
+
+                foreach (Image image in images.Values)
+                {
+                    wordsearchImages.AddRange(image.WordsearchImages);
+                }
+
+                return wordsearchImages;
             }
             else //Otherwise the data hasn't been loaded
             {

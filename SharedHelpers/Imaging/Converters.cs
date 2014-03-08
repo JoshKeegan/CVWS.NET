@@ -94,5 +94,23 @@ namespace SharedHelpers.Imaging
 
             return boolImg;
         }
+
+        //Convert a thresholded bitmap to a double[] (numbers are around 0, used to improve performance in neural networks)
+        public static double[] ThresholdedBitmapToDoubleArray(Bitmap img)
+        {
+            bool[,] boolImg = ThresholdedBitmapToBoolArray(img);
+
+            double[] dblImg = new double[boolImg.GetLength(0) * boolImg.GetLength(1)];
+
+            for(int i = 0; i < boolImg.GetLength(0); i++)
+            {
+                for(int j = 0; j < boolImg.GetLength(1); j++)
+                {
+                    dblImg[(j * boolImg.GetLength(0)) + i] = boolImg[i, j] ? 0.5 : -0.5;
+                }
+            }
+
+            return dblImg;
+        }
     }
 }

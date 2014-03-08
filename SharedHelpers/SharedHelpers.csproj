@@ -51,12 +51,14 @@
   <ItemGroup>
     <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
     <Compile Include="Exceptions\RegisteredInterestException.cs" />
+    <Compile Include="Exceptions\UnexpectedImageSizeException.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\Converters.cs" />
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />
     <Compile Include="Imaging\DrawShapes.cs" />
     <Compile Include="Imaging\Exceptions\UnexpectedPixelFormatException.cs" />
+    <Compile Include="Imaging\SplitImage.cs" />
     <Compile Include="Maths\Exceptions\InvalidShapeException.cs" />
     <Compile Include="Maths\Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

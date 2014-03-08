@@ -3,6 +3,7 @@
  * Unit Tests
  * SharedHelpers.Imaging.Converters Tests
  * By Josh Keegan 06/03/2014
+ * Last Edit 08/03/2014
  */
 
 using System;
@@ -17,7 +18,7 @@ using AForge.Imaging.Filters;
 namespace UnitTests.SharedHelpers.Imaging
 {
     [TestClass]
-    public class ConvertersTest
+    public class ConvertersTests
     {
         /*
          * ThresholdedBitmapToBoolArray Function Tests
@@ -150,6 +151,57 @@ namespace UnitTests.SharedHelpers.Imaging
             CollectionAssert.AreEqual(expected, Converters.BitmapToBoolArray(b));
 
             b.Dispose();
+        }
+
+        /*
+         * ThresholdedBitmapToDoubleArray Function Tests
+         */
+        [TestMethod]
+        public void TestThresholdedBitmapToDoubleArray1()
+        {
+            Bitmap b = get8bppConvertedSinglePixelBitmap(Color.Black);
+
+            double[] expected = new double[1];
+            expected[0] = 0.5;
+
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToDoubleArray(b));
+
+            b.Dispose();
+        }
+
+        [TestMethod]
+        public void TestThresholdedBitmapToDoubleArray2()
+        {
+            Bitmap b = get8bppConvertedSinglePixelBitmap(Color.White);
+
+            double[] expected = new double[1];
+            expected[0] = -0.5;
+
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToDoubleArray(b));
+
+            b.Dispose();
+        }
+
+        [TestMethod]
+        public void TestThresholdedBitmapToDoubleArray3()
+        {
+            //Test multi-dimensional bitmap
+            Bitmap b = new Bitmap(2, 2);
+            b.SetPixel(0, 0, Color.Black);
+            b.SetPixel(1, 0, Color.White);
+            b.SetPixel(0, 1, Color.Black);
+            b.SetPixel(1, 1, Color.White);
+
+            Bitmap greyImg = Grayscale.CommonAlgorithms.BT709.Apply(b);
+            Threshold threshold = new Threshold(128);
+            threshold.ApplyInPlace(greyImg);
+            b.Dispose();
+
+            double[] expected = new double[] { 0.5, -0.5, 0.5, -0.5 };
+
+            CollectionAssert.AreEqual(expected, Converters.ThresholdedBitmapToDoubleArray(greyImg));
+
+            greyImg.Dispose();
         }
 
         /*

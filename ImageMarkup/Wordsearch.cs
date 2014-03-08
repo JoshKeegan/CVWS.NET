@@ -3,7 +3,7 @@
  * Image Markup
  * Wordsearch class
  * By Josh Keegan 26/02/2014
- * Last Edit 05/03/2013
+ * Last Edit 06/03/2013
  */
 
 using System;
@@ -46,15 +46,15 @@ namespace ImageMarkup
             get
             {
                 StringBuilder builder = new StringBuilder();
-                for(int i = 0; i < Chars.GetLength(0); i++)
+                for(int i = 0; i < Chars.GetLength(1); i++)
                 {
-                    for(int j = 0; j < Chars.GetLength(1); j++)
+                    for(int j = 0; j < Chars.GetLength(0); j++)
                     {
-                        builder.Append(Chars[i, j]);
+                        builder.Append(Chars[j, i]);
                     }
 
                     //Don't append a newline on the last line
-                    if(i != Chars.GetLength(0) - 1)
+                    if(i != Chars.GetLength(1) - 1)
                     {
                         builder.Append("\n");
                     }

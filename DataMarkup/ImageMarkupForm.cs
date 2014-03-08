@@ -3,7 +3,7 @@
  * Data Entry GUI
  * Image Markup Form class
  * By Josh Keegan 26/02/2014
- * Last Edit 05/03/2014
+ * Last Edit 06/03/2014
  */
 
 using System;
@@ -33,7 +33,7 @@ namespace DataEntryGUI
     public partial class ImageMarkupForm : Form
     {
         //Constants
-        private const string RAW_IMAGE_DIR = "images";
+        private const string RAW_IMAGE_DIR = ImageMarkupDatabase.DATA_DIRECTORY_PATH + "images";
 
         //Private vars
         private string defaultLblToProcessLength;
