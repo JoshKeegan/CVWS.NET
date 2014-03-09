@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
+    <Compile Include="ClassifierInterfacing\NeuralNetworkHelpers.cs" />
     <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
     <Compile Include="Exceptions\RegisteredInterestException.cs" />
+    <Compile Include="Exceptions\UnexpectedClassifierOutputException.cs" />
     <Compile Include="Exceptions\UnexpectedImageSizeException.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\Converters.cs" />
