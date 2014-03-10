@@ -2,7 +2,8 @@
  * Dissertation CV Wordsearch Solver
  * Quantitative Evaluation
  * Confusion Matrix - a summary of the performance of a classification algorithm
- * By Josh Keegan 08/03/2013
+ * By Josh Keegan 08/03/2014
+ * Last Edit 10/03/2014
  */
 
 using System;
@@ -48,7 +49,7 @@ namespace QuantitativeEvaluation
                     {
                         if(i != j)
                         {
-                            numMisclassifications++;
+                            numMisclassifications += matrix[i, j];
                         }
                     }
                 }

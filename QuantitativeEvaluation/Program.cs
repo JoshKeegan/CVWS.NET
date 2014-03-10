@@ -3,6 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
+ * Last Edit 10/03/2014
  */
 
 using System;
@@ -24,6 +25,7 @@ using SharedHelpers.Exceptions;
 using SharedHelpers.Imaging;
 using QuantitativeEvaluation.Evaluators;
 using QuantitativeEvaluation.FeatureReduction;
+using BaseObjectExtensions;
 
 namespace QuantitativeEvaluation
 {
@@ -31,7 +33,13 @@ namespace QuantitativeEvaluation
     {
         //Constants
         private const string LOGS_DIR_PATH = "logs";
+#if DEBUG
         private const LogLevel LOG_LEVEL = LogLevel.All;
+#endif
+
+#if !DEBUG
+        private const LogLevel LOG_LEVEL = LogLevel.Info | LogLevel.Warning | LogLevel.Error;
+#endif
 
         //Constants used by the evaluation of the Neural network (to be moved elsewhere)
         private const int CHAR_WITH_WHITESPACE_WIDTH = 20;
@@ -41,9 +49,11 @@ namespace QuantitativeEvaluation
         private const int NUM_INPUT_VALUES = CHAR_WITHOUT_WHITESPACE_WIDTH * CHAR_WITHOUT_WHITESPACE_HEIGHT;
         private const double LEARNING_RATE = 0.5;
         private const double LEARNED_AT_ERROR = 0.5; //The error returned by the neural network. When less than this class as learned
-        private const int MAX_LEARNING_ITERATIONS = 100; //The maximum number of iterations to train the network for
+        private const int MAX_LEARNING_ITERATIONS = 1000; //The maximum number of iterations to train the network for
         private const int ITERATIONS_PER_PROGRESS_UPDATE = 25;
         private const string MISCLASSIFIED_IMAGES_DIR_PATH = "Misclassified";
+        private const int NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU = 50; //The number of previous iterations to record when evaluating a network in training on the cross-validation data
+                                                                     //Used for detecting a plateau and detecting over-learning of data
 
         static void Main(string[] args)
         {
@@ -125,6 +135,20 @@ namespace QuantitativeEvaluation
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} training input character samples", input.Length));
 
+            //Load the cross-validation data for the neural network
+            Log.Info("Loading & processing the character data (cross-validation)");
+            Dictionary<char, List<double[]>> crossValidationData = getCharData(crossValidationWordsearchImages);
+            Log.Info("Loaded cross-validation character data");
+
+            //Convert the evaluation data into a format the Neural network accepts
+            Log.Info("Converting data to format for Neural Network . . .");
+            double[][] crossValInput;
+            double[][] crossValOutput;
+            convertDataToNeuralNetworkFormat(crossValidationData, out crossValInput, out crossValOutput);
+            Log.Info("Conversion Complete");
+            Log.Info(String.Format("There are {0} cross-validation input character samples", crossValInput.Length));
+            char[] crossValidationDataLabels = getCharacterLabels(crossValidationData);
+
             //TODO: Make N Neural networks here, randomise each ones weights and train them all, then select the one that performs best on 
             //  the cross-validation data??
 
@@ -142,9 +166,23 @@ namespace QuantitativeEvaluation
             //Make the network learn the data
             Log.Info("Training the neural network . . .");
             double error;
-            int iterNum = 0;
+
+            //TODO: Store the previous NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU networks so in the event of over-learning, we can return to the best one
+            //Use the cross-validation data to notice if the network starts to over-learn the data.
+            //Store the previous network (before training) and check if the performance drops on the cross-validation data
+            MemoryStream prevNetworkStream = new MemoryStream();
+            uint prevNetworkNumMisclassified = uint.MaxValue;
+            Queue<uint> prevNetworksNumMisclassified = new Queue<uint>(NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU);
+            //Initialise the queue to be full of uint.MaxValue
+            for(int i = 0; i < NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU; i++)
+            {
+                prevNetworksNumMisclassified.Enqueue(prevNetworkNumMisclassified);
+            }
+
+            int iterNum = 1;
             do
             {
+                //Perform an iteration of training (calls teacher.Run() for each item in the array of inputs/outputs provided)
                 error = teacher.RunEpoch(input, output);
 
                 //Progress update
@@ -153,7 +191,43 @@ namespace QuantitativeEvaluation
                     Log.Info(String.Format("Learned for {0} iterations. Error: {1}", iterNum, error));
                 }
 
-                if (iterNum >= MAX_LEARNING_ITERATIONS)
+                //Evaluate this network on the cross-validation data
+                //Clear the Memory Stream storing the previous network
+                prevNetworkStream.SetLength(0);
+                //Store this network & the number of characters it misclassified on the cross-validation data
+                neuralNet.Save(prevNetworkStream);
+                NeuralNetworkEvaluator crossValidationEvaluator = new NeuralNetworkEvaluator(neuralNet);
+                crossValidationEvaluator.Evaluate(crossValInput, crossValidationDataLabels);
+                uint networkNumMisclassified = crossValidationEvaluator.ConfusionMatrix.NumMisclassifications;
+                Log.Debug(String.Format("Network misclassified {0} / {1} on the cross-validation data set", networkNumMisclassified, 
+                    crossValidationEvaluator.ConfusionMatrix.TotalClassifications));
+
+
+                //Check if we've overlearned the data and performance on the cross-valiadtion data has dropped off
+                if(networkNumMisclassified > prevNetworksNumMisclassified.Mean()) //Use the mean of the number of misclassification, as the actual number can move around a bit
+                {
+                    //Cross-Validation performance has dropped, reinstate the previous network & break
+                    Log.Info(String.Format("Network has started to overlearn the training data on iteration {0}. Using previous classifier.", iterNum));
+                    prevNetworkStream.Position = 0; //Set head to start of stream
+                    neuralNet = ActivationNetwork.Load(prevNetworkStream) as ActivationNetwork; //Read in the network
+                    break;
+                }
+
+                //This is now the previous network, update the number it misclassified
+                prevNetworkNumMisclassified = networkNumMisclassified;
+                prevNetworksNumMisclassified.Dequeue();
+                prevNetworksNumMisclassified.Enqueue(prevNetworkNumMisclassified);
+
+                //Check if the performance has plateaued
+                if(prevNetworksNumMisclassified.Distinct().Count() == 1) //Allow for slight movement in performance here??
+                {
+                    //Cross-Validation performance has plateaued, use this network as the final one & break
+                    Log.Info(String.Format("Network performance on cross-validation data has plateaued on iteration {0}.", iterNum));
+                    break;
+                }
+
+                //Check if we've performed the max number of iterations
+                if (iterNum > MAX_LEARNING_ITERATIONS)
                 {
                     Log.Info(String.Format("Reached the maximum number of learning iterations ({0}), with error {1}", MAX_LEARNING_ITERATIONS, error));
                     break;
@@ -179,7 +253,7 @@ namespace QuantitativeEvaluation
 
             //Evaluate the trained network on the evaluation data
             NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
-            char[] evaluationDataLabels = getEvaluationDataLabels(evaluationData);
+            char[] evaluationDataLabels = getCharacterLabels(evaluationData);
             evaluator.Evaluate(evalInput, evaluationDataLabels);
 
             Log.Info(String.Format("{0} / {1} characters from the evaluation data were misclassified",
@@ -257,7 +331,7 @@ namespace QuantitativeEvaluation
             return data;
         }
 
-        private static char[] getEvaluationDataLabels(Dictionary<char, List<double[]>> data)
+        private static char[] getCharacterLabels(Dictionary<char, List<double[]>> data)
         {
             int numInputs = 0;
             foreach (List<double[]> arr in data.Values)

@@ -3,10 +3,12 @@
  * Shared Helpers
  * Classifier Helpers
  * By Josh Keegan 08/03/2014
+ * Last Edit 10/03/2014
  */
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +21,7 @@ namespace SharedHelpers.ClassifierInterfacing
         public const int NUM_CHAR_CLASSES = 26;
 
         //Public Methods
-        public static string[] getCharacterClassifierClassLabels()
+        public static string[] GetCharacterClassifierClassLabels()
         {
             string[] classLabels = new string[NUM_CHAR_CLASSES];
 

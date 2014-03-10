@@ -3,6 +3,7 @@
  * Quantitative Evaluation
  * Neural Network Evaluator
  * By Josh Keegan 08/03/2014
+ * Last Edit 10/03/2014
  */
 
 using System;
@@ -32,7 +33,7 @@ namespace QuantitativeEvaluation.Evaluators
         {
             if(classLabels == null)
             {
-                classLabels = ClassifierHelpers.getCharacterClassifierClassLabels();
+                classLabels = ClassifierHelpers.GetCharacterClassifierClassLabels();
             }
 
             ConfusionMatrix = new ConfusionMatrix(classLabels);

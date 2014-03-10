@@ -67,6 +67,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseObjectExtensions\BaseObjectExtensions.csproj">
+      <Project>{6fc68f2c-22b6-4909-895a-4c845b761422}</Project>
+      <Name>BaseObjectExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageMarkup\ImageMarkup.csproj">
       <Project>{2ea98af3-88fd-4b06-b1d6-dc9068263bea}</Project>
       <Name>ImageMarkup</Name>
