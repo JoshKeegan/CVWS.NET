@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 10/03/2014
+ * Last Edit 11/03/2014
  */
 
 using System;
@@ -21,10 +21,10 @@ using AForge.Neuro.Learning;
 using ImageMarkup;
 using SharedHelpers;
 using SharedHelpers.ClassifierInterfacing;
+using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
 using SharedHelpers.Exceptions;
 using SharedHelpers.Imaging;
 using QuantitativeEvaluation.Evaluators;
-using QuantitativeEvaluation.FeatureReduction;
 using BaseObjectExtensions;
 
 namespace QuantitativeEvaluation
@@ -52,6 +52,7 @@ namespace QuantitativeEvaluation
         private const int MAX_LEARNING_ITERATIONS = 1000; //The maximum number of iterations to train the network for
         private const int ITERATIONS_PER_PROGRESS_UPDATE = 25;
         private const string MISCLASSIFIED_IMAGES_DIR_PATH = "Misclassified";
+        private const string EVALUATION_RESULTS_DIR_PATH = "EvaluationResults";
         private const int NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU = 50; //The number of previous iterations to record when evaluating a network in training on the cross-validation data
                                                                      //Used for detecting a plateau and detecting over-learning of data
 
@@ -112,49 +113,116 @@ namespace QuantitativeEvaluation
             }
             Log.Info("Data split into Training, Cross-Validation & Evalutaion data");
 
-            //Evaluate a neural network
-            evaluateNeuralNetwork(trainingWordsearchImages, crossValidationWordsearchImages, evaluationWordsearchImages);
+            //Evaluate all of the neural network combo's
+            Log.Info("Starting to evaluate all Neural Networks . . .");
+            Dictionary<string, NeuralNetworkEvaluator> neuralNetworkEvalResults = 
+                evaluateNeuralNetworks(trainingWordsearchImages, 
+                crossValidationWordsearchImages, evaluationWordsearchImages);
+            Log.Info("Evaluation of all Neural Networks completed");
+
+            //Write out the evaluation results
+            if(!Directory.Exists(EVALUATION_RESULTS_DIR_PATH))
+            {
+                Log.Info("Evaluation Results Directory didn't exist, creating . . .");
+                Directory.CreateDirectory(EVALUATION_RESULTS_DIR_PATH);
+            }
+
+            Log.Info("Writing out Neural Network Evaluation Results . . .");
+            foreach(KeyValuePair<string, NeuralNetworkEvaluator> pair in neuralNetworkEvalResults)
+            {
+                string networkName = pair.Key;
+                ConfusionMatrix cm = pair.Value.ConfusionMatrix;
+
+                cm.WriteToCsv(EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
+            }
+            Log.Info("Neural Network Evaluation results written out successfully");
         }
 
-        //Example usage: evaluate a Neural Network
-        private static void evaluateNeuralNetwork(List<WordsearchImage> trainingWordsearchImages, 
+        private static Dictionary<string, NeuralNetworkEvaluator> evaluateNeuralNetworks(List<WordsearchImage> trainingWordsearchImages, 
             List<WordsearchImage> crossValidationWordsearchImages, List<WordsearchImage> evaluationWordsearchImages)
         {
-            //TODO: Evaluate for each feature reduction algorithm automatically?
+            //evaluate all neural networks and feature extraction methods we're interested in & return their evaluation results
+            Dictionary<string, NeuralNetworkEvaluator> evaluationResults = new Dictionary<string, NeuralNetworkEvaluator>();
+
+            //Construct static feature extraction techniques (ones that don't learn the data) here, so they can be reused
+            FeatureExtractionAlgorithm rawPixelFeatureExtraction = new FeatureExtractionPixelValues();
+
+            /*
+             * Load all required data
+             */
 
             //Get the training data for the Neural Network
             Log.Info("Loading & processing the character training data");
-            Dictionary<char, List<double[]>> trainingData = getCharData(trainingWordsearchImages);
+            Dictionary<char, List<Bitmap>> trainingData = CharData.GetCharData(trainingWordsearchImages);
             Log.Info("Loaded training character data");
 
             //Convert the training data into a format the Neural network accepts
             Log.Info("Converting data to format for Neural Network . . .");
-            double[][] input;
+            double[][] rawPixelValuesInput;
+            Bitmap[] trainingCharImgs;
             double[][] output;
-            convertDataToNeuralNetworkFormat(trainingData, out input, out output);
+            CharData.GetNeuralNetworkBitmapsAndOutput(trainingData, out trainingCharImgs, out output);
+            rawPixelValuesInput = rawPixelFeatureExtraction.Extract(trainingCharImgs);
+            trainingCharImgs.DisposeAll(); //Dispose of all the training Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
-            Log.Info(String.Format("There are {0} training input character samples", input.Length));
+            Log.Info(String.Format("There are {0} training input character samples", rawPixelValuesInput.Length));
 
             //Load the cross-validation data for the neural network
             Log.Info("Loading & processing the character data (cross-validation)");
-            Dictionary<char, List<double[]>> crossValidationData = getCharData(crossValidationWordsearchImages);
+            Dictionary<char, List<Bitmap>> crossValidationData = CharData.GetCharData(crossValidationWordsearchImages);
             Log.Info("Loaded cross-validation character data");
 
             //Convert the evaluation data into a format the Neural network accepts
             Log.Info("Converting data to format for Neural Network . . .");
-            double[][] crossValInput;
+            double[][] rawPixelValuesCossValInput;
+            Bitmap[] crossValCharImgs;
             double[][] crossValOutput;
-            convertDataToNeuralNetworkFormat(crossValidationData, out crossValInput, out crossValOutput);
+            CharData.GetNeuralNetworkBitmapsAndOutput(crossValidationData, out crossValCharImgs, out crossValOutput);
+            rawPixelValuesCossValInput = rawPixelFeatureExtraction.Extract(crossValCharImgs);
+            crossValCharImgs.DisposeAll(); //Dispose of all the cross-validation Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
-            Log.Info(String.Format("There are {0} cross-validation input character samples", crossValInput.Length));
-            char[] crossValidationDataLabels = getCharacterLabels(crossValidationData);
+            Log.Info(String.Format("There are {0} cross-validation input character samples", rawPixelValuesCossValInput.Length));
+            char[] crossValidationDataLabels = CharData.GetCharLabels(crossValidationData);
 
-            //TODO: Make N Neural networks here, randomise each ones weights and train them all, then select the one that performs best on 
-            //  the cross-validation data??
+            //Load the evaluation data for the neural network
+            Log.Info("Loading & processing the character data (evaluation)");
+            Dictionary<char, List<Bitmap>> evaluationData = CharData.GetCharData(evaluationWordsearchImages);
+            Log.Info("Loaded evaluation character data");
 
-            //Create the neural network
+            //Convert the evaluation data into a format the Neural network accepts
+            Log.Info("Converting data to format for Neural Network . . .");
+            double[][] rawPixelValuesEvalInput;
+            Bitmap[] evalCharImgs;
+            double[][] evalOutput;
+            CharData.GetNeuralNetworkBitmapsAndOutput(evaluationData, out evalCharImgs, out evalOutput);
+            rawPixelValuesEvalInput = rawPixelFeatureExtraction.Extract(evalCharImgs);
+            evalCharImgs.DisposeAll(); //Dispose of all the bitmaps, freeing up memory
+            Log.Info("Conversion Complete");
+            Log.Info(String.Format("There are {0} evaluation input character samples", rawPixelValuesEvalInput.Length));
+            char[] evaluationDataLabels = CharData.GetCharLabels(evaluationData);
+
+            /*
+             * Evaluate each Neural Network
+             */
+
+            //Single layer Activation Network, Sigmoid Function, Back Propagation Learning on Raw Pixel Values
+            NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationRawPixelEval =
+                evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                rawPixelValuesInput, output, rawPixelValuesCossValInput, crossValidationDataLabels,
+                rawPixelValuesEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+            evaluationResults.Add("SingleLayer Sigmoid BkPropLearn RawPxlVals", 
+                singleLayerActivationSigmoidBackPropagationRawPixelEval);
+
+            return evaluationResults;
+        }
+
+        private static NeuralNetworkEvaluator evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+            double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels,
+            double[][] evaluationInput, char[] evaluationDataLabels, double learningRate)
+        {
+            //Create the neural Network
             BipolarSigmoidFunction sigmoidFunction = new BipolarSigmoidFunction(2.0f);
-            ActivationNetwork neuralNet = new ActivationNetwork(sigmoidFunction, NUM_INPUT_VALUES, ClassifierHelpers.NUM_CHAR_CLASSES);
+            ActivationNetwork neuralNet = new ActivationNetwork(sigmoidFunction, input[0].Length, ClassifierHelpers.NUM_CHAR_CLASSES);
 
             //Randomise the networks initial weights
             neuralNet.Randomize();
@@ -163,6 +231,18 @@ namespace QuantitativeEvaluation
             BackPropagationLearning teacher = new BackPropagationLearning(neuralNet);
             teacher.LearningRate = LEARNING_RATE;
 
+            //Train the Network
+            trainNetwork(neuralNet, teacher, input, output, crossValidationInput, crossValidationDataLabels);
+
+            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
+            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
+
+            return evaluator;
+        }
+
+        private static void trainNetwork(ActivationNetwork neuralNet, ISupervisedLearning teacher, 
+            double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels)
+        {
             //Make the network learn the data
             Log.Info("Training the neural network . . .");
             double error;
@@ -174,7 +254,7 @@ namespace QuantitativeEvaluation
             uint prevNetworkNumMisclassified = uint.MaxValue;
             Queue<uint> prevNetworksNumMisclassified = new Queue<uint>(NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU);
             //Initialise the queue to be full of uint.MaxValue
-            for(int i = 0; i < NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU; i++)
+            for (int i = 0; i < NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU; i++)
             {
                 prevNetworksNumMisclassified.Enqueue(prevNetworkNumMisclassified);
             }
@@ -197,14 +277,14 @@ namespace QuantitativeEvaluation
                 //Store this network & the number of characters it misclassified on the cross-validation data
                 neuralNet.Save(prevNetworkStream);
                 NeuralNetworkEvaluator crossValidationEvaluator = new NeuralNetworkEvaluator(neuralNet);
-                crossValidationEvaluator.Evaluate(crossValInput, crossValidationDataLabels);
+                crossValidationEvaluator.Evaluate(crossValidationInput, crossValidationDataLabels);
                 uint networkNumMisclassified = crossValidationEvaluator.ConfusionMatrix.NumMisclassifications;
-                Log.Debug(String.Format("Network misclassified {0} / {1} on the cross-validation data set", networkNumMisclassified, 
+                Log.Debug(String.Format("Network misclassified {0} / {1} on the cross-validation data set", networkNumMisclassified,
                     crossValidationEvaluator.ConfusionMatrix.TotalClassifications));
 
 
                 //Check if we've overlearned the data and performance on the cross-valiadtion data has dropped off
-                if(networkNumMisclassified > prevNetworksNumMisclassified.Mean()) //Use the mean of the number of misclassification, as the actual number can move around a bit
+                if (networkNumMisclassified > prevNetworksNumMisclassified.Mean()) //Use the mean of the number of misclassification, as the actual number can move around a bit
                 {
                     //Cross-Validation performance has dropped, reinstate the previous network & break
                     Log.Info(String.Format("Network has started to overlearn the training data on iteration {0}. Using previous classifier.", iterNum));
@@ -219,7 +299,7 @@ namespace QuantitativeEvaluation
                 prevNetworksNumMisclassified.Enqueue(prevNetworkNumMisclassified);
 
                 //Check if the performance has plateaued
-                if(prevNetworksNumMisclassified.Distinct().Count() == 1) //Allow for slight movement in performance here??
+                if (prevNetworksNumMisclassified.Distinct().Count() == 1) //Allow for slight movement in performance here??
                 {
                     //Cross-Validation performance has plateaued, use this network as the final one & break
                     Log.Info(String.Format("Network performance on cross-validation data has plateaued on iteration {0}.", iterNum));
@@ -237,149 +317,6 @@ namespace QuantitativeEvaluation
             while (error > LEARNED_AT_ERROR);
 
             Log.Info(String.Format("Data learned to an error of {0}", error));
-
-            //Load the evaluation data for the neural network
-            Log.Info("Loading & processing the character data (evaluation)");
-            Dictionary<char, List<double[]>> evaluationData = getCharData(evaluationWordsearchImages);
-            Log.Info("Loaded evaluation character data");
-
-            //Convert the evaluation data into a format the Neural network accepts
-            Log.Info("Converting data to format for Neural Network . . .");
-            double[][] evalInput;
-            double[][] evalOutput;
-            convertDataToNeuralNetworkFormat(evaluationData, out evalInput, out evalOutput);
-            Log.Info("Conversion Complete");
-            Log.Info(String.Format("There are {0} evaluation input character samples", evalInput.Length));
-
-            //Evaluate the trained network on the evaluation data
-            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
-            char[] evaluationDataLabels = getCharacterLabels(evaluationData);
-            evaluator.Evaluate(evalInput, evaluationDataLabels);
-
-            Log.Info(String.Format("{0} / {1} characters from the evaluation data were misclassified",
-                evaluator.ConfusionMatrix.NumMisclassifications, evaluator.ConfusionMatrix.TotalClassifications));
-
-            //Write out the Confusion Matrix so that we can inspect the reults in greater detail
-            evaluator.ConfusionMatrix.WriteToCsv("neuralNetwork.csv");
-        }
-
-        //TODO: Refactor. Complete rewrite needed, should be multiple methods, clearer & elsewhere
-        private static Dictionary<char, List<double[]>> getCharData(List<WordsearchImage> wordsearchImages)
-        {
-            //Make some objects now for reuse later
-            BradleyLocalThresholding bradleyLocalThreshold = new BradleyLocalThresholding();
-            ExtractBiggestBlob extractBiggestBlob = new ExtractBiggestBlob();
-            ResizeNearestNeighbor resize = new ResizeNearestNeighbor(CHAR_WITHOUT_WHITESPACE_WIDTH, CHAR_WITHOUT_WHITESPACE_HEIGHT);
-            Invert invert = new Invert();
-
-            //Construct Data Structure to be returned
-            Dictionary<char, List<double[]>> data = new Dictionary<char, List<double[]>>();
-
-            //Make a blank entry for each valid char
-            for (int i = (int)'A'; i <= (int)'Z'; i++)
-            {
-                char c = (char)i;
-                List<double[]> charImgs = new List<double[]>();
-                data.Add(c, charImgs);
-            }
-
-            foreach (WordsearchImage wordsearchImage in wordsearchImages)
-            {
-                Bitmap[,] rawCharImages = wordsearchImage.GetCharBitmaps(CHAR_WITH_WHITESPACE_WIDTH, CHAR_WITH_WHITESPACE_HEIGHT);
-
-                for (int i = 0; i < rawCharImages.GetLength(0); i++)
-                {
-                    for (int j = 0; j < rawCharImages.GetLength(1); j++)
-                    {
-                        //Greyscale
-                        Bitmap greyImg = Grayscale.CommonAlgorithms.BT709.Apply(rawCharImages[i, j]); //Use the BT709 (HDTV spec) for RBG weights
-
-                        //Bradley Local Thresholding
-                        bradleyLocalThreshold.ApplyInPlace(greyImg);
-
-                        //Invert the image (required for blob detection)
-                        invert.ApplyInPlace(greyImg);
-
-                        //TODO: The biggest blob might be something else (when in a corner of a bounded wordsearch it's often the 2 lines making a square). Account for this
-                        //Extract the largest blob (the character)
-                        Bitmap charWithoutWhitespace = extractBiggestBlob.Apply(greyImg);
-
-                        //Resize the image of the char without whitespace to some normalised size (using nearest neighbour because we've already thresholded)
-                        Bitmap normalisedCharWithoutWhitespace = resize.Apply(charWithoutWhitespace);
-
-                        //Convert Bitmap to double[,] (+-0.5) (what's used to train the neural network)
-                        double[] doubleImg = Converters.ThresholdedBitmapToDoubleArray(normalisedCharWithoutWhitespace);
-                        char charImg = wordsearchImage.Wordsearch.Chars[i, j];
-
-                        //Check the char is valid
-                        if (charImg < 'A' || charImg > 'Z')
-                        {
-                            throw new UnexpectedClassifierOutputException("Chars must be in range A-Z. Found " + charImg);
-                        }
-
-                        data[charImg].Add(doubleImg);
-
-                        //Clean up
-                        rawCharImages[i, j].Dispose();
-                        greyImg.Dispose();
-                        charWithoutWhitespace.Dispose();
-                        normalisedCharWithoutWhitespace.Dispose();
-                    }
-                }
-            }
-
-            return data;
-        }
-
-        private static char[] getCharacterLabels(Dictionary<char, List<double[]>> data)
-        {
-            int numInputs = 0;
-            foreach (List<double[]> arr in data.Values)
-            {
-                numInputs += arr.Count;
-            }
-
-            char[] labels = new char[numInputs];
-            int idx = 0;
-            foreach (KeyValuePair<char, List<double[]>> entry in data)
-            {
-                char c = entry.Key;
-
-                for (int i = 0; i < entry.Value.Count; i++)
-                {
-                    labels[idx] = c;
-                    idx++;
-                }
-            }
-
-            return labels;
-        }
-
-        private static void convertDataToNeuralNetworkFormat(Dictionary<char, List<double[]>> data, out double[][] input, out double[][] output)
-        {
-            int numInputs = 0;
-            foreach (List<double[]> arr in data.Values)
-            {
-                numInputs += arr.Count;
-            }
-
-            input = new double[numInputs][];
-            output = new double[numInputs][];
-            int idx = 0;
-            foreach (KeyValuePair<char, List<double[]>> entry in data)
-            {
-                char c = entry.Key;
-                List<double[]> images = entry.Value;
-
-                double[] thisCharOutput = NeuralNetworkHelpers.GetDesiredOutputForChar(c);
-
-                foreach (double[] image in images)
-                {
-                    input[idx] = image;
-                    output[idx] = thisCharOutput;
-                    idx++;
-                }
-            }
         }
     }
 }

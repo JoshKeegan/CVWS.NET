@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
- * Quantitative Evaluation
- * Feature Reduction Algorithm - abstract class 
+ * Shared Helpers
+ * Feature Extraction Algorithm - abstract class 
  * By Josh Keegan 08/03/2014
+ * Last Edit 11/03/2014
  */
 
 using System;
@@ -12,12 +13,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuantitativeEvaluation.FeatureReduction
+namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
 {
-    public abstract class FeatureReductionAlgorithm
+    public abstract class FeatureExtractionAlgorithm
     {
         //Method is non-static to allow for feature reduction algorithms that learn what features are best to extract on the training data
         //The best features can be stored local to the instance this way
-        public abstract double[][] Reduce(Bitmap[] charImgs);
+        public abstract double[][] Extract(Bitmap[] charImgs);
     }
 }

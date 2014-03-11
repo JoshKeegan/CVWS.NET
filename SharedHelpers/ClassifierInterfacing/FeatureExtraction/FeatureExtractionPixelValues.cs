@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
- * Quantitative Evaluation
- * Feature Reduction Pixel Values - return the pixel value given binarised bitmaps
+ * Shared Helpers
+ * Feature Extraction Pixel Values - return the pixel value given binarised bitmaps
  * By Josh Keegan 08/03/2014
+ * Last Edit 11/03/2014
  */
 
 using System;
@@ -14,11 +15,11 @@ using System.Threading.Tasks;
 
 using SharedHelpers.Imaging;
 
-namespace QuantitativeEvaluation.FeatureReduction
+namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
 {
-    public class FeatureReductionPixelValues : FeatureReductionAlgorithm
+    public class FeatureExtractionPixelValues : FeatureExtractionAlgorithm
     {
-        public override double[][] Reduce(Bitmap[] charImgs)
+        public override double[][] Extract(Bitmap[] charImgs)
         {
             double[][] doubleCharImgs = new double[charImgs.Length][];
 
