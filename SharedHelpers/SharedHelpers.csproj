@@ -35,6 +35,9 @@
     <Reference Include="Accord.Math">
       <HintPath>..\lib\Accord.Math.dll</HintPath>
     </Reference>
+    <Reference Include="Accord.Statistics">
+      <HintPath>..\lib\Accord.Statistics.dll</HintPath>
+    </Reference>
     <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\AForge.dll</HintPath>
@@ -56,12 +59,15 @@
     <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionDCT.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPCA.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPixelValues.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\TrainableFeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\NeuralNetworkHelpers.cs" />
     <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
     <Compile Include="Exceptions\RegisteredInterestException.cs" />
     <Compile Include="Exceptions\UnexpectedClassifierOutputException.cs" />
     <Compile Include="Exceptions\UnexpectedImageSizeException.cs" />
+    <Compile Include="Exceptions\UntrainedFeatureExtractionAlgorithmException.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\CharacterExtractor.cs" />
     <Compile Include="Imaging\Converters.cs" />
