@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2dArrayExtensions.cs" />
     <Compile Include="CollectionExtensionsIDisposable.cs" />
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="CollectionExtensionsUint.cs" />

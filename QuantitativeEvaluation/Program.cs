@@ -149,6 +149,7 @@ namespace QuantitativeEvaluation
 
             //Construct static feature extraction techniques (ones that don't learn the data) here, so they can be reused
             FeatureExtractionAlgorithm rawPixelFeatureExtraction = new FeatureExtractionPixelValues();
+            FeatureExtractionAlgorithm dctFeatureExtraction = new FeatureExtractionDCT();
 
             /*
              * Load all required data
@@ -161,11 +162,11 @@ namespace QuantitativeEvaluation
 
             //Convert the training data into a format the Neural network accepts
             Log.Info("Converting data to format for Neural Network . . .");
-            double[][] rawPixelValuesInput;
             Bitmap[] trainingCharImgs;
             double[][] output;
             CharData.GetNeuralNetworkBitmapsAndOutput(trainingData, out trainingCharImgs, out output);
-            rawPixelValuesInput = rawPixelFeatureExtraction.Extract(trainingCharImgs);
+            double[][] rawPixelValuesInput = rawPixelFeatureExtraction.Extract(trainingCharImgs);
+            double[][] dctInput = dctFeatureExtraction.Extract(trainingCharImgs);
             trainingCharImgs.DisposeAll(); //Dispose of all the training Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} training input character samples", rawPixelValuesInput.Length));
@@ -177,11 +178,11 @@ namespace QuantitativeEvaluation
 
             //Convert the evaluation data into a format the Neural network accepts
             Log.Info("Converting data to format for Neural Network . . .");
-            double[][] rawPixelValuesCossValInput;
             Bitmap[] crossValCharImgs;
             double[][] crossValOutput;
             CharData.GetNeuralNetworkBitmapsAndOutput(crossValidationData, out crossValCharImgs, out crossValOutput);
-            rawPixelValuesCossValInput = rawPixelFeatureExtraction.Extract(crossValCharImgs);
+            double[][] rawPixelValuesCossValInput = rawPixelFeatureExtraction.Extract(crossValCharImgs);
+            double[][] dctCrossValInput = dctFeatureExtraction.Extract(crossValCharImgs);
             crossValCharImgs.DisposeAll(); //Dispose of all the cross-validation Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} cross-validation input character samples", rawPixelValuesCossValInput.Length));
@@ -194,11 +195,11 @@ namespace QuantitativeEvaluation
 
             //Convert the evaluation data into a format the Neural network accepts
             Log.Info("Converting data to format for Neural Network . . .");
-            double[][] rawPixelValuesEvalInput;
             Bitmap[] evalCharImgs;
             double[][] evalOutput;
             CharData.GetNeuralNetworkBitmapsAndOutput(evaluationData, out evalCharImgs, out evalOutput);
-            rawPixelValuesEvalInput = rawPixelFeatureExtraction.Extract(evalCharImgs);
+            double[][] rawPixelValuesEvalInput = rawPixelFeatureExtraction.Extract(evalCharImgs);
+            double[][] dctEvalInput = dctFeatureExtraction.Extract(evalCharImgs);
             evalCharImgs.DisposeAll(); //Dispose of all the bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} evaluation input character samples", rawPixelValuesEvalInput.Length));
@@ -215,6 +216,14 @@ namespace QuantitativeEvaluation
                 rawPixelValuesEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
             evaluationResults.Add("SingleLayer Sigmoid BkPropLearn RawPxlVals", 
                 singleLayerActivationSigmoidBackPropagationRawPixelEval);
+
+            //Single layer activation network, Signmoid Function, Back Propagation Learning on DCT
+            NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationDCT =
+                evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                dctInput, output, dctCrossValInput, crossValidationDataLabels,
+                dctEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+            evaluationResults.Add("SingleLayer Sigmoid BkPropLearn DCT",
+                singleLayerActivationSigmoidBackPropagationDCT);
 
             return evaluationResults;
         }

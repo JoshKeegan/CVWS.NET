@@ -1,7 +1,7 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Base Object Extensions
- * partion Collection Extensions class - functions working on IDisposable
+ * partial Collection Extensions class - functions working on IDisposable
  * By Josh Keegan 11/03/2014
  */
 
