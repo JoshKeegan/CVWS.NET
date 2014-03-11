@@ -44,7 +44,7 @@ namespace QuantitativeEvaluation
         private const int NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU = 50; //The number of previous iterations to record when evaluating a network in training on the cross-validation data
         //Used for detecting a plateau and detecting over-learning of data
         private const int NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION = 10;
-        private const int PCA_NUM_FEATURES = 10;
+        private const int PCA_NUM_FEATURES = 20;
 
         //evaluate all neural networks and feature extraction methods we're interested in & return their evaluation results
         internal static IDictionary<string, NeuralNetworkEvaluator> evaluateNeuralNetworks(List<WordsearchImage> trainingWordsearchImages,
