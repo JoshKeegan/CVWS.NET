@@ -32,6 +32,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord">
+      <HintPath>..\lib\Accord.dll</HintPath>
+    </Reference>
     <Reference Include="Accord.Math">
       <HintPath>..\lib\Accord.Math.dll</HintPath>
     </Reference>

@@ -44,6 +44,7 @@ namespace QuantitativeEvaluation
         private const int NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU = 50; //The number of previous iterations to record when evaluating a network in training on the cross-validation data
         //Used for detecting a plateau and detecting over-learning of data
         private const int NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION = 10;
+        private const int PCA_NUM_FEATURES = 10;
 
         //evaluate all neural networks and feature extraction methods we're interested in & return their evaluation results
         internal static IDictionary<string, NeuralNetworkEvaluator> evaluateNeuralNetworks(List<WordsearchImage> trainingWordsearchImages,
@@ -69,6 +70,16 @@ namespace QuantitativeEvaluation
             CharData.GetNeuralNetworkBitmapsAndOutput(trainingData, out trainingCharImgs, out output);
             double[][] rawPixelValuesInput = rawPixelFeatureExtraction.Extract(trainingCharImgs);
             double[][] dctInput = dctFeatureExtraction.Extract(trainingCharImgs);
+
+            //Create the non-static feature extraction algorithms & train them on the training data
+            TrainableFeatureExtractionAlgorithm pcaFeatureExtractionAllFeatures = new FeatureExtractionPCA();
+            pcaFeatureExtractionAllFeatures.Train(trainingCharImgs);
+            TrainableFeatureExtractionAlgorithm pcaFeatureExtractionTopFeatures = new FeatureExtractionPCA(PCA_NUM_FEATURES);
+            pcaFeatureExtractionTopFeatures.Train(trainingCharImgs);
+
+            double[][] pcaAllFeaturesInput = pcaFeatureExtractionAllFeatures.Extract(trainingCharImgs);
+            double[][] pcaTopFeaturesInput = pcaFeatureExtractionTopFeatures.Extract(trainingCharImgs);
+
             trainingCharImgs.DisposeAll(); //Dispose of all the training Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} training input character samples", rawPixelValuesInput.Length));
@@ -85,6 +96,8 @@ namespace QuantitativeEvaluation
             CharData.GetNeuralNetworkBitmapsAndOutput(crossValidationData, out crossValCharImgs, out crossValOutput);
             double[][] rawPixelValuesCossValInput = rawPixelFeatureExtraction.Extract(crossValCharImgs);
             double[][] dctCrossValInput = dctFeatureExtraction.Extract(crossValCharImgs);
+            double[][] pcaAllFeaturesCrossValInput = pcaFeatureExtractionAllFeatures.Extract(crossValCharImgs);
+            double[][] pcaTopFeaturesCrossValInput = pcaFeatureExtractionTopFeatures.Extract(crossValCharImgs);
             crossValCharImgs.DisposeAll(); //Dispose of all the cross-validation Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} cross-validation input character samples", rawPixelValuesCossValInput.Length));
@@ -102,6 +115,8 @@ namespace QuantitativeEvaluation
             CharData.GetNeuralNetworkBitmapsAndOutput(evaluationData, out evalCharImgs, out evalOutput);
             double[][] rawPixelValuesEvalInput = rawPixelFeatureExtraction.Extract(evalCharImgs);
             double[][] dctEvalInput = dctFeatureExtraction.Extract(evalCharImgs);
+            double[][] pcaAllFeaturesEvaluationInput = pcaFeatureExtractionAllFeatures.Extract(evalCharImgs);
+            double[][] pcaTopFeaturesEvaluationInput = pcaFeatureExtractionTopFeatures.Extract(evalCharImgs);
             evalCharImgs.DisposeAll(); //Dispose of all the bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} evaluation input character samples", rawPixelValuesEvalInput.Length));
@@ -115,7 +130,7 @@ namespace QuantitativeEvaluation
             ConcurrentDictionary<string, NeuralNetworkEvaluator> concurrentEvaluationResults = 
                 new ConcurrentDictionary<string, NeuralNetworkEvaluator>();
 
-            ManualResetEvent[] doneEvents = new ManualResetEvent[2]; //Update to the number of algorithms to run in parallel
+            ManualResetEvent[] doneEvents = new ManualResetEvent[4]; //Update to the number of algorithms to run in parallel
 
             Log.Info("Starting worker threads");
 
@@ -137,7 +152,7 @@ namespace QuantitativeEvaluation
             doneEvents[1] = new ManualResetEvent(false);
             Task.Factory.StartNew(() =>
                 {
-                    //Single layer activation network, Signmoid Function, Back Propagation Learning on DCT
+                    //Single layer activation network, Sigmoid Function, Back Propagation Learning on DCT
                     NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationDCT =
                         evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
                         dctInput, output, dctCrossValInput, crossValidationDataLabels,
@@ -148,6 +163,36 @@ namespace QuantitativeEvaluation
                     //Tell the main thread we're done
                     doneEvents[1].Set();
                 });
+
+            doneEvents[2] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+                {
+                    //Single layer activation network, Sigmoid Function, Back Propagation Learning on PCA with all Features
+                    NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationPCAAllFeatures =
+                        evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                        pcaAllFeaturesInput, output, pcaAllFeaturesCrossValInput, crossValidationDataLabels,
+                        pcaAllFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                    concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn PCAAllFeatures",
+                        singleLayerActivationSigmoidBackPropagationPCAAllFeatures);
+
+                    //Tell the main thread we're done
+                    doneEvents[2].Set();
+                });
+
+            doneEvents[3] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+            {
+                //Single layer activation network, Sigmoid Function, Back Propagation Learning on PCA, using onlt the top features
+                NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationPCATopFeatures =
+                    evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                    pcaTopFeaturesInput, output, pcaTopFeaturesCrossValInput, crossValidationDataLabels,
+                    pcaTopFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn PCA" + PCA_NUM_FEATURES + "Features",
+                    singleLayerActivationSigmoidBackPropagationPCATopFeatures);
+
+                //Tell the main thread we're done
+                doneEvents[3].Set();
+            });
 
             //Wait for all threads to complete
             WaitHandle.WaitAll(doneEvents);
