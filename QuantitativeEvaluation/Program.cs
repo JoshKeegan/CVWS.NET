@@ -133,6 +133,9 @@ namespace QuantitativeEvaluation
                 string networkName = pair.Key;
                 ConfusionMatrix cm = pair.Value.ConfusionMatrix;
 
+                Log.Info(String.Format("Network \"{0}\" misclassified {1}/{2}", networkName, 
+                    cm.NumMisclassifications, cm.TotalClassifications));
+
                 cm.WriteToCsv(EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
             }
             Log.Info("Neural Network Evaluation results written out successfully");
