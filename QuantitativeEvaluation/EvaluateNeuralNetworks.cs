@@ -19,6 +19,8 @@ using AForge.Imaging.Filters;
 using AForge.Neuro;
 using AForge.Neuro.Learning;
 
+using Accord.Statistics.Kernels;
+
 using ImageMarkup;
 using SharedHelpers;
 using SharedHelpers.ClassifierInterfacing;
@@ -54,6 +56,9 @@ namespace QuantitativeEvaluation
             FeatureExtractionAlgorithm rawPixelFeatureExtraction = new FeatureExtractionPixelValues();
             FeatureExtractionAlgorithm dctFeatureExtraction = new FeatureExtractionDCT();
 
+            //Construct kernels for use in some feature extraction techniques
+            IKernel gaussianKernal = new Gaussian(10);
+
             /*
              * Load all required data
              */
@@ -72,13 +77,21 @@ namespace QuantitativeEvaluation
             double[][] dctInput = dctFeatureExtraction.Extract(trainingCharImgs);
 
             //Create the non-static feature extraction algorithms & train them on the training data
+            Log.Info("Training Feature Extraction systems . . .");
             TrainableFeatureExtractionAlgorithm pcaFeatureExtractionAllFeatures = new FeatureExtractionPCA();
             pcaFeatureExtractionAllFeatures.Train(trainingCharImgs);
             TrainableFeatureExtractionAlgorithm pcaFeatureExtractionTopFeatures = new FeatureExtractionPCA(PCA_NUM_FEATURES);
             pcaFeatureExtractionTopFeatures.Train(trainingCharImgs);
+            TrainableFeatureExtractionAlgorithm kpcaGaussianFeatureExtractionAllFeatures = new FeatureExtractionKPCA(gaussianKernal);
+            kpcaGaussianFeatureExtractionAllFeatures.Train(trainingCharImgs);
+            TrainableFeatureExtractionAlgorithm kpcaGaussianFeatureExtractionTopFeatures = new FeatureExtractionKPCA(gaussianKernal);
+            kpcaGaussianFeatureExtractionTopFeatures.Train(trainingCharImgs);
+            Log.Info("Feature Extraction Training Complete");
 
             double[][] pcaAllFeaturesInput = pcaFeatureExtractionAllFeatures.Extract(trainingCharImgs);
             double[][] pcaTopFeaturesInput = pcaFeatureExtractionTopFeatures.Extract(trainingCharImgs);
+            double[][] kpcaGaussianAllFeaturesInput = kpcaGaussianFeatureExtractionAllFeatures.Extract(trainingCharImgs);
+            double[][] kpcaGaussianTopFeaturesInput = kpcaGaussianFeatureExtractionAllFeatures.Extract(trainingCharImgs);
 
             trainingCharImgs.DisposeAll(); //Dispose of all the training Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
@@ -98,6 +111,8 @@ namespace QuantitativeEvaluation
             double[][] dctCrossValInput = dctFeatureExtraction.Extract(crossValCharImgs);
             double[][] pcaAllFeaturesCrossValInput = pcaFeatureExtractionAllFeatures.Extract(crossValCharImgs);
             double[][] pcaTopFeaturesCrossValInput = pcaFeatureExtractionTopFeatures.Extract(crossValCharImgs);
+            double[][] kpcaGaussianAllFeaturesCrossValInput = kpcaGaussianFeatureExtractionAllFeatures.Extract(crossValCharImgs);
+            double[][] kpcaGaussianTopFeaturesCrossValInput = kpcaGaussianFeatureExtractionTopFeatures.Extract(crossValCharImgs);
             crossValCharImgs.DisposeAll(); //Dispose of all the cross-validation Bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} cross-validation input character samples", rawPixelValuesCossValInput.Length));
@@ -117,6 +132,8 @@ namespace QuantitativeEvaluation
             double[][] dctEvalInput = dctFeatureExtraction.Extract(evalCharImgs);
             double[][] pcaAllFeaturesEvaluationInput = pcaFeatureExtractionAllFeatures.Extract(evalCharImgs);
             double[][] pcaTopFeaturesEvaluationInput = pcaFeatureExtractionTopFeatures.Extract(evalCharImgs);
+            double[][] kpcaGaussianAllFeaturesEvaluationInput = kpcaGaussianFeatureExtractionAllFeatures.Extract(evalCharImgs);
+            double[][] kpcaGaussianTopFeaturesEvaluationInput = kpcaGaussianFeatureExtractionTopFeatures.Extract(evalCharImgs);
             evalCharImgs.DisposeAll(); //Dispose of all the bitmaps, freeing up memory
             Log.Info("Conversion Complete");
             Log.Info(String.Format("There are {0} evaluation input character samples", rawPixelValuesEvalInput.Length));
@@ -130,7 +147,7 @@ namespace QuantitativeEvaluation
             ConcurrentDictionary<string, NeuralNetworkEvaluator> concurrentEvaluationResults = 
                 new ConcurrentDictionary<string, NeuralNetworkEvaluator>();
 
-            ManualResetEvent[] doneEvents = new ManualResetEvent[4]; //Update to the number of algorithms to run in parallel
+            ManualResetEvent[] doneEvents = new ManualResetEvent[6]; //Update to the number of algorithms to run in parallel
 
             Log.Info("Starting worker threads");
 
@@ -182,7 +199,7 @@ namespace QuantitativeEvaluation
             doneEvents[3] = new ManualResetEvent(false);
             Task.Factory.StartNew(() =>
             {
-                //Single layer activation network, Sigmoid Function, Back Propagation Learning on PCA, using onlt the top features
+                //Single layer activation network, Sigmoid Function, Back Propagation Learning on PCA, using only the top features
                 NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationPCATopFeatures =
                     evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
                     pcaTopFeaturesInput, output, pcaTopFeaturesCrossValInput, crossValidationDataLabels,
@@ -192,6 +209,36 @@ namespace QuantitativeEvaluation
 
                 //Tell the main thread we're done
                 doneEvents[3].Set();
+            });
+
+            doneEvents[4] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+            {
+                //Single layer activation network, Sigmoid Function, Back Propagation Learning on KPCA, with Gaussian Kernel using all features
+                NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationKPCAAllFeaturesGaussian =
+                    evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                    kpcaGaussianAllFeaturesInput, output, kpcaGaussianAllFeaturesCrossValInput, crossValidationDataLabels,
+                    kpcaGaussianAllFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn KPCAAllFeatures Gaussian",
+                    singleLayerActivationSigmoidBackPropagationKPCAAllFeaturesGaussian);
+
+                //Tell the main thread we're done
+                doneEvents[4].Set();
+            });
+
+            doneEvents[5] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+            {
+                //Single layer activation network, Sigmoid Function, Back Propagation Learning on KPCA, with Gaussian Kernel using only the top features
+                NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationKPCATopFeaturesGaussian =
+                    evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                    kpcaGaussianTopFeaturesInput, output, kpcaGaussianTopFeaturesCrossValInput, crossValidationDataLabels,
+                    kpcaGaussianTopFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn KPCA" + PCA_NUM_FEATURES + "Features Gaussian",
+                    singleLayerActivationSigmoidBackPropagationKPCATopFeaturesGaussian);
+
+                //Tell the main thread we're done
+                doneEvents[5].Set();
             });
 
             //Wait for all threads to complete

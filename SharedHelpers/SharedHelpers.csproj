@@ -62,6 +62,7 @@
     <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionDCT.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionKPCA.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPCA.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPixelValues.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\TrainableFeatureExtractionAlgorithm.cs" />
