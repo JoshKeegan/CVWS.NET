@@ -58,8 +58,6 @@
     <Compile Include="ConfusionMatrix.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />
     <Compile Include="Evaluators\NeuralNetworkEvaluator.cs" />
-    <Compile Include="FeatureReduction\FeatureReductionAlgorithm.cs" />
-    <Compile Include="FeatureReduction\FeatureReductionPixelValues.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

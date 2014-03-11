@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionAlgorithm.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPixelValues.cs" />
     <Compile Include="ClassifierInterfacing\NeuralNetworkHelpers.cs" />
     <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
     <Compile Include="Exceptions\RegisteredInterestException.cs" />

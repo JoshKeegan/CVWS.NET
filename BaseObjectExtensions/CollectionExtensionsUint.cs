@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Base Object Extensions
- * Collection Extensions
+ * partial Collection Extensions class - functions working on uints
  * By Josh Keegan 10/03/2014
+ * Last Edit 11/03/2014
  */
 
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BaseObjectExtensions
 {
-    public static class CollectionExtensions
+    public static partial class CollectionExtensions
     {
         //Function to calculate the mean of a Collection of numbers
         public static double Mean(this ICollection<uint> collection)
