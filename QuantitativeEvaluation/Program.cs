@@ -87,7 +87,7 @@ namespace QuantitativeEvaluation
 
             //Evaluate all of the neural network combo's
             Log.Info("Starting to evaluate all Neural Networks . . .");
-            Dictionary<string, NeuralNetworkEvaluator> neuralNetworkEvalResults = 
+            IDictionary<string, NeuralNetworkEvaluator> neuralNetworkEvalResults = 
                 EvaluateNeuralNetworks.evaluateNeuralNetworks(trainingWordsearchImages, 
                 crossValidationWordsearchImages, evaluationWordsearchImages);
             Log.Info("Evaluation of all Neural Networks completed");

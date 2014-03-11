@@ -7,9 +7,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 
@@ -43,12 +45,10 @@ namespace QuantitativeEvaluation
         //Used for detecting a plateau and detecting over-learning of data
         private const int NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION = 10;
 
-        internal static Dictionary<string, NeuralNetworkEvaluator> evaluateNeuralNetworks(List<WordsearchImage> trainingWordsearchImages,
+        //evaluate all neural networks and feature extraction methods we're interested in & return their evaluation results
+        internal static IDictionary<string, NeuralNetworkEvaluator> evaluateNeuralNetworks(List<WordsearchImage> trainingWordsearchImages,
             List<WordsearchImage> crossValidationWordsearchImages, List<WordsearchImage> evaluationWordsearchImages)
         {
-            //evaluate all neural networks and feature extraction methods we're interested in & return their evaluation results
-            Dictionary<string, NeuralNetworkEvaluator> evaluationResults = new Dictionary<string, NeuralNetworkEvaluator>();
-
             //Construct static feature extraction techniques (ones that don't learn the data) here, so they can be reused
             FeatureExtractionAlgorithm rawPixelFeatureExtraction = new FeatureExtractionPixelValues();
             FeatureExtractionAlgorithm dctFeatureExtraction = new FeatureExtractionDCT();
@@ -111,23 +111,49 @@ namespace QuantitativeEvaluation
              * Evaluate each Neural Network
              */
 
-            //Single layer Activation Network, Sigmoid Function, Back Propagation Learning on Raw Pixel Values
-            NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationRawPixelEval =
-                evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
-                rawPixelValuesInput, output, rawPixelValuesCossValInput, crossValidationDataLabels,
-                rawPixelValuesEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
-            evaluationResults.Add("SingleLayer Sigmoid BkPropLearn RawPxlVals",
-                singleLayerActivationSigmoidBackPropagationRawPixelEval);
+            //Run each network trainin process in it's own thread as they can take a while . . .
+            ConcurrentDictionary<string, NeuralNetworkEvaluator> concurrentEvaluationResults = 
+                new ConcurrentDictionary<string, NeuralNetworkEvaluator>();
 
-            //Single layer activation network, Signmoid Function, Back Propagation Learning on DCT
-            NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationDCT =
-                evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
-                dctInput, output, dctCrossValInput, crossValidationDataLabels,
-                dctEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
-            evaluationResults.Add("SingleLayer Sigmoid BkPropLearn DCT",
-                singleLayerActivationSigmoidBackPropagationDCT);
+            ManualResetEvent[] doneEvents = new ManualResetEvent[2]; //Update to the number of algorithms to run in parallel
 
-            return evaluationResults;
+            Log.Info("Starting worker threads");
+
+            doneEvents[0] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+                {
+                    //Single layer Activation Network, Sigmoid Function, Back Propagation Learning on Raw Pixel Values
+                    NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationRawPixelEval =
+                        evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                        rawPixelValuesInput, output, rawPixelValuesCossValInput, crossValidationDataLabels,
+                        rawPixelValuesEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                    concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn RawPxlVals",
+                        singleLayerActivationSigmoidBackPropagationRawPixelEval);
+
+                    //Tell the main thread we're done
+                    doneEvents[0].Set();
+                });
+
+            doneEvents[1] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+                {
+                    //Single layer activation network, Signmoid Function, Back Propagation Learning on DCT
+                    NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationDCT =
+                        evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                        dctInput, output, dctCrossValInput, crossValidationDataLabels,
+                        dctEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                    concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn DCT",
+                        singleLayerActivationSigmoidBackPropagationDCT);
+
+                    //Tell the main thread we're done
+                    doneEvents[1].Set();
+                });
+
+            //Wait for all threads to complete
+            WaitHandle.WaitAll(doneEvents);
+            Log.Info("All worker threads have completed");
+
+            return concurrentEvaluationResults;
         }
 
         private static NeuralNetworkEvaluator evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
@@ -227,7 +253,7 @@ namespace QuantitativeEvaluation
                 //Progress update
                 if (iterNum % ITERATIONS_PER_PROGRESS_UPDATE == 0)
                 {
-                    Log.Info(String.Format("Learned for {0} iterations. Error: {1}", iterNum, error));
+                    Log.Debug(String.Format("Learned for {0} iterations. Error: {1}", iterNum, error));
                 }
 
                 //Evaluate this network on the cross-validation data
@@ -246,7 +272,7 @@ namespace QuantitativeEvaluation
                 if (networkNumMisclassified > prevNetworksNumMisclassified.Mean()) //Use the mean of the number of misclassification, as the actual number can move around a bit
                 {
                     //Cross-Validation performance has dropped, reinstate the previous network & break
-                    Log.Info(String.Format("Network has started to overlearn the training data on iteration {0}. Using previous classifier.", iterNum));
+                    Log.Debug(String.Format("Network has started to overlearn the training data on iteration {0}. Using previous classifier.", iterNum));
                     prevNetworkStream.Position = 0; //Set head to start of stream
                     neuralNet = ActivationNetwork.Load(prevNetworkStream) as ActivationNetwork; //Read in the network
                     break;
@@ -261,14 +287,14 @@ namespace QuantitativeEvaluation
                 if (prevNetworksNumMisclassified.Distinct().Count() == 1) //Allow for slight movement in performance here??
                 {
                     //Cross-Validation performance has plateaued, use this network as the final one & break
-                    Log.Info(String.Format("Network performance on cross-validation data has plateaued on iteration {0}.", iterNum));
+                    Log.Debug(String.Format("Network performance on cross-validation data has plateaued on iteration {0}.", iterNum));
                     break;
                 }
 
                 //Check if we've performed the max number of iterations
                 if (iterNum > MAX_LEARNING_ITERATIONS)
                 {
-                    Log.Info(String.Format("Reached the maximum number of learning iterations ({0}), with error {1}", MAX_LEARNING_ITERATIONS, error));
+                    Log.Debug(String.Format("Reached the maximum number of learning iterations ({0}), with error {1}", MAX_LEARNING_ITERATIONS, error));
                     break;
                 }
                 iterNum++;
