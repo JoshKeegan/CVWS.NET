@@ -35,12 +35,10 @@ namespace QuantitativeEvaluation
         private const int CHAR_WITH_WHITESPACE_HEIGHT = 25;
         private const int CHAR_WITHOUT_WHITESPACE_WIDTH = 12;
         private const int CHAR_WITHOUT_WHITESPACE_HEIGHT = 16;
-        private const int NUM_INPUT_VALUES = CHAR_WITHOUT_WHITESPACE_WIDTH * CHAR_WITHOUT_WHITESPACE_HEIGHT;
         private const double LEARNING_RATE = 0.5;
         private const double LEARNED_AT_ERROR = 0.5; //The error returned by the neural network. When less than this class as learned
         private const int MAX_LEARNING_ITERATIONS = 1000; //The maximum number of iterations to train the network for
         private const int ITERATIONS_PER_PROGRESS_UPDATE = 25;
-        private const string MISCLASSIFIED_IMAGES_DIR_PATH = "Misclassified";
         private const int NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU = 50; //The number of previous iterations to record when evaluating a network in training on the cross-validation data
         //Used for detecting a plateau and detecting over-learning of data
 
