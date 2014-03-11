@@ -231,6 +231,18 @@ namespace QuantitativeEvaluation
             BackPropagationLearning teacher = new BackPropagationLearning(neuralNet);
             teacher.LearningRate = LEARNING_RATE;
 
+            //Train the Network
+            trainNetwork(neuralNet, teacher, input, output, crossValidationInput, crossValidationDataLabels);
+
+            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
+            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
+
+            return evaluator;
+        }
+
+        private static void trainNetwork(ActivationNetwork neuralNet, ISupervisedLearning teacher, 
+            double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels)
+        {
             //Make the network learn the data
             Log.Info("Training the neural network . . .");
             double error;
@@ -305,11 +317,6 @@ namespace QuantitativeEvaluation
             while (error > LEARNED_AT_ERROR);
 
             Log.Info(String.Format("Data learned to an error of {0}", error));
-
-            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
-            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
-
-            return evaluator;
         }
     }
 }
