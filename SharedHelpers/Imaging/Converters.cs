@@ -3,7 +3,7 @@
  * Shared Helpers
  * Converters class - convert Images to other formats
  * By Josh Keegan 06/03/2014
- * Last Edit 08/03/2014
+ * Last Edit 11/03/2014
  */
 
 using System;
@@ -108,6 +108,23 @@ namespace SharedHelpers.Imaging
                 for(int j = 0; j < boolImg.GetLength(1); j++)
                 {
                     dblImg[(j * boolImg.GetLength(0)) + i] = boolImg[i, j] ? 0.5 : -0.5;
+                }
+            }
+
+            return dblImg;
+        }
+
+        public static double[,] ThresholdedBitmapTo2DDoubleArray(Bitmap img)
+        {
+            bool[,] boolImg = ThresholdedBitmapToBoolArray(img);
+
+            double[,] dblImg = new double[boolImg.GetLength(0), boolImg.GetLength(1)];
+
+            for(int i = 0; i < dblImg.GetLength(0); i++)
+            {
+                for(int j = 0; j < dblImg.GetLength(1); j++)
+                {
+                    dblImg[i, j] = boolImg[i, j] ? 0.5 : -0.5;
                 }
             }
 
