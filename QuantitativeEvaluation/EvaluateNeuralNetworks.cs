@@ -41,6 +41,7 @@ namespace QuantitativeEvaluation
         private const int ITERATIONS_PER_PROGRESS_UPDATE = 25;
         private const int NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU = 50; //The number of previous iterations to record when evaluating a network in training on the cross-validation data
         //Used for detecting a plateau and detecting over-learning of data
+        private const int NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION = 10;
 
         internal static Dictionary<string, NeuralNetworkEvaluator> evaluateNeuralNetworks(List<WordsearchImage> trainingWordsearchImages,
             List<WordsearchImage> crossValidationWordsearchImages, List<WordsearchImage> evaluationWordsearchImages)
@@ -145,12 +146,57 @@ namespace QuantitativeEvaluation
             teacher.LearningRate = LEARNING_RATE;
 
             //Train the Network
-            trainNetwork(neuralNet, teacher, input, output, crossValidationInput, crossValidationDataLabels);
+            //trainNetwork(neuralNet, teacher, input, output, crossValidationInput, crossValidationDataLabels);
+            //Train multiple networks, pick the one that performs best on the Cross-Validation data
+            neuralNet = trainNetworksCompeteOnCrossValidation(neuralNet, teacher, 
+                input, output, crossValidationInput, crossValidationDataLabels);
 
             NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
             evaluator.Evaluate(evaluationInput, evaluationDataLabels);
 
             return evaluator;
+        }
+
+        //Train the network many times, with different initial values, evaluate them on the cross valiadtion data and select the best one
+        private static ActivationNetwork trainNetworksCompeteOnCrossValidation(ActivationNetwork neuralNet, ISupervisedLearning teacher,
+            double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels)
+        {
+            Log.Info(String.Format("Training {0} neural networks & picking the one that performs best on the cross-validation data . . .", 
+                NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION));
+
+            MemoryStream bestNetworkStream = new MemoryStream();
+            uint bestNetworkNumMisclassified = uint.MaxValue;
+
+            for(int i = 0; i < NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION; i++)
+            {
+                Log.Info(String.Format("Training network {0}/{1}", (i  +1), NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION));
+                //Train a new network
+                neuralNet.Randomize(); //Reset the weights to random values
+                trainNetwork(neuralNet, teacher, input, output, crossValidationInput, crossValidationDataLabels);
+
+                //Compare this new networks performance to our current best network
+                NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
+                evaluator.Evaluate(crossValidationInput, crossValidationDataLabels);
+                uint numMisclassified = evaluator.ConfusionMatrix.NumMisclassifications;
+
+                if(numMisclassified < bestNetworkNumMisclassified)
+                {
+                    //This network performed better than out current best network, make this the new best
+
+                    //Clear the Memory Stream storing the current best network
+                    bestNetworkStream.SetLength(0);
+                    //Save the network & update the best numMisclassified
+                    neuralNet.Save(bestNetworkStream);
+                    bestNetworkNumMisclassified = numMisclassified;
+                }
+            }
+
+            Log.Info("Trained all networks and selected the best one");
+
+            //Load up the network that performed best
+            bestNetworkStream.Position = 0; //Read from the start of the stream
+            ActivationNetwork bestNetwork = ActivationNetwork.Load(bestNetworkStream) as ActivationNetwork;
+            return bestNetwork;
         }
 
         private static void trainNetwork(ActivationNetwork neuralNet, ISupervisedLearning teacher,
