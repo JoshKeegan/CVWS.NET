@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharData.cs" />
     <Compile Include="ConfusionMatrix.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />
     <Compile Include="Evaluators\NeuralNetworkEvaluator.cs" />

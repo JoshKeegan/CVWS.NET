@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 10/03/2014
+ * Last Edit 11/03/2014
  */
 
 using System;
@@ -291,24 +291,11 @@ namespace QuantitativeEvaluation
                 {
                     for (int j = 0; j < rawCharImages.GetLength(1); j++)
                     {
-                        //Greyscale
-                        Bitmap greyImg = Grayscale.CommonAlgorithms.BT709.Apply(rawCharImages[i, j]); //Use the BT709 (HDTV spec) for RBG weights
-
-                        //Bradley Local Thresholding
-                        bradleyLocalThreshold.ApplyInPlace(greyImg);
-
-                        //Invert the image (required for blob detection)
-                        invert.ApplyInPlace(greyImg);
-
-                        //TODO: The biggest blob might be something else (when in a corner of a bounded wordsearch it's often the 2 lines making a square). Account for this
-                        //Extract the largest blob (the character)
-                        Bitmap charWithoutWhitespace = extractBiggestBlob.Apply(greyImg);
-
-                        //Resize the image of the char without whitespace to some normalised size (using nearest neighbour because we've already thresholded)
-                        Bitmap normalisedCharWithoutWhitespace = resize.Apply(charWithoutWhitespace);
+                        //Get a Bitmap of just the character (without whitespace)
+                        Bitmap extractedChar = CharImgExtractor.Extract(rawCharImages[i, j]);
 
                         //Convert Bitmap to double[,] (+-0.5) (what's used to train the neural network)
-                        double[] doubleImg = Converters.ThresholdedBitmapToDoubleArray(normalisedCharWithoutWhitespace);
+                        double[] doubleImg = Converters.ThresholdedBitmapToDoubleArray(extractedChar);
                         char charImg = wordsearchImage.Wordsearch.Chars[i, j];
 
                         //Check the char is valid
@@ -321,9 +308,7 @@ namespace QuantitativeEvaluation
 
                         //Clean up
                         rawCharImages[i, j].Dispose();
-                        greyImg.Dispose();
-                        charWithoutWhitespace.Dispose();
-                        normalisedCharWithoutWhitespace.Dispose();
+                        extractedChar.Dispose();
                     }
                 }
             }
