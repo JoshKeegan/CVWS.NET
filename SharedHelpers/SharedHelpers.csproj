@@ -62,8 +62,10 @@
     <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionDCT.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionLDA.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPCA.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPixelValues.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\SupervisedTrainableFeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\TrainableFeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\NeuralNetworkHelpers.cs" />
     <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
