@@ -127,7 +127,7 @@ namespace QuantitativeEvaluation
              * Evaluate each Neural Network
              */
 
-            //Run each network trainin process in it's own thread as they can take a while . . .
+            //Run each network training process in it's own thread as they can take a while . . .
             ConcurrentDictionary<string, NeuralNetworkEvaluator> concurrentEvaluationResults =
                 new ConcurrentDictionary<string, NeuralNetworkEvaluator>();
 
@@ -139,11 +139,12 @@ namespace QuantitativeEvaluation
             Task.Factory.StartNew(() =>
             {
                 //Single layer Activation Network, Sigmoid Function, Back Propagation Learning on Raw Pixel Values
+                string networkName = "SingleLayer Sigmoid BkPropLearn RawPxlVals";
                 NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationRawPixelEval =
                     evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
                     rawPixelValuesInput, output, rawPixelValuesCossValInput, crossValidationDataLabels,
-                    rawPixelValuesEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
-                concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn RawPxlVals",
+                    rawPixelValuesEvalInput, evaluationDataLabels, LEARNING_RATE, networkName); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd(networkName,
                     singleLayerActivationSigmoidBackPropagationRawPixelEval);
 
                 //Tell the main thread we're done
@@ -154,11 +155,12 @@ namespace QuantitativeEvaluation
             Task.Factory.StartNew(() =>
             {
                 //Single layer activation network, Sigmoid Function, Back Propagation Learning on DCT
+                string networkName = "SingleLayer Sigmoid BkPropLearn DCT";
                 NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationDCT =
                     evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
                     dctInput, output, dctCrossValInput, crossValidationDataLabels,
-                    dctEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
-                concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn DCT",
+                    dctEvalInput, evaluationDataLabels, LEARNING_RATE, networkName); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd(networkName,
                     singleLayerActivationSigmoidBackPropagationDCT);
 
                 //Tell the main thread we're done
@@ -169,11 +171,12 @@ namespace QuantitativeEvaluation
             Task.Factory.StartNew(() =>
             {
                 //Single layer activation network, Sigmoid Function, Back Propagation Learning on PCA with all Features
+                string networkName = "SingleLayer Sigmoid BkPropLearn PCAAllFeatures";
                 NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationPCAAllFeatures =
                     evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
                     pcaAllFeaturesInput, output, pcaAllFeaturesCrossValInput, crossValidationDataLabels,
-                    pcaAllFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
-                concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn PCAAllFeatures",
+                    pcaAllFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE, networkName); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd(networkName,
                     singleLayerActivationSigmoidBackPropagationPCAAllFeatures);
 
                 //Tell the main thread we're done
@@ -184,11 +187,12 @@ namespace QuantitativeEvaluation
             Task.Factory.StartNew(() =>
             {
                 //Single layer activation network, Sigmoid Function, Back Propagation Learning on PCA, using onlt the top features
+                string networkName = "SingleLayer Sigmoid BkPropLearn PCA" + PCA_NUM_FEATURES + "Features";
                 NeuralNetworkEvaluator singleLayerActivationSigmoidBackPropagationPCATopFeatures =
                     evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
                     pcaTopFeaturesInput, output, pcaTopFeaturesCrossValInput, crossValidationDataLabels,
-                    pcaTopFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
-                concurrentEvaluationResults.TryAdd("SingleLayer Sigmoid BkPropLearn PCA" + PCA_NUM_FEATURES + "Features",
+                    pcaTopFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE, networkName); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd(networkName,
                     singleLayerActivationSigmoidBackPropagationPCATopFeatures);
 
                 //Tell the main thread we're done
@@ -204,7 +208,7 @@ namespace QuantitativeEvaluation
 
         private static NeuralNetworkEvaluator evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
             double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels,
-            double[][] evaluationInput, char[] evaluationDataLabels, double learningRate)
+            double[][] evaluationInput, char[] evaluationDataLabels, double learningRate, string networkName)
         {
             //Create the neural Network
             BipolarSigmoidFunction sigmoidFunction = new BipolarSigmoidFunction(2.0f);
@@ -225,6 +229,47 @@ namespace QuantitativeEvaluation
 
             NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
             evaluator.Evaluate(evaluationInput, evaluationDataLabels);
+
+            //See if this network is better than the current best network of it's type
+            //Try and load a previous network of this type
+            string previousNetworkPath = Program.NEURAL_NETWORKS_PATH + networkName + Program.NEURAL_NETWORK_FILE_EXTENSION;
+            string previousNetworkCMPath = Program.NEURAL_NETWORKS_PATH + networkName + ".csv";
+            bool writeNewBest = false;
+            if(File.Exists(previousNetworkPath))
+            {
+                //Load the previous network & evaluate it
+                ActivationNetwork previous = ActivationNetwork.Load(previousNetworkPath) as ActivationNetwork;
+                NeuralNetworkEvaluator prevEval = new NeuralNetworkEvaluator(previous);
+                prevEval.Evaluate(evaluationInput, evaluationDataLabels);
+
+                //If this network is better than the previous best, write it out as the new best
+                if(prevEval.ConfusionMatrix.NumMisclassifications > evaluator.ConfusionMatrix.NumMisclassifications)
+                {
+                    Log.Info(String.Format("New best score for network \"{0}\". Previous was {1}/{2}, new best is {3}/{2}",
+                        networkName, prevEval.ConfusionMatrix.NumMisclassifications, prevEval.ConfusionMatrix.TotalClassifications,
+                        evaluator.ConfusionMatrix.NumMisclassifications));
+
+                    //Delete the old files
+                    File.Delete(previousNetworkPath);
+                    File.Delete(previousNetworkCMPath);
+
+                    writeNewBest = true;
+                }
+            }
+            else //Otherwise there isn't a previous best
+            {
+                Log.Info(String.Format("No previous best record for network \"{0}\" . . .", networkName));
+                writeNewBest = true;
+            }
+
+            //If there is a new best to write out
+            if(writeNewBest)
+            {
+                Log.Info(String.Format("Writing out net best network of type\"{0}\"", networkName));
+                neuralNet.Save(previousNetworkPath);
+                evaluator.ConfusionMatrix.WriteToCsv(previousNetworkCMPath);
+                Log.Info(String.Format("Finished writing out network \"{0}\"", networkName));
+            }
 
             return evaluator;
         }

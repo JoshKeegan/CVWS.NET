@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 11/03/2014
+ * Last Edit 12/03/2014
  */
 
 using System;
@@ -27,6 +27,9 @@ namespace QuantitativeEvaluation
         private const LogLevel LOG_LEVEL = LogLevel.Info | LogLevel.Warning | LogLevel.Error;
 #endif
         private const string EVALUATION_RESULTS_DIR_PATH = "EvaluationResults";
+        private const string CLASSIFIERS_PATH = ImageMarkup.ImageMarkupDatabase.DATA_DIRECTORY_PATH + "Classifiers/";
+        internal const string NEURAL_NETWORKS_PATH = CLASSIFIERS_PATH + "NeuralNetworks/";
+        internal const string NEURAL_NETWORK_FILE_EXTENSION = ".networkWeights";
 
         static void Main(string[] args)
         {
@@ -53,6 +56,17 @@ namespace QuantitativeEvaluation
                     break;
                 }
                 logAttempt++;
+            }
+            //If the directories for storing Classifiers don't exist, make them now
+            if (!Directory.Exists(CLASSIFIERS_PATH))
+            {
+                Log.Info("Classifiers Directory didn't exist, creating . . .");
+                Directory.CreateDirectory(CLASSIFIERS_PATH);
+            }
+            if (!Directory.Exists(NEURAL_NETWORKS_PATH))
+            {
+                Log.Info("Neural Networks Path didn't exist, creating . . .");
+                Directory.CreateDirectory(NEURAL_NETWORKS_PATH);
             }
 
             //Load the Wordsearch Database
