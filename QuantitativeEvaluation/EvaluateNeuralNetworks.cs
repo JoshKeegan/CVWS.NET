@@ -227,50 +227,59 @@ namespace QuantitativeEvaluation
             neuralNet = trainNetworksCompeteOnCrossValidation(neuralNet, teacher,
                 input, output, crossValidationInput, crossValidationDataLabels);
 
-            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
-            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
+            //Evaluate the network returned on the cross-validation data so it can be compared to the current best
+            NeuralNetworkEvaluator crossValEvaluator = new NeuralNetworkEvaluator(neuralNet);
+            crossValEvaluator.Evaluate(evaluationInput, evaluationDataLabels);
 
             //See if this network is better than the current best network of it's type
             //Try and load a previous network of this type
             string previousNetworkPath = Program.NEURAL_NETWORKS_PATH + networkName + Program.NEURAL_NETWORK_FILE_EXTENSION;
             string previousNetworkCMPath = Program.NEURAL_NETWORKS_PATH + networkName + ".csv";
-            bool writeNewBest = false;
+            bool newBest = false;
+            ActivationNetwork bestNetwork = neuralNet;
             if(File.Exists(previousNetworkPath))
             {
                 //Load the previous network & evaluate it
                 ActivationNetwork previous = ActivationNetwork.Load(previousNetworkPath) as ActivationNetwork;
-                NeuralNetworkEvaluator prevEval = new NeuralNetworkEvaluator(previous);
-                prevEval.Evaluate(evaluationInput, evaluationDataLabels);
+                NeuralNetworkEvaluator prevCrossValEval = new NeuralNetworkEvaluator(previous);
+                prevCrossValEval.Evaluate(crossValidationInput, crossValidationDataLabels);
 
                 //If this network is better than the previous best, write it out as the new best
-                if(prevEval.ConfusionMatrix.NumMisclassifications > evaluator.ConfusionMatrix.NumMisclassifications)
+                if(prevCrossValEval.ConfusionMatrix.NumMisclassifications > crossValEvaluator.ConfusionMatrix.NumMisclassifications)
                 {
-                    Log.Info(String.Format("New best score for network \"{0}\". Previous was {1}/{2}, new best is {3}/{2}",
-                        networkName, prevEval.ConfusionMatrix.NumMisclassifications, prevEval.ConfusionMatrix.TotalClassifications,
-                        evaluator.ConfusionMatrix.NumMisclassifications));
+                    Log.Info(String.Format("New best cross-validation score for network \"{0}\". Previous was {1}/{2}, new best is {3}/{2}",
+                        networkName, prevCrossValEval.ConfusionMatrix.NumMisclassifications, prevCrossValEval.ConfusionMatrix.TotalClassifications,
+                        crossValEvaluator.ConfusionMatrix.NumMisclassifications));
 
                     //Delete the old files
                     File.Delete(previousNetworkPath);
                     File.Delete(previousNetworkCMPath);
 
-                    writeNewBest = true;
+                    newBest = true;
+                }
+                else //The previous network is still the best
+                {
+                    bestNetwork = previous;
                 }
             }
             else //Otherwise there isn't a previous best
             {
                 Log.Info(String.Format("No previous best record for network \"{0}\" . . .", networkName));
-                writeNewBest = true;
+                newBest = true;
             }
 
             //If there is a new best to write out
-            if(writeNewBest)
+            if(newBest)
             {
                 Log.Info(String.Format("Writing out net best network of type\"{0}\"", networkName));
                 neuralNet.Save(previousNetworkPath);
-                evaluator.ConfusionMatrix.WriteToCsv(previousNetworkCMPath);
+                crossValEvaluator.ConfusionMatrix.WriteToCsv(previousNetworkCMPath);
                 Log.Info(String.Format("Finished writing out network \"{0}\"", networkName));
             }
 
+            //Evaluate the best system on the evaluation data
+            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(bestNetwork);
+            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
             return evaluator;
         }
 
