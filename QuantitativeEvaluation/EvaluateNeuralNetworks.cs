@@ -259,6 +259,9 @@ namespace QuantitativeEvaluation
                 }
                 else //The previous network is still the best
                 {
+                    Log.Info(String.Format("Existing \"{0}\" network performed better than new one. New network scored {1}/{2}, existing scored {3}/{2}",
+                        networkName, crossValEvaluator.ConfusionMatrix.NumMisclassifications, crossValEvaluator.ConfusionMatrix.TotalClassifications,
+                        prevCrossValEval.ConfusionMatrix.NumMisclassifications));
                     bestNetwork = previous;
                 }
             }
