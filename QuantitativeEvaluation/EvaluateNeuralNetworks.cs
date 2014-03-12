@@ -3,6 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
+ * Last Edit 12/03/2014
  */
 
 using System;
@@ -43,7 +44,7 @@ namespace QuantitativeEvaluation
         private const int ITERATIONS_PER_PROGRESS_UPDATE = 25;
         private const int NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU = 50; //The number of previous iterations to record when evaluating a network in training on the cross-validation data
         //Used for detecting a plateau and detecting over-learning of data
-        private const int NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION = 10;
+        private const int NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION = 10; //Use as 1000 to determine what is close to the maximum performance each network can give
         private const int PCA_NUM_FEATURES = 20;
 
         //evaluate all neural networks and feature extraction methods we're interested in & return their evaluation results
