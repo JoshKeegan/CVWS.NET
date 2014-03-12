@@ -1,9 +1,8 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Shared Helpers
- * Trainable Feature Extraction Algorithm - abstract class
- * By Josh Keegan 11/03/2014
- * Last Edit 12/03/2014
+ * Supervised Trainable Feature Extraction Algorithm - abstract class
+ * By Josh Keegan 12/03/2014
  */
 
 using System;
@@ -17,27 +16,27 @@ using SharedHelpers.Exceptions;
 
 namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
 {
-    public abstract class TrainableFeatureExtractionAlgorithm : FeatureExtractionAlgorithm
+    public abstract class SupervisedTrainableFeatureExtractionAlgorithm : FeatureExtractionAlgorithm
     {
         private bool trained = false;
 
         //Use the public methods here to perform checks about the training before then passing the call on to the child class in the protected DoBlah methods
-        public void Train(Bitmap[] charImgs)
+        public void Train(Bitmap[] charImgs, char[] labels)
         {
-            if(trained)
+            if (trained)
             {
                 throw new TrainableFeatureExtractionAlgorithmException("Trainable feature extraction algorithm has already been trained");
             }
             trained = true;
 
-            DoTrain(charImgs);
+            DoTrain(charImgs, labels);
         }
 
-        protected abstract void DoTrain(Bitmap[] charImgs);
+        protected abstract void DoTrain(Bitmap[] charImgs, char[] labels);
 
         public override double[][] Extract(Bitmap[] charImgs)
         {
-            if(!trained)
+            if (!trained)
             {
                 throw new TrainableFeatureExtractionAlgorithmException("Trainable feature extraction algorithms must be trained before extracting data");
             }
