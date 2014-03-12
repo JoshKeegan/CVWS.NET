@@ -3,6 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
+ * Last Edit 12/03/2014
  */
 
 using System;
@@ -130,7 +131,7 @@ namespace QuantitativeEvaluation
             ConcurrentDictionary<string, NeuralNetworkEvaluator> concurrentEvaluationResults = 
                 new ConcurrentDictionary<string, NeuralNetworkEvaluator>();
 
-            ManualResetEvent[] doneEvents = new ManualResetEvent[4]; //Update to the number of algorithms to run in parallel
+            ManualResetEvent[] doneEvents = new ManualResetEvent[6]; //Update to the number of algorithms to run in parallel
 
             Log.Info("Starting worker threads");
 
@@ -194,11 +195,73 @@ namespace QuantitativeEvaluation
                 doneEvents[3].Set();
             });
 
+            //Two layer network evaluations
+            doneEvents[4] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+            {
+                //Two layer Activation Network, Sigmoid Function, Back Propagation Learning on Raw Pixel Values
+                NeuralNetworkEvaluator twoLayerActivationSigmoidBackPropagationRawPixelEval =
+                    evaluateTwoLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                    rawPixelValuesInput, output, rawPixelValuesCossValInput, crossValidationDataLabels,
+                    rawPixelValuesEvalInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd("TwoLayer Sigmoid BkPropLearn RawPxlVals",
+                    twoLayerActivationSigmoidBackPropagationRawPixelEval);
+
+                //Tell the main thread we're done
+                doneEvents[4].Set();
+            });
+
+            doneEvents[5] = new ManualResetEvent(false);
+            Task.Factory.StartNew(() =>
+            {
+                //Two layer activation network, Sigmoid Function, Back Propagation Learning on PCA with all Features
+                NeuralNetworkEvaluator twoLayerActivationSigmoidBackPropagationPCAAllFeatures =
+                    evaluateTwoLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+                    pcaAllFeaturesInput, output, pcaAllFeaturesCrossValInput, crossValidationDataLabels,
+                    pcaAllFeaturesEvaluationInput, evaluationDataLabels, LEARNING_RATE); //Use the default learning rate
+                concurrentEvaluationResults.TryAdd("TwoLayer Sigmoid BkPropLearn PCAAllFeatures",
+                    twoLayerActivationSigmoidBackPropagationPCAAllFeatures);
+
+                //Tell the main thread we're done
+                doneEvents[5].Set();
+            });
+
             //Wait for all threads to complete
             WaitHandle.WaitAll(doneEvents);
             Log.Info("All worker threads have completed");
 
             return concurrentEvaluationResults;
+        }
+
+        private static NeuralNetworkEvaluator evaluateTwoLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
+            double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels,
+            double[][] evaluationInput, char[] evaluationDataLabels, double learningRate)
+        {
+            //Create the neural Network
+            BipolarSigmoidFunction sigmoidFunction = new BipolarSigmoidFunction(2.0f);
+            ActivationNetwork neuralNet = new ActivationNetwork(
+                sigmoidFunction, 
+                input[0].Length, // number of inputs into the network
+                ((ClassifierHelpers.NUM_CHAR_CLASSES + input[0].Length) * 2) / 3, //number of neurons in the first layer
+                ClassifierHelpers.NUM_CHAR_CLASSES); //number of neurons in the second layer
+
+            //Randomise the networks initial weights
+            neuralNet.Randomize();
+
+            //Create teacher that the network will use to learn the data (Back Propogation Learning technique used here)
+            BackPropagationLearning teacher = new BackPropagationLearning(neuralNet);
+            teacher.LearningRate = LEARNING_RATE;
+
+            //Train the Network
+            //trainNetwork(neuralNet, teacher, input, output, crossValidationInput, crossValidationDataLabels);
+            //Train multiple networks, pick the one that performs best on the Cross-Validation data
+            neuralNet = trainNetworksCompeteOnCrossValidation(neuralNet, teacher,
+                input, output, crossValidationInput, crossValidationDataLabels);
+
+            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(neuralNet);
+            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
+
+            return evaluator;
         }
 
         private static NeuralNetworkEvaluator evaluateSingleLayerActivationNetworkWithSigmoidFunctionBackPropagationLearning(
