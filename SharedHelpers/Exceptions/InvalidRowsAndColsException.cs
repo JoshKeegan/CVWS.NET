@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation Cv Wordsearch Solver
+ * Dissertation CV Wordsearch Solver
  * Shared Helpers Exceptions
  * InvalidRowsAndColsException
  * By Josh Keegan 05/03/2014

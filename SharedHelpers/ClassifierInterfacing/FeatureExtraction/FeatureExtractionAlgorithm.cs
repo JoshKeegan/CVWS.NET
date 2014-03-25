@@ -3,7 +3,7 @@
  * Shared Helpers
  * Feature Extraction Algorithm - abstract class 
  * By Josh Keegan 08/03/2014
- * Last Edit 11/03/2014
+ * Last Edit 25/03/2014
  */
 
 using System;
@@ -20,5 +20,13 @@ namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
         //Method is non-static to allow for feature reduction algorithms that learn what features are best to extract on the training data
         //The best features can be stored local to the instance this way
         public abstract double[][] Extract(Bitmap[] charImgs);
+
+        //Method to Extract a single Bitmap
+        public double[] Extract(Bitmap charImg)
+        {
+            Bitmap[] charImgs = { charImg };
+            double[][] data = Extract(charImgs);
+            return data[0];
+        }
     }
 }

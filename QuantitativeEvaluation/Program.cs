@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 12/03/2014
+ * Last Edit 25/03/2014
  */
 
 using System;
@@ -12,6 +12,9 @@ using System.IO;
 
 using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;
+using SharedHelpers.ClassifierInterfacing;
+using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
+using System.Drawing;
 
 namespace QuantitativeEvaluation
 {
@@ -30,6 +33,8 @@ namespace QuantitativeEvaluation
         private const string CLASSIFIERS_PATH = ImageMarkup.ImageMarkupDatabase.DATA_DIRECTORY_PATH + "Classifiers/";
         internal const string NEURAL_NETWORKS_PATH = CLASSIFIERS_PATH + "NeuralNetworks/";
         internal const string NEURAL_NETWORK_FILE_EXTENSION = ".networkWeights";
+        private const bool EVALUATE_NEURAL_NETWORKS = false;
+        private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = true;
 
         static void Main(string[] args)
         {
@@ -99,40 +104,72 @@ namespace QuantitativeEvaluation
             }
             Log.Info("Data split into Training, Cross-Validation & Evalutaion data");
 
-            //Evaluate all of the neural network combo's
-            Log.Info("Starting to evaluate all Neural Networks . . .");
-            IDictionary<string, NeuralNetworkEvaluator> neuralNetworkEvalResults = 
-                EvaluateNeuralNetworks.evaluateNeuralNetworks(trainingWordsearchImages, 
-                crossValidationWordsearchImages, evaluationWordsearchImages);
-            Log.Info("Evaluation of all Neural Networks completed");
-
-            //Write out the evaluation results
-            if(!Directory.Exists(EVALUATION_RESULTS_DIR_PATH))
+            //If we're evaluating neural networks
+            if (EVALUATE_NEURAL_NETWORKS)
             {
-                Log.Info("Evaluation Results Directory didn't exist, creating . . .");
-                Directory.CreateDirectory(EVALUATION_RESULTS_DIR_PATH);
-            }
+                //Evaluate all of the neural network combo's
+                Log.Info("Starting to evaluate all Neural Networks . . .");
+                IDictionary<string, NeuralNetworkEvaluator> neuralNetworkEvalResults =
+                    EvaluateNeuralNetworks.evaluateNeuralNetworks(trainingWordsearchImages,
+                    crossValidationWordsearchImages, evaluationWordsearchImages);
+                Log.Info("Evaluation of all Neural Networks completed");
 
-            Log.Info("Writing out Neural Network Evaluation Results . . .");
-            foreach(KeyValuePair<string, NeuralNetworkEvaluator> pair in neuralNetworkEvalResults)
+                //Write out the evaluation results
+                if (!Directory.Exists(EVALUATION_RESULTS_DIR_PATH))
+                {
+                    Log.Info("Evaluation Results Directory didn't exist, creating . . .");
+                    Directory.CreateDirectory(EVALUATION_RESULTS_DIR_PATH);
+                }
+
+                Log.Info("Writing out Neural Network Evaluation Results . . .");
+                foreach (KeyValuePair<string, NeuralNetworkEvaluator> pair in neuralNetworkEvalResults)
+                {
+                    string networkName = pair.Key;
+                    ConfusionMatrix cm = pair.Value.ConfusionMatrix;
+
+                    Log.Info(String.Format("Network \"{0}\" misclassified {1}/{2}", networkName,
+                        cm.NumMisclassifications, cm.TotalClassifications));
+
+                    try
+                    {
+                        cm.WriteToCsv(EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("Error writing Confusion Matrix to file " + EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
+                        Console.WriteLine(e);
+                    }
+                }
+                Log.Info("Neural Network Evaluation results written out successfully");
+            }
+            
+            //If we're evaluating Wordsearch rotation correction
+            if(EVALUATE_WORDSEARCH_ROTATION_CORRECTION)
             {
-                string networkName = pair.Key;
-                ConfusionMatrix cm = pair.Value.ConfusionMatrix;
+                Log.Info("Starting to evaluate Wordsearch Rotation Correction");
 
-                Log.Info(String.Format("Network \"{0}\" misclassified {1}/{2}", networkName, 
-                    cm.NumMisclassifications, cm.TotalClassifications));
+                //Get the Feature Reduction Algorithm to be used
+                Log.Info("Loading Feature Extraction Algorithm . . .");
+                //TODO: Load a pre-trained feature reduction algorithm rather than training on the training data every time
+                FeatureExtractionPCA featureExtractionAlgorithm = new FeatureExtractionPCA(); //Full PCA (no dimensionality reduction)
+                Dictionary<char, List<Bitmap>> trainingData = CharData.GetCharData(trainingWordsearchImages);
+                Bitmap[] trainingCharImgs;
+                double[][] trainingOutput;
+                CharData.GetNeuralNetworkBitmapsAndOutput(trainingData, out trainingCharImgs, out trainingOutput);
+                featureExtractionAlgorithm.Train(trainingCharImgs);
+                Log.Info("Feature Extraction Algorithm Loaded");
 
-                try
-                {
-                    cm.WriteToCsv(EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
-                }
-                catch(Exception e)
-                {
-                    Log.Error("Error writing Confusion Matrix to file " + EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
-                    Console.WriteLine(e);
-                }
+                //Get the classifier to be used
+                Log.Info("Loading Classifier . . .");
+                Classifier classifier = new AForgeActivationNeuralNetClassifier(featureExtractionAlgorithm, 
+                    NEURAL_NETWORKS_PATH + "SingleLayer Sigmoid BkPropLearn PCAAllFeatures" + NEURAL_NETWORK_FILE_EXTENSION);
+                Log.Info("Classifier Loaded");
+
+                //Evaluate the wordsearch Image Rotation Correction
+                EvaluateWordsearchRotationCorrection.EvaluateWordsearchRotationCorrection(evaluationWordsearchImages, classifier);
+
+                Log.Info("Wordsearch Rotation Correction Evaluation complete");
             }
-            Log.Info("Neural Network Evaluation results written out successfully");
         }
     }
 }
