@@ -33,7 +33,7 @@ namespace QuantitativeEvaluation
         private const string CLASSIFIERS_PATH = ImageMarkup.ImageMarkupDatabase.DATA_DIRECTORY_PATH + "Classifiers/";
         internal const string NEURAL_NETWORKS_PATH = CLASSIFIERS_PATH + "NeuralNetworks/";
         internal const string NEURAL_NETWORK_FILE_EXTENSION = ".networkWeights";
-        private const bool EVALUATE_NEURAL_NETWORKS = false;
+        private const bool EVALUATE_NEURAL_NETWORKS = true;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = true;
 
         static void Main(string[] args)
@@ -166,7 +166,7 @@ namespace QuantitativeEvaluation
                 Log.Info("Classifier Loaded");
 
                 //Evaluate the wordsearch Image Rotation Correction
-                EvaluateWordsearchRotationCorrection.EvaluateWordsearchRotationCorrection(evaluationWordsearchImages, classifier);
+                EvaluateWordsearchRotationCorrection.Evaluate(evaluationWordsearchImages, classifier);
 
                 Log.Info("Wordsearch Rotation Correction Evaluation complete");
             }

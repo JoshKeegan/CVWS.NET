@@ -36,7 +36,7 @@ namespace SharedHelpers.ClassifierInterfacing
             network = ActivationNetwork.Load(path) as ActivationNetwork;
         }
 
-        public override double[] classify(double[] charData)
+        public override double[] Classify(double[] charData)
         {
             return network.Compute(charData);
         }

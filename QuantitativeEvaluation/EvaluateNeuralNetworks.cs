@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
- * Last Edit 12/03/2014
+ * Last Edit 25/03/2014
  */
 
 using System;
@@ -34,10 +34,6 @@ namespace QuantitativeEvaluation
     internal static class EvaluateNeuralNetworks
     {
         //Constants
-        private const int CHAR_WITH_WHITESPACE_WIDTH = 20;
-        private const int CHAR_WITH_WHITESPACE_HEIGHT = 25;
-        private const int CHAR_WITHOUT_WHITESPACE_WIDTH = 12;
-        private const int CHAR_WITHOUT_WHITESPACE_HEIGHT = 16;
         private const double LEARNING_RATE = 0.5;
         private const double LEARNED_AT_ERROR = 0.5; //The error returned by the neural network. When less than this class as learned
         private const int MAX_LEARNING_ITERATIONS = 1000; //The maximum number of iterations to train the network for

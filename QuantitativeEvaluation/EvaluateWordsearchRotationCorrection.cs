@@ -20,7 +20,7 @@ namespace QuantitativeEvaluation
 {
     internal static class EvaluateWordsearchRotationCorrection
     {
-        internal static void EvaluateWordsearchRotationCorrection(List<WordsearchImage> wordsearchImages, Classifier classifier)
+        internal static void Evaluate(List<WordsearchImage> wordsearchImages, Classifier classifier)
         {
             Log.Info("Evaluating Wordsearch Image Rotation Correction . . .");
 
