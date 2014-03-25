@@ -3,6 +3,7 @@
  * Shared Helpers
  * Char Img Extractor class - extract just the character from an image (removing whitespace)
  * By Josh Keegan 11/03/2014
+ * Last Edit 25/03/2014
  */
 
 using System;

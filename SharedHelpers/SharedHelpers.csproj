@@ -84,7 +84,7 @@
     <Compile Include="Exceptions\UnexpectedImageSizeException.cs" />
     <Compile Include="Exceptions\UntrainedFeatureExtractionAlgorithmException.cs" />
     <Compile Include="ImageLoader.cs" />
-    <Compile Include="Imaging\CharacterExtractor.cs" />
+    <Compile Include="Imaging\CharImgExtractor.cs" />
     <Compile Include="Imaging\Converters.cs" />
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />

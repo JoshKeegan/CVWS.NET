@@ -79,8 +79,11 @@ namespace SharedHelpers.BespokeAlgorithms
             double score = 0;
             foreach(Bitmap charImg in chars)
             {
+                //Remove all of the whitespace etc... returning an image that can be used for classification
+                Bitmap extractedCharImg = CharImgExtractor.Extract(charImg);
+
                 //Classify this bitmap
-                double[] charResult = classifier.Classify(charImg);
+                double[] charResult = classifier.Classify(extractedCharImg);
 
                 //Get the largest probability from the classifier output and add it to the overall score
                 double largest = charResult[0];
@@ -95,6 +98,7 @@ namespace SharedHelpers.BespokeAlgorithms
                 score += largest;
 
                 //Clean up
+                extractedCharImg.Dispose();
                 charImg.Dispose();
             }
 
