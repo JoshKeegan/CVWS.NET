@@ -63,6 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BespokeAlgorithms\WordsearchRotation.cs" />
+    <Compile Include="BespokeAlgorithms\WordsearchRotationCorrection.cs" />
     <Compile Include="ClassifierInterfacing\AForgeActivationNeuralNetClassifier.cs" />
     <Compile Include="ClassifierInterfacing\Classifier.cs" />
     <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="ClassifierInterfacing\FeatureExtraction\SupervisedTrainableFeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\FeatureExtraction\TrainableFeatureExtractionAlgorithm.cs" />
     <Compile Include="ClassifierInterfacing\NeuralNetworkHelpers.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
     <Compile Include="Exceptions\MissingFeatureExtractionAlgorithmException.cs" />
     <Compile Include="Exceptions\RegisteredInterestException.cs" />

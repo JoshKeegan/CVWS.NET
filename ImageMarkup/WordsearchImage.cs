@@ -3,7 +3,7 @@
  * Image Markup
  * Wordsearch Image Class
  * By Josh Keegan 26/02/2014
- * Last Edit 06/03/2014
+ * Last Edit 25/03/2014
  */
 
 using System;
@@ -17,6 +17,7 @@ using AForge;
 using AForge.Imaging.Filters;
 
 using ImageMarkup.Exceptions;
+using SharedHelpers;
 using SharedHelpers.Maths;
 using SharedHelpers.Exceptions;
 using SharedHelpers.Imaging;
@@ -192,6 +193,12 @@ namespace ImageMarkup
             fromImage.DeregisterInterestInBitmap();
 
             return customResBitmap;
+        }
+
+        //Get the Char Bitmaps using a default image size
+        public Bitmap[,] GetCharBitmaps()
+        {
+            return GetCharBitmaps(Constants.CHAR_WITH_WHITESPACE_WIDTH, Constants.CHAR_WITH_WHITESPACE_HEIGHT);
         }
 
         public Bitmap[,] GetCharBitmaps(int width, int height)

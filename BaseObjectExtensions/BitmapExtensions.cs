@@ -3,6 +3,7 @@
  * Base Object Extensions
  * Bitmap Extensions
  * By Josh Keegan 27/02/2014
+ * Last Edit 25/03/2014
  */
 
 using System;
@@ -47,6 +48,11 @@ namespace BaseObjectExtensions
             b.UnlockBits(data);
 
             return toRet;
+        }
+
+        public static Bitmap DeepCopy(this Bitmap b)
+        {
+            return b.Clone(new Rectangle(0, 0, b.Width, b.Height), b.PixelFormat);
         }
     }
 }

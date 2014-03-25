@@ -3,6 +3,7 @@
  * Quatitative Evaluation
  * Char Data class - static methods for handling character image data
  * By Josh Keegan 11/03/2014
+ * Last Edit 25/03/2014
  */
 
 using System;
@@ -21,10 +22,6 @@ namespace QuantitativeEvaluation
 {
     public static class CharData
     {
-        //Constants
-        private const int CHAR_WITH_WHITESPACE_WIDTH = 20;
-        private const int CHAR_WITH_WHITESPACE_HEIGHT = 25;
-
         //Public Methods
         public static Dictionary<char, List<Bitmap>> GetCharData(List<WordsearchImage> wordsearchImages)
         {
@@ -41,7 +38,7 @@ namespace QuantitativeEvaluation
 
             foreach (WordsearchImage wordsearchImage in wordsearchImages)
             {
-                Bitmap[,] rawCharImages = wordsearchImage.GetCharBitmaps(CHAR_WITH_WHITESPACE_WIDTH, CHAR_WITH_WHITESPACE_HEIGHT);
+                Bitmap[,] rawCharImages = wordsearchImage.GetCharBitmaps();
 
                 for (int i = 0; i < rawCharImages.GetLength(0); i++)
                 {

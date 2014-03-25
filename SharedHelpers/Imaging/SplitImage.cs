@@ -3,6 +3,7 @@
  * Shared Helpers
  * Split Image class - methods for splitting an image up into a collection of smaller images
  * By Josh Keegan 06/03/2014
+ * Last Edit 25/03/2014
  */
 
 using System;
@@ -28,7 +29,7 @@ namespace SharedHelpers.Imaging
                 throw new InvalidRowsAndColsException("Rows or Cols must not be negative");
             }
 
-            return Grid(img, rows, cols);
+            return Grid(img, (uint)rows, (uint)cols);
         }
 
         public static Bitmap[,] Grid(Bitmap img, uint rows, uint cols)
