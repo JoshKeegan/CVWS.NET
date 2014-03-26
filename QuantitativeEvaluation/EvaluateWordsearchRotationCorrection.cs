@@ -40,7 +40,7 @@ namespace QuantitativeEvaluation
                 //Test the system on each posisble rotation of the wordsearch image
                 int[] angles = new int[] { 0, 90, 180, 270 };
 
-                foreach(int angle in angles)
+                Parallel.ForEach(angles, angle =>
                 {
                     WordsearchRotation rotation = new WordsearchRotation(wordsearchImage.Bitmap.DeepCopy(), (int)wordsearchImage.Rows, (int)wordsearchImage.Cols);
                     rotation.Rotate(angle);
@@ -52,7 +52,7 @@ namespace QuantitativeEvaluation
                     WordsearchRotation proposedRotation = WordsearchRotationCorrection.CorrectOrientation(rotation, classifier);
 
                     //Keep track of the number correct & total number
-                    if(proposedRotation.Bitmap.DataEquals(correctRotation.Bitmap))
+                    if (proposedRotation.Bitmap.DataEquals(correctRotation.Bitmap))
                     {
                         numCorrect++;
                     }
@@ -62,7 +62,7 @@ namespace QuantitativeEvaluation
                     rotation.Bitmap.Dispose();
                     correctRotation.Bitmap.Dispose();
                     proposedRotation.Bitmap.Dispose();
-                }
+                });
 
                 //Clean up
                 wordsearchImage.DeregisterInterestInBitmap();
