@@ -3,7 +3,7 @@
  * Shared Helpers
  * Split Image class - methods for splitting an image up into a collection of smaller images
  * By Josh Keegan 06/03/2014
- * Last Edit 25/03/2014
+ * Last Edit 26/03/2014
  */
 
 using System;
@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 using AForge.Imaging;
 
+using BaseObjectExtensions;
 using SharedHelpers.Exceptions;
 
 namespace SharedHelpers.Imaging
@@ -40,20 +41,8 @@ namespace SharedHelpers.Imaging
                 throw new UnexpectedImageSizeException("Image height must be divisible by num rows and Image width must be divisible by num cols");
             }
 
-            //Determine the number of Bits Per pixel in this image
-            int bpp;
-            switch(img.PixelFormat)
-            {
-                case PixelFormat.Format8bppIndexed:
-                    bpp = 8;
-                    break;
-                case PixelFormat.Format24bppRgb:
-                    bpp = 24;
-                    break;
-                default:
-                    throw new UnsupportedImageFormatException("Source pixel format is not supported by the routine.");
-            }
-            int bytesPerPixel = bpp / 8;
+            //Determine the number of Bytes Per pixel in this image
+            int bytesPerPixel = img.GetBitsPerPixel() / 8;
 
             Bitmap[,] chars = new Bitmap[cols, rows];
 

@@ -3,6 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Rotation Correction
  * By Josh Keegan 25/03/2014
+ * Last Edit 26/03/2014
  */
 
 using System;
@@ -38,18 +39,20 @@ namespace QuantitativeEvaluation
 
                 //Test the system on each posisble rotation of the wordsearch image
                 int[] angles = new int[] { 0, 90, 180, 270 };
-                String correctHash = wordsearchImage.Bitmap.GetDataHashCode();
 
                 foreach(int angle in angles)
                 {
                     WordsearchRotation rotation = new WordsearchRotation(wordsearchImage.Bitmap.DeepCopy(), (int)wordsearchImage.Rows, (int)wordsearchImage.Cols);
                     rotation.Rotate(angle);
 
-                    WordsearchRotation correctRotation = WordsearchRotationCorrection.CorrectOrientation(rotation, classifier);
-                    string proposedSolutionHash = correctRotation.Bitmap.GetDataHashCode();
+                    //Rotate the image for the wordsearch back to the correct orientation so that we know the correct answer
+                    WordsearchRotation correctRotation = rotation.DeepCopy();
+                    correctRotation.Rotate((360 - angle) % 360); //Angles must be EXACTLY the same as the ones used in the correction in order to yield the same result (i.e. 0, 90, 180, 270)
+
+                    WordsearchRotation proposedRotation = WordsearchRotationCorrection.CorrectOrientation(rotation, classifier);
 
                     //Keep track of the number correct & total number
-                    if(proposedSolutionHash == correctHash)
+                    if(proposedRotation.Bitmap.DataEquals(correctRotation.Bitmap))
                     {
                         numCorrect++;
                     }
@@ -58,6 +61,7 @@ namespace QuantitativeEvaluation
                     //Clean up
                     rotation.Bitmap.Dispose();
                     correctRotation.Bitmap.Dispose();
+                    proposedRotation.Bitmap.Dispose();
                 }
 
                 //Clean up

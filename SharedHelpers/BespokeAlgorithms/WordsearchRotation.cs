@@ -5,6 +5,7 @@
  *  When you rotate a wordsearch image 90 deg, the rows and cols will swap
  *  This class exists to encapsulate this behaviour
  * By Josh Keegan 25/03/2014
+ * Last Edit 26/03/2014
  */
 
 using System;
@@ -42,7 +43,7 @@ namespace SharedHelpers.BespokeAlgorithms
             Bitmap = rotate.Apply(oldBitmap);
 
             //If the angle being rotated through is 90 or 270 deg, then the rows & cols will swap
-            if(angleDeg == 90 || angleDeg == 270)
+            if(angleDeg % 180 != 0)
             {
                 //Swap rows & cols
                 int newRows = Cols;
