@@ -83,6 +83,10 @@
     <Compile Include="Exceptions\UnexpectedClassifierOutputException.cs" />
     <Compile Include="Exceptions\UnexpectedImageSizeException.cs" />
     <Compile Include="Exceptions\UntrainedFeatureExtractionAlgorithmException.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\WordsearchSegmentation.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\WordsearchSegmentationAlgorithm.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\WordsearchSegmentationAlgorithmReturningNumRowsAndCols.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\WordsearchSegmentationAlgorithmReturningRowAndColStartAndEndIndices.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\CharImgExtractor.cs" />
     <Compile Include="Imaging\Converters.cs" />
@@ -101,9 +105,7 @@
       <Name>BaseObjectExtensions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ImageAnalysis\WordsearchSegmentation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
