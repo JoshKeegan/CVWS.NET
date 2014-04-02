@@ -13,27 +13,27 @@ using System.Threading.Tasks;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
 {
-    public class WordsearchSegmentation
+    public class Segmentation
     {
         //Public vars
         public int[] Rows { get; private set; } // The indices splitting rows/cols
         public int[] Cols { get; private set; }
 
         //Constructors
-        public WordsearchSegmentation(int[] rows, int[] cols)
+        public Segmentation(int[] rows, int[] cols)
         {
             this.Cols = cols;
             this.Rows = rows;
         }
 
-        //Constrct from number of rows & cols
-        public WordsearchSegmentation(int rows, int cols)
+        //Construct from number of rows & cols
+        public Segmentation(int rows, int cols, int width, int height)
         {
             //TODO: Comvert rows & cols to incices splitting them
         }
 
         //Construct from the start & end indices of each row & col
-        public WordsearchSegmentation(int[,] rows, int[,] cols)
+        public Segmentation(int[,] rows, int[,] cols, int width, int height)
         {
             //TODO: Convert row/col start & end indices into indices splitting them by finding the mid-point between the end of one & start of the next
         }

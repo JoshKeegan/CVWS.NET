@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
 {
-    public abstract class WordsearchSegmentationAlgorithmByStartEndIndices : WordsearchSegmentationAlgorithm
+    public abstract class WordsearchSegmentationAlgorithmByStartEndIndices : SegmentationAlgorithm
     {
-        public override WordsearchSegmentation Segment(Bitmap image)
+        public override Segmentation Segment(Bitmap image)
         {
             int[,] rows;
             int[,] cols;
             doSegment(image, out rows, out cols);
-            return new WordsearchSegmentation(rows, cols);
+            return new Segmentation(rows, cols, image.Width, image.Height);
         }
 
         protected abstract void doSegment(Bitmap image, out int[,] rows, out int[,] cols);

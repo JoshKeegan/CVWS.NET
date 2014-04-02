@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
 {
-    public abstract class WordsearchSegmentationAlgorithm
+    public abstract class SegmentationAlgorithm
     {
         //Method to extract the segmentation points from a Bitmap of a wordsearch
-        public abstract WordsearchSegmentation Segment(Bitmap image);
+        public abstract Segmentation Segment(Bitmap image);
     }
 }
