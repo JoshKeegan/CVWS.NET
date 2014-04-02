@@ -5,7 +5,7 @@
  *  When you rotate a wordsearch image 90 deg, the rows and cols will swap
  *  This class exists to encapsulate this behaviour
  * By Josh Keegan 25/03/2014
- * Last Edit 26/03/2014
+ * Last Edit 02/04/2014
  */
 
 using System;
@@ -19,7 +19,7 @@ using AForge.Imaging.Filters;
 
 using BaseObjectExtensions;
 
-namespace SharedHelpers.BespokeAlgorithms
+namespace SharedHelpers.ImageAnalysis.WordsearchRotation
 {
     public class WordsearchRotation
     {

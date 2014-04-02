@@ -3,6 +3,7 @@
  * Shared Helpers
  * Wordsearch Rotation Correction class - takes an image containing just a Wordsearch and returns it in it's correct orientation
  * By Josh Keegan 25/03/2014
+ * Last Edit 02/04/2014
  */
 
 using System;
@@ -18,7 +19,7 @@ using BaseObjectExtensions;
 using SharedHelpers.ClassifierInterfacing;
 using SharedHelpers.Imaging;
 
-namespace SharedHelpers.BespokeAlgorithms
+namespace SharedHelpers.ImageAnalysis.WordsearchRotation
 {
     public static class WordsearchRotationCorrection
     {

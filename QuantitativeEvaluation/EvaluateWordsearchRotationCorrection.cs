@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Rotation Correction
  * By Josh Keegan 25/03/2014
- * Last Edit 26/03/2014
+ * Last Edit 02/04/2014
  */
 
 using System;
@@ -18,7 +18,7 @@ using AForge.Imaging.Filters;
 using BaseObjectExtensions;
 using ImageMarkup;
 using SharedHelpers.ClassifierInterfacing;
-using SharedHelpers.BespokeAlgorithms;
+using SharedHelpers.ImageAnalysis.WordsearchRotation;
 
 namespace QuantitativeEvaluation
 {

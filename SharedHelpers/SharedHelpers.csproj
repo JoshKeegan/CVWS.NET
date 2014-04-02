@@ -63,8 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BespokeAlgorithms\WordsearchRotation.cs" />
-    <Compile Include="BespokeAlgorithms\WordsearchRotationCorrection.cs" />
+    <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotation.cs" />
+    <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotationCorrection.cs" />
     <Compile Include="ClassifierInterfacing\AForgeActivationNeuralNetClassifier.cs" />
     <Compile Include="ClassifierInterfacing\Classifier.cs" />
     <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
@@ -100,6 +100,9 @@
       <Project>{6fc68f2c-22b6-4909-895a-4c845b761422}</Project>
       <Name>BaseObjectExtensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ImageAnalysis\WordsearchSegmentation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
