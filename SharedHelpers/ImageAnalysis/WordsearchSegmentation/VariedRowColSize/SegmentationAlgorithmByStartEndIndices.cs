@@ -3,6 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation Algorithm Returning Start And End Indices - abstract class
  * By Josh Keegan 02/04/2014
+ * Last Edit 03/04/2014
  */
 
 using System;
@@ -12,9 +13,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
+using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
+
+namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
-    public abstract class WordsearchSegmentationAlgorithmByStartEndIndices : SegmentationAlgorithm
+    internal abstract class SegmentationAlgorithmByStartEndIndices : SegmentationAlgorithm
     {
         public override Segmentation Segment(Bitmap image)
         {

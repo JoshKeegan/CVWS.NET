@@ -85,10 +85,12 @@
     <Compile Include="Exceptions\UnexpectedClassifierOutputException.cs" />
     <Compile Include="Exceptions\UnexpectedImageSizeException.cs" />
     <Compile Include="Exceptions\UntrainedFeatureExtractionAlgorithmException.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\ISegmentationAlgorithmOnBoolArr.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\Segmentation.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithm.cs" />
-    <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithmReturningNumRowsAndCols.cs" />
-    <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithmReturningRowAndColStartAndEndIndices.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithmHelpers.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\EqualRowColSize\SegmentationAlgorithmByNumRowsCols.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentationAlgorithmByStartEndIndices.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\CharImgExtractor.cs" />
     <Compile Include="Imaging\Converters.cs" />
