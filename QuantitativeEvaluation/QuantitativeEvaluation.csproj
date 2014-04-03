@@ -62,6 +62,7 @@
     <Compile Include="ConfusionMatrix.cs" />
     <Compile Include="EvaluateNeuralNetworks.cs" />
     <Compile Include="EvaluateWordsearchRotationCorrection.cs" />
+    <Compile Include="EvaluateWordsearchSegmentation.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />
     <Compile Include="Evaluators\NeuralNetworkEvaluator.cs" />
     <Compile Include="Log.cs" />

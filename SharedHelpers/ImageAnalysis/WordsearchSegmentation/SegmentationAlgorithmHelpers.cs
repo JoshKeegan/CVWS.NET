@@ -90,7 +90,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             }
 
             //If we end in a character, make it's end position the last character
-            if(inChar)
+            if(inChar && charStartIdx != (uint)darkPixelCounts.Length - 1) //Also Prevent rows/cols of 0 width
             {
                 uint[] thisChar = { charStartIdx, (uint)darkPixelCounts.Length - 1 };
                 chars.Add(thisChar);

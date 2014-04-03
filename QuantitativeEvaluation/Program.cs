@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 25/03/2014
+ * Last Edit 03/04/2014
  */
 
 using System;
@@ -34,7 +34,8 @@ namespace QuantitativeEvaluation
         internal const string NEURAL_NETWORKS_PATH = CLASSIFIERS_PATH + "NeuralNetworks/";
         internal const string NEURAL_NETWORK_FILE_EXTENSION = ".networkWeights";
         private const bool EVALUATE_NEURAL_NETWORKS = false;
-        private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = true;
+        private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
+        private const bool EVALUATE_WORDSEARCH_SEGMENTATION = true;
 
         static void Main(string[] args)
         {
@@ -170,6 +171,38 @@ namespace QuantitativeEvaluation
                 Log.Info(String.Format("Wordsearch Rotation Correction returned the correct answer {0}% of the time", rotationCorrectionRate * 100));
 
                 Log.Info("Wordsearch Rotation Correction Evaluation complete");
+            }
+
+            //If we're evaluating Wordsearch Segmentation
+            if(EVALUATE_WORDSEARCH_SEGMENTATION)
+            {
+                /*
+                 * Note that here all Wordsearch Images are used for evaluation (essentially they are all in the evaluation data set)
+                 * This is because the training & cross validation data haven't been used to develop the algorithms, meaning that they 
+                 * are fresh data and can be used for evaluation
+                 */
+
+                Log.Info("Strating to evaluhate Wordsearch Segmentation");
+
+                //Evaluate by the number of rows and cols returned
+                Dictionary<string, double> scoresByNumRowsCols = EvaluateWordsearchSegmentation.EvaluateByNumRowsAndCols(wordsearchImages);
+
+                //Print out scores
+                Log.Info("Scores for Evaluation by Number of Rows and Cols");
+                printScores(scoresByNumRowsCols);
+
+                Log.Info("Wordsearch Segmentation Evaluation complete");
+            }
+        }
+
+        private static void printScores(IDictionary<string, double> scores)
+        {
+            foreach(KeyValuePair<string, double> kvp in scores)
+            {
+                string algorithm = kvp.Key;
+                double score = kvp.Value;
+
+                Log.Info(String.Format("Algorithm \"{0}\" returned the correct answer {1}% of the time", algorithm, score * 100));
             }
         }
     }
