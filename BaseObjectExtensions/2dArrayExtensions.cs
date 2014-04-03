@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Base Object Extensions
- * 2D Array Extensions
+ * partial 2D Array Extensions for Generics
  * By Josh Keegan 11/03/2014
+ * Last Edit 03/04/2014
  */
 
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BaseObjectExtensions
 {
-    public static class _2dArrayExtensions
+    public static partial class _2dArrayExtensions
     {
         public static T[] ToSingleDimension<T>(this T[,] arr2d)
         {

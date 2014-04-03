@@ -17,7 +17,7 @@ using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
-    internal abstract class SegmentationAlgorithmByStartEndIndices : SegmentationAlgorithm
+    public abstract class SegmentationAlgorithmByStartEndIndices : SegmentationAlgorithm
     {
         public override Segmentation Segment(Bitmap image)
         {

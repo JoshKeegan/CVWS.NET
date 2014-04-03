@@ -17,7 +17,7 @@ using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.EqualRowColSize
 {
-    internal abstract class SegmentationAlgorithmByNumRowsCols : SegmentationAlgorithm
+    public abstract class SegmentationAlgorithmByNumRowsCols : SegmentationAlgorithm
     {
         public override Segmentation Segment(Bitmap image)
         {

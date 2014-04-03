@@ -11,11 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
+namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
     public interface ISegmentationAlgorithmOnBoolArr
     {
         //Method to extract the segmentation indices from a boolean array representation of a wordsearch image
-        public Segmentation Segment(bool[,] image);
+        void DoSegment(bool[,] image, out int[,] rows, out int[,] cols);
     }
 }

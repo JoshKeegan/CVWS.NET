@@ -22,6 +22,22 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
         public int[] Rows { get; private set; } // The indices splitting rows/cols
         public int[] Cols { get; private set; }
 
+        public int NumRows
+        {
+            get
+            {
+                return Rows.Length + 1;
+            }
+        }
+
+        public int NumCols
+        {
+            get
+            {
+                return Cols.Length + 1;
+            }
+        }
+
         //Constructors
         public Segmentation(int[] rows, int[] cols)
         {

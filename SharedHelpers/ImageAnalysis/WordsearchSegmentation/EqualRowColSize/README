@@ -1,0 +1,2 @@
+﻿Think EqualRowColSize should be made redundant by always using the VariedRowColSize algorithms, but then having
+a method on Segmentation to make a new segmentation with equal row and col size

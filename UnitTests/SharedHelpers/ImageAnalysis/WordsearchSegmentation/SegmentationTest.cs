@@ -552,5 +552,33 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 Assert.Fail();
             }
         }
+
+        /*
+         * Test NumRows Accessor
+         */
+        [TestMethod]
+        public void TestNumRows1()
+        {
+            int[] rows = { };
+            int[] cols = { 1 };
+
+            Segmentation s = new Segmentation(rows, cols);
+
+            Assert.AreEqual(1, s.NumRows);
+        }
+
+        /*
+         * Test NumCols Accessor
+         */
+        [TestMethod]
+        public void TestNumCols1()
+        {
+            int[] rows = { };
+            int[] cols = { 1 };
+
+            Segmentation s = new Segmentation(rows, cols);
+
+            Assert.AreEqual(2, s.NumCols);
+        }
     }
 }

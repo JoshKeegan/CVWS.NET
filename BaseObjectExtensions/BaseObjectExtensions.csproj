@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="2dArrayExtensions.cs" />
+    <Compile Include="2dArrayExtensionsUint.cs" />
     <Compile Include="CollectionExtensionsIDisposable.cs" />
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="CollectionExtensionsUint.cs" />
