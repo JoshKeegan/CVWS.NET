@@ -37,5 +37,41 @@ namespace BaseObjectExtensions
         {
             return Mean(stack.ToArray());
         }
+
+        public static double Percentile(this uint[] arr, double percentile)
+        {
+            //Sort the array
+            uint[] sorted = (uint[])arr.Clone();
+            Array.Sort(sorted);
+
+            //Use linear interpolation between indexes to return a better approximation of the percentile
+            double realIndex = (percentile / 100) * (arr.Length - 1);
+            int lowerIndex = (int)Math.Floor(realIndex);
+            int upperIndex = (int)Math.Ceiling(realIndex);
+            double pointBetweenIndexes = realIndex % 1;
+
+            return linearlyInterpolate(sorted[lowerIndex], sorted[upperIndex], pointBetweenIndexes);
+        }
+
+        /*
+         * Helpers
+         */
+        //Linearly interpolate between two values, given a point between them to find (in range 0..1)
+        private static double linearlyInterpolate(double a, double b, double point)
+        {
+            //Let a be the small and b be the big number
+            if (a > b)
+            {
+                //Swap the numbers
+                double c = a;
+                a = b;
+                b = c;
+            }
+
+            double diff = b - a;
+
+            double interVal = diff * point;
+            return a + interVal;
+        }
     }
 }

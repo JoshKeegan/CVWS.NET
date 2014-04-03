@@ -31,7 +31,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
             uint[] colDarkPixelCounts = SegmentationAlgorithmHelpers.CountNumDarkPixelsPerCol(image);
             uint[] rowDarkPixelCounts = SegmentationAlgorithmHelpers.CountNumDarkPixelsPerRow(image);
 
-            //Determine for each row/col of pixels whether you are in a character, using the mean as the threshold to determine entry & exit
+            //Determine the start & end indices of all the rows & cols, using the mean as the threshold to determine entry & exit
             uint[,] colChars = SegmentationAlgorithmHelpers.FindCharIndices(colDarkPixelCounts, colDarkPixelCounts.Mean());
             uint[,] rowChars = SegmentationAlgorithmHelpers.FindCharIndices(rowDarkPixelCounts, rowDarkPixelCounts.Mean());
 
