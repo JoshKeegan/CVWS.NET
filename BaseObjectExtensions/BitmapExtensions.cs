@@ -3,7 +3,7 @@
  * Base Object Extensions
  * Bitmap Extensions
  * By Josh Keegan 27/02/2014
- * Last Edit 26/03/2014
+ * Last Edit 03/04/2014
  */
 
 using System;
@@ -67,6 +67,12 @@ namespace BaseObjectExtensions
             if(a.Width != b.Width || a.Height != b.Height || a.PixelFormat != b.PixelFormat)
             {
                 return false;
+            }
+
+            //If the objects point to the same data, no need for further checks
+            if(a == b)
+            {
+                return true;
             }
 
             //Now check that the actual image data is the same
