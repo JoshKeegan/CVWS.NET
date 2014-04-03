@@ -26,7 +26,7 @@ namespace UnitTests.BaseObjectExtensions
 
             Assert.IsTrue(b.DataEquals(b));
 
-            //Clean Ups
+            //Clean Up
             b.Dispose();
         }
 
