@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InvalidImageDimensionsException.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotation.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotationCorrection.cs" />
     <Compile Include="ClassifierInterfacing\AForgeActivationNeuralNetClassifier.cs" />
