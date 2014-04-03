@@ -20,8 +20,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
     public class SegmentByPercentileTwoThresholds : SegmentationAlgorithmByStartEndIndices, ISegmentationAlgorithmOnBoolArr
     {
         //Constants
-        private const double CHAR_START_THRESHOLD_PERCENTILE = 55; //TODO: Maybe have these as defaults and have a constructor that can override them??
-        private const double CHAR_END_THRESHOLD_PERCENTILE = 52;
+        private const double CHAR_START_THRESHOLD_PERCENTILE = 60; //TODO: Maybe have these as defaults and have a constructor that can override them??
+        private const double CHAR_END_THRESHOLD_PERCENTILE = 40;
 
         protected override void doSegment(System.Drawing.Bitmap image, out int[,] rows, out int[,] cols)
         {
