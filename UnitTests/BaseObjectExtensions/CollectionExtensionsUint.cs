@@ -116,5 +116,135 @@ namespace UnitTests.BaseObjectExtensions
 
             CollectionAssert.AreEqual(orig, arr);
         }
+
+        /*
+         * Percentile Tests
+         */
+        [TestMethod]
+        public void TestPercentile1()
+        {
+            //Test odd arr 50th percentile
+            uint[] arr = { 0, 2, 3 };
+
+            Assert.AreEqual(2, arr.Percentile(50));
+        }
+
+        [TestMethod]
+        public void TestPercentile2()
+        {
+            //Test even arr 50th percentile
+            uint[] arr = { 0, 1 };
+
+            Assert.AreEqual(0.5, arr.Percentile(50));
+        }
+
+        [TestMethod]
+        public void TestPercentile3()
+        {
+            //Test unordered
+            uint[] arr = { 2, 3, 0 };
+
+            Assert.AreEqual(2, arr.Percentile(50));
+        }
+
+        [TestMethod]
+        public void TestPercentile4()
+        {
+            //Test Quartiles of data trivially split into quartiles
+            uint[] arr = { 1, 2, 3, 4 };
+
+            Assert.AreEqual(1.5, arr.Percentile(25));
+            Assert.AreEqual(2.5, arr.Percentile(50));
+            Assert.AreEqual(3.5, arr.Percentile(75));
+        }
+
+        [TestMethod]
+        public void TestPercentile5()
+        {
+            //Test Quartiles of random data
+            uint[] arr = { 10, 20, 42, 36, 102, 12, 34 };
+
+            Assert.AreEqual(14, arr.Percentile(25));
+            Assert.AreEqual(34, arr.Percentile(50));
+            Assert.AreEqual(40.5, arr.Percentile(75));
+        }
+
+        [TestMethod]
+        public void TestPercentile6()
+        {
+            //Test array with just one element
+            uint[] arr = { 1 };
+
+            Assert.AreEqual(1, arr.Percentile(23));
+        }
+
+        [TestMethod]
+        public void TestPercentile7()
+        {
+            //Test array with no elements
+            uint[] arr = new uint[0];
+
+            try
+            {
+                arr.Percentile(50);
+                //No Exception, Fail
+                Assert.Fail();
+            }
+            catch(ArgumentOutOfRangeException)
+            {
+                //Correct exception, pass
+            }
+            catch
+            {
+                //Wrong Exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestPercentile8()
+        {
+            //Test percentile < 0
+            uint[] arr = { 1, 2 };
+
+            try
+            {
+                arr.Percentile(-1);
+                //No Exception, Fail
+                Assert.Fail();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                //Correct exception, pass
+            }
+            catch
+            {
+                //Wrong Exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestPercentile9()
+        {
+            //Test percentile > 100
+            uint[] arr = { 1, 2 };
+
+            try
+            {
+                arr.Percentile(100.1);
+                //No Exception, Fail
+                Assert.Fail();
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                //Correct exception, pass
+            }
+            catch
+            {
+                //Wrong Exception, fail
+                Assert.Fail();
+            }
+        }
     }
 }
