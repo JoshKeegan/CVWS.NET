@@ -27,6 +27,7 @@ namespace QuantitativeEvaluation
 
             //Get the score for each segmentation algorithm
             scores.Add("MeanDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByMeanDarkPixels()));
+            scores.Add("MedianDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByMedianDarkPixels()));
             scores.Add("PercentileTwoThresholds", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByPercentileTwoThresholds()));
 
             Log.Info("Completed evaluation of all Wordsearch Image Segmentation Algorithms based on the number of rows and cols they return");

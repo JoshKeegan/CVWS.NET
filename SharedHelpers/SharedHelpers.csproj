@@ -93,6 +93,7 @@
     <Compile Include="ImageAnalysis\WordsearchSegmentation\EqualRowColSize\SegmentationAlgorithmByNumRowsCols.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\ISegmentationAlgorithmOnBoolArr.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentationAlgorithmByStartEndIndices.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByMedianDarkPixels.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByPercentileTwoThresholds.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\CharImgExtractor.cs" />

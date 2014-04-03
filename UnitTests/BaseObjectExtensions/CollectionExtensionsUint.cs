@@ -3,6 +3,7 @@
  * Unit Tests
  * BaseObjectExtensions.CollectionExtensions Tests for the Uint operators
  * By Josh Keegan 26/03/2014
+ * Last Edit 03/04/2014
  */
 
 using System;
@@ -72,6 +73,48 @@ namespace UnitTests.BaseObjectExtensions
             double actual = uints.Mean();
 
             Assert.AreEqual(expected, actual);
+        }
+
+        /*
+         * Median Function Tests
+         */
+        [TestMethod]
+        public void TestMedian1()
+        {
+            //Test odd arr
+            uint[] arr = { 0, 2, 3 };
+
+            Assert.AreEqual(2, arr.Median());
+        }
+
+        [TestMethod]
+        public void TestMedian2()
+        {
+            //Test even arr
+            uint[] arr = { 0, 1 };
+
+            Assert.AreEqual(0.5, arr.Median());
+        }
+
+        [TestMethod]
+        public void TestMedian3()
+        {
+            //Test arr not sorted
+            uint[] arr = { 1, 5, 5, 1, 1, 3, 6 };
+
+            Assert.AreEqual(3, arr.Median());
+        }
+
+        [TestMethod]
+        public void TestMedian4()
+        {
+            //Test arr doesn't get changed
+            uint[] arr = { 2, 1 };
+            uint[] orig = { 2, 1 };
+
+            arr.Median();
+
+            CollectionAssert.AreEqual(orig, arr);
         }
     }
 }

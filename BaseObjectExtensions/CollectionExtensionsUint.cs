@@ -3,7 +3,7 @@
  * Base Object Extensions
  * partial Collection Extensions class - functions working on uints
  * By Josh Keegan 10/03/2014
- * Last Edit 11/03/2014
+ * Last Edit 03/04/2014
  */
 
 using System;
@@ -38,6 +38,30 @@ namespace BaseObjectExtensions
             return Mean(stack.ToArray());
         }
 
+        public static double Median(this ICollection<uint> collection)
+        {
+            //Convert the collection to an array to be worked on
+            uint[] arr = collection.ToArray();
+
+            //Sort the array
+            Array.Sort(arr);
+
+            //If there is an odd number of elements, pick the middle one
+            if(arr.Length % 2 == 1)
+            {
+                return arr[arr.Length / 2];
+            }
+            //Otherwise there is an even number of elements, return the mean of the middle 2
+            else
+            {
+                uint a = arr[(arr.Length / 2) - 1];
+                uint b = arr[arr.Length / 2];
+
+                return (double)(a + b) / 2;
+            }
+        }
+
+        //TODO: Change to work on generic collections, not just arrays
         public static double Percentile(this uint[] arr, double percentile)
         {
             //Sort the array
