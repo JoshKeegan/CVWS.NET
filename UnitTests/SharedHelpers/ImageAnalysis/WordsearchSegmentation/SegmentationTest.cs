@@ -167,8 +167,390 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             CollectionAssert.AreEqual(cols, segmentation.Cols);
         }
 
-        /*
-         * TODO: More Unit Tests
-         */
+        [TestMethod]
+        public void TestConstructor8()
+        {
+            //Test constructor when it's supplied with row & col start & end indices
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 1, 2 }, { 2, 4 } };
+            int[,] cols = new int[,] { {0, 3}, {5, 6}, {6, 8} };
+
+            Segmentation segmentation = new Segmentation(rows, cols, width, height);
+
+            int[] rowsSeg = { 2 };
+            int[] colsSeg = { 4, 6 };
+
+            CollectionAssert.AreEqual(rowsSeg, segmentation.Rows);
+            CollectionAssert.AreEqual(colsSeg, segmentation.Cols);
+        }
+
+        [TestMethod]
+        public void TestConstructor9()
+        {
+            //Test constructor when it's supplied with row & col start & end indices whose segmentations will require rounding
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            Segmentation segmentation = new Segmentation(rows, cols, width, height);
+
+            int[] rowsSeg = { 1 };
+            int[] colsSeg = { 3, 6 };
+
+            CollectionAssert.AreEqual(rowsSeg, segmentation.Rows);
+            CollectionAssert.AreEqual(colsSeg, segmentation.Cols);
+        }
+
+        [TestMethod]
+        public void TestConstructor10()
+        {
+            //Test constructor when it's supplied with invalid width
+            int width = -1;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch(InvalidImageDimensionsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor11()
+        {
+            //Test constructor when it's supplied with invalid height
+            int width = 10;
+            int height = -1;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidImageDimensionsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor12()
+        {
+            //Test constructor when it's supplied with invalid number of rows
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] {  };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor13()
+        {
+            //Test constructor when it's supplied with invalid number of cols
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] {  };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor14()
+        {
+            //Test constructor when it's supplied with invalid row indices (<0)
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { -2, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor15()
+        {
+            //Test constructor when it's supplied with invalid row indices (>= height)
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 5, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor16()
+        {
+            //Test constructor when it's supplied with invalid col indices (<0)
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, -3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor17()
+        {
+            //Test constructor when it's supplied with invalid col indices (>=width)
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 42 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor18()
+        {
+            //Test constructor when it's supplied with invalid row array dimensions
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1, 2 }, { 2, 4, 3 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (UnexpectedArrayDimensionsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor19()
+        {
+            //Test constructor when it's supplied with invalid col array dimensions
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, 3, 3 }, { 4, 6, 6 }, { 7, 8, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (UnexpectedArrayDimensionsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor20()
+        {
+            //Test constructor when it's supplied with overlapping rows
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 0, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor21()
+        {
+            //Test constructor when it's supplied with overlapping cols
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 5, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor22()
+        {
+            //Test constructor when it's supplied with unordered rows
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 2, 4 }, { 0, 1 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 4, 6 }, { 7, 8 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void TestConstructor23()
+        {
+            //Test constructor when it's supplied with unordered cols
+            int width = 10;
+            int height = 5;
+            int[,] rows = new int[,] { { 0, 1 }, { 2, 4 } };
+            int[,] cols = new int[,] { { 0, 3 }, { 7, 8 }, { 4, 6 } };
+
+            try
+            {
+                Segmentation s = new Segmentation(rows, cols, width, height);
+                Assert.Fail(); //Threw no exception, fail
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Threw correct exception, Pass
+            }
+            catch
+            {
+                //Threw wrong exception, fail
+                Assert.Fail();
+            }
+        }
     }
 }

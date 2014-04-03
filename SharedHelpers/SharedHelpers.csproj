@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\InvalidImageDimensionsException.cs" />
+    <Compile Include="Exceptions\UnexpectedArrayDimensionsException.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotation.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotationCorrection.cs" />
     <Compile Include="ClassifierInterfacing\AForgeActivationNeuralNetClassifier.cs" />
