@@ -3,7 +3,7 @@
  * Shared Helpers
  * Converters class - convert Images to other formats
  * By Josh Keegan 06/03/2014
- * Last Edit 11/03/2014
+ * Last Edit 04/04/2014
  */
 
 using System;
@@ -24,30 +24,12 @@ namespace SharedHelpers.Imaging
     {
         public static bool[,] BitmapToBoolArray(Bitmap img)
         {
-            Bitmap greyImg;
-
-            //If the image is 8bpp
-            if(img.PixelFormat == PixelFormat.Format8bppIndexed)
-            {
-                greyImg = img;
-            }
-            else //Otherwise the image needs converting to greyscale before any further processing
-            {
-                greyImg = Grayscale.CommonAlgorithms.BT709.Apply(img);
-            }
-
-            //Threshold the image
-            BradleyLocalThresholding bradleyLocalThreshold = new BradleyLocalThresholding();
-            Bitmap bradleyLocalImg = bradleyLocalThreshold.Apply(greyImg);
+            Bitmap bradleyLocalImg = FilterCombinations.AdaptiveThreshold(img);
 
             //Convert to bool array
             bool[,] toRet = ThresholdedBitmapToBoolArray(bradleyLocalImg);
 
             //Clean up
-            if(greyImg != img)
-            {
-                greyImg.Dispose();
-            }
             bradleyLocalImg.Dispose();
 
             return toRet;
