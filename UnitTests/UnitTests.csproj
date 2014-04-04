@@ -66,7 +66,8 @@
     <Compile Include="SharedHelpers\ImageAnalysis\WordsearchSegmentation\SegmentationTest.cs" />
     <Compile Include="SharedHelpers\Imaging\ConvertersTest.cs" />
     <Compile Include="SharedHelpers\Maths\GeometryTests.cs" />
-    <Compile Include="SharedHelpers\Maths\Statistics\HistogramTest.cs" />
+    <Compile Include="SharedHelpers\Maths\Statistics\BimodalHistogramTests.cs" />
+    <Compile Include="SharedHelpers\Maths\Statistics\HistogramTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseObjectExtensions\BaseObjectExtensions.csproj">

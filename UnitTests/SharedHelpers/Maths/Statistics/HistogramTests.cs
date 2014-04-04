@@ -15,7 +15,7 @@ using SharedHelpers.Maths.Statistics;
 namespace UnitTests.SharedHelpers.Maths.Statistics
 {
     [TestClass]
-    public class HistogramTest
+    public class HistogramTests
     {
         /*
          * Test Data

@@ -18,8 +18,10 @@ namespace SharedHelpers.Maths.Statistics
 {
     public class Histogram
     {
+        //Private Vars
         private int numBins;
 
+        //Public Vars
         public ICollection<double> Data { get; private set; }
         public uint[] Bins { get; private set; }
         public double MinBin { get; private set; }
@@ -40,34 +42,7 @@ namespace SharedHelpers.Maths.Statistics
                 else //Valid
                 {
                     numBins = value;
-
-                    //Update Bins
-                    Bins = new uint[NumBins];
-                    for(int i = 0; i < Bins.Length; i++)
-                    {
-                        Bins[i] = 0;
-                    }
-
-                    double binWidth = BinWidth;
-
-                    foreach(double d in Data)
-                    {
-                        //If the data is inside of the range of data the histogram is specified to work with
-                        if(d >= MinBin && d <= MaxBin)
-                        {
-                            //Allign the data with the minimum Histogram bin starting at 0
-                            double zeroAligned = d - MinBin;
-                            int idx = (int)(zeroAligned / binWidth);
-
-                            //If the idx is over the end of the array, then this value is equal to the max value, tag it onto the last bin
-                            if(idx == Bins.Length)
-                            {
-                                idx--;
-                            }
-
-                            Bins[idx]++;
-                        }
-                    }
+                    update();
                 }
             }
         }
@@ -96,6 +71,40 @@ namespace SharedHelpers.Maths.Statistics
             this.MinBin = min;
             this.MaxBin = max;
             this.NumBins = numBins;
+        }
+
+        /*
+         * Helper Methods
+         */
+        protected virtual void update()
+        {
+            //Update Bins
+            Bins = new uint[NumBins];
+            for (int i = 0; i < Bins.Length; i++)
+            {
+                Bins[i] = 0;
+            }
+
+            double binWidth = BinWidth;
+
+            foreach (double d in Data)
+            {
+                //If the data is inside of the range of data the histogram is specified to work with
+                if (d >= MinBin && d <= MaxBin)
+                {
+                    //Allign the data with the minimum Histogram bin starting at 0
+                    double zeroAligned = d - MinBin;
+                    int idx = (int)(zeroAligned / binWidth);
+
+                    //If the idx is over the end of the array, then this value is equal to the max value, tag it onto the last bin
+                    if (idx == Bins.Length)
+                    {
+                        idx--;
+                    }
+
+                    Bins[idx]++;
+                }
+            }
         }
     }
 }
