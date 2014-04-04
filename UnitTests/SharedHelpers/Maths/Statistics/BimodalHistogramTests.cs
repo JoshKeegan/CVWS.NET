@@ -17,7 +17,7 @@ namespace UnitTests.SharedHelpers.Maths.Statistics
     public class BimodalHistogramTests
     {
         /*
-         * Test Threshold
+         * Test Threshold Bin Index
          */
         [TestMethod]
         public void TestThreshold1()
@@ -49,6 +49,25 @@ namespace UnitTests.SharedHelpers.Maths.Statistics
             //Check the threshold index selected
             int expected = 3;
             Assert.AreEqual(expected, hist.ThresholdBinIdx);
+        }
+
+        /*
+         * Test Threshold Value
+         */
+        [TestMethod]
+        public void TestThresholdValue1()
+        {
+            //Test finding the value of the threshold in data where this is trivial
+            double[] data = { 1, 3 };
+            BimodalHistogram hist = new BimodalHistogram(data, 1, 4, 3);
+
+            //Check bins are as expected
+            uint[] expectedBins = { 1, 0, 1 };
+            CollectionAssert.AreEqual(expectedBins, hist.Bins);
+
+            //Check the threshold value selected 
+            double expected = 2;
+            Assert.AreEqual(expected, hist.ThresholdValue);
         }
     }
 }

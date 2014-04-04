@@ -19,6 +19,13 @@ namespace SharedHelpers.Maths.Statistics
     {
         //Public Vars
         public int ThresholdBinIdx { get; private set; }
+        public double ThresholdValue //The Value of the Bin that it's best to threshold at
+        {
+            get
+            {
+                return MinBin + (ThresholdBinIdx * BinWidth);
+            }
+        }
 
         //Constructors
         public BimodalHistogram(ICollection<double> values)
