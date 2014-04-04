@@ -107,6 +107,7 @@
     <Compile Include="Imaging\SplitImage.cs" />
     <Compile Include="Exceptions\InvalidShapeException.cs" />
     <Compile Include="Maths\Geometry.cs" />
+    <Compile Include="Maths\Statistics\Histogram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
