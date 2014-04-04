@@ -109,6 +109,39 @@ namespace UnitTests.SharedHelpers.Maths.Statistics
         }
 
         /*
+         * Test Num Values
+         */
+        [TestMethod]
+        public void TestNumValues1()
+        {
+            //Test that Num Values is as expected when all values are in range
+            double[] data = { 1, 2, 3 };
+            Histogram hist = new Histogram(data);
+
+            Assert.AreEqual((uint)data.Length, hist.NumValues);
+        }
+
+        [TestMethod]
+        public void TestNumValues2()
+        {
+            //Test that Num Values is as expected when some values aren't in range
+            double[] data = { 1, 2, 3 };
+            Histogram hist = new Histogram(data, 1, 2);
+
+            Assert.AreEqual(2u, hist.NumValues);
+        }
+
+        [TestMethod]
+        public void TestNumValues3()
+        {
+            //Test Num Values is 0 when all values are outside the specified Histogram range
+            double[] data = { 1, 2, 3 };
+            Histogram hist = new Histogram(data, -1, 0);
+
+            Assert.AreEqual(0u, hist.NumValues);
+        }
+
+        /*
          * Test Bin Width
          */
         [TestMethod]

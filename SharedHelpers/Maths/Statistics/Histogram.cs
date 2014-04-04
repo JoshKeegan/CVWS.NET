@@ -46,6 +46,7 @@ namespace SharedHelpers.Maths.Statistics
                 }
             }
         }
+        public uint NumValues { get; private set; } //The number of values stored in bins in the histogram
         public double BinWidth
         {
             get
@@ -78,12 +79,13 @@ namespace SharedHelpers.Maths.Statistics
          */
         protected virtual void update()
         {
-            //Update Bins
+            //Update Bins & NumValues
             Bins = new uint[NumBins];
             for (int i = 0; i < Bins.Length; i++)
             {
                 Bins[i] = 0;
             }
+            NumValues = 0;
 
             double binWidth = BinWidth;
 
@@ -103,6 +105,7 @@ namespace SharedHelpers.Maths.Statistics
                     }
 
                     Bins[idx]++;
+                    NumValues++;
                 }
             }
         }
