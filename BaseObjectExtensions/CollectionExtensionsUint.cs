@@ -3,7 +3,7 @@
  * Base Object Extensions
  * partial Collection Extensions class - functions working on uints
  * By Josh Keegan 10/03/2014
- * Last Edit 03/04/2014
+ * Last Edit 04/04/2014
  */
 
 using System;
@@ -16,6 +16,20 @@ namespace BaseObjectExtensions
 {
     public static partial class CollectionExtensions
     {
+        public static double[] ToDoubleArr(this ICollection<uint> collection)
+        {
+            double[] toRet = new double[collection.Count];
+
+            int i = 0;
+            foreach(uint num in collection)
+            {
+                toRet[i] = (double)num;
+
+                i++;
+            }
+            return toRet;
+        }
+
         //Function to calculate the mean of a Collection of numbers
         public static double Mean(this ICollection<uint> collection)
         {
