@@ -8,12 +8,6 @@
  *  to locate rows & cols
  * By Josh Keegan 04/04/2014
  * Last Edit 05/04/2014
- * 
- * Note: With the distribution of dark pixels per row/col the BimodalHistogram selects 
- *  thresholds that are far too high to be used here.
- *  The threshold selection seems to produce odd results on more complex data that isn't 
- *  seen in the current unit tests & needs further testing
- *  Because of this problem, this class is effectively !BROKEN!
  */
 
 using System;

@@ -3,6 +3,7 @@
  * Shared Helpers
  * Bimodal Histogram class
  * By Josh Keegan 04/04/2014
+ * Last Edit 05/04/2014
  */
 
 using System;
@@ -52,11 +53,61 @@ namespace SharedHelpers.Maths.Statistics
             ThresholdBinIdx = calculateThresholdBinIdx();
         }
 
-        //Calculate the best threshold index by minimising the between class variance
+        //Implementation of Otsu's Method as he proposed it (non-optimised) but based on his version maximising inter class variance
+        //Based on the maths (NOT the optimised algorithm) from http://en.wikipedia.org/wiki/Otsu%27s_method#Method 
+        //and http://web-ext.u-aizu.ac.jp/course/bmclass/documents/otsu1979.pdf
+        private int calculateThresholdBinIdx()
+        {
+            double bestThresholdInterClassVariance = double.MinValue;
+            int bestThreshold = -1;
+
+            //Check all thresholds, searching for the max inter class variance
+            for (int i = 0; i < Bins.Length; i++)
+            {
+                uint[] class1 = Bins.Take(i).ToArray();
+                uint[] class2 = new uint[Bins.Length - i];
+                for (int j = 0; j < class2.Length; j++)
+                {
+                    class2[j] = Bins[i + j];
+                }
+
+                double class1Probability = (double)class1.Sum(a => a) / NumValues;
+                double class2Probability = (double)class2.Sum(a => a) / NumValues;
+
+                double class1Mean = 0;
+                for (int j = 0; j < class1.Length; j++)
+                {
+                    class1Mean += ((double)class1[j] / NumValues) * (((j + 0.5d) * BinWidth) + MinBin);
+                }
+                class1Mean /= class1Probability;
+
+                double class2Mean = 0;
+                for (int j = 0; j < class2.Length; j++)
+                {
+                    class2Mean += ((double)class2[j] / NumValues) * (((j + i + 0.5d) * BinWidth) + MinBin);
+                }
+                class2Mean /= class2Probability;
+
+                double interClassVariance = class1Probability * class2Probability * Math.Pow((class1Mean - class2Mean), 2);
+
+                if (interClassVariance > bestThresholdInterClassVariance)
+                {
+                    bestThresholdInterClassVariance = interClassVariance;
+                    bestThreshold = i;
+                }
+            }
+            return bestThreshold;
+        }
+
+        /*
+         * This Optimised version of the function appears to be broken
+         * TODO: Fix & Write Unit tests to identify problem to prevent it happening again
+         */
+        //Calculate the best threshold index by maximising the inter class variance
         //Idea based on Otsu's Method http://en.wikipedia.org/wiki/Otsu%27s_method 
         //and more efficient implementations of it's thresholding (so you don't need to 
         //compute means & variances of each class at each threshold)
-        private int calculateThresholdBinIdx()
+        /*private int calculateThresholdBinIdxOptimised()
         {
             double bestThresholdBetweenClassVariance = double.MinValue;
             int bestThreshold = -1;
@@ -107,6 +158,6 @@ namespace SharedHelpers.Maths.Statistics
             }
 
             return bestThreshold;
-        }
+        }*/
     }
 }

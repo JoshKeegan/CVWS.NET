@@ -31,7 +31,7 @@ namespace QuantitativeEvaluation
             scores.Add("MedianDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByMedianDarkPixels()));
             scores.Add("PercentileTwoThresholds", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByPercentileTwoThresholds()));
             scores.Add("BlobRecognition", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByBlobRecognition()));
-            //scores.Add("HistogramThresholdDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByHistogramThresholdDarkPixels()));
+            scores.Add("HistogramThresholdDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByHistogramThresholdDarkPixels()));
             scores.Add("ThresholdDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByThresholdDarkPixels()));
 
             Log.Info("Completed evaluation of all Wordsearch Image Segmentation Algorithms based on the number of rows and cols they return");
