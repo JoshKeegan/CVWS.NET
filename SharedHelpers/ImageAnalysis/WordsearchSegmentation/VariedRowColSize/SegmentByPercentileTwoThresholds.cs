@@ -3,6 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting using separate start & end thresholds based on percentile values of dark pixels per row/col
  * By Josh Keegan 03/04/2014
+ * Last Edit 05/04/2014
  */
 
 using System;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 using SharedHelpers.Imaging;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
+using SharedHelpers.Maths.Statistics;
 using BaseObjectExtensions;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
@@ -35,10 +37,12 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
             uint[] rowDarkPixelCounts = SegmentationAlgorithmHelpers.CountNumDarkPixelsPerRow(image);
 
             //Calculate the percentile-based char start/end thresholds
-            double colCharStartThreshold = colDarkPixelCounts.Percentile(CHAR_START_THRESHOLD_PERCENTILE);
-            double colCharEndThreshold = colDarkPixelCounts.Percentile(CHAR_END_THRESHOLD_PERCENTILE);
-            double rowCharStartThreshold = rowDarkPixelCounts.Percentile(CHAR_START_THRESHOLD_PERCENTILE);
-            double rowCharEndThreshold = rowDarkPixelCounts.Percentile(CHAR_END_THRESHOLD_PERCENTILE);
+            Percentile colPercentile = new Percentile(colDarkPixelCounts.ToDoubleArr());
+            Percentile rowPercentile = new Percentile(rowDarkPixelCounts.ToDoubleArr());
+            double colCharStartThreshold = colPercentile.CalculatePercentile(CHAR_START_THRESHOLD_PERCENTILE);
+            double colCharEndThreshold = colPercentile.CalculatePercentile(CHAR_END_THRESHOLD_PERCENTILE);
+            double rowCharStartThreshold = rowPercentile.CalculatePercentile(CHAR_START_THRESHOLD_PERCENTILE);
+            double rowCharEndThreshold = rowPercentile.CalculatePercentile(CHAR_END_THRESHOLD_PERCENTILE);
 
             //Determine the start & end indices of all the rows & cols, using the percentile thresholds to determine entry & exit
             uint[,] colChars = SegmentationAlgorithmHelpers.FindCharIndices(colDarkPixelCounts, colCharStartThreshold, colCharEndThreshold);

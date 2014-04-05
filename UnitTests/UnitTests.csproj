@@ -68,6 +68,7 @@
     <Compile Include="SharedHelpers\Maths\GeometryTests.cs" />
     <Compile Include="SharedHelpers\Maths\Statistics\BimodalHistogramTests.cs" />
     <Compile Include="SharedHelpers\Maths\Statistics\HistogramTests.cs" />
+    <Compile Include="SharedHelpers\Maths\Statistics\PercentileTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseObjectExtensions\BaseObjectExtensions.csproj">

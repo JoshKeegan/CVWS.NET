@@ -111,6 +111,7 @@
     <Compile Include="Maths\Geometry.cs" />
     <Compile Include="Maths\Statistics\BimodalHistogram.cs" />
     <Compile Include="Maths\Statistics\Histogram.cs" />
+    <Compile Include="Maths\Statistics\Percentile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
