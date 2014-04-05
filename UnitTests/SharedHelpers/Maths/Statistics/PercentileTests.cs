@@ -218,5 +218,47 @@ namespace UnitTests.SharedHelpers.Maths.Statistics
                 Assert.Fail();
             }
         }
+
+        /*
+         * Test Calculate Rank
+         */
+        [TestMethod]
+        public void TestCalculateRank1()
+        {
+            //Test calculating the rank on known values
+            double[] arr = { 62, 66, 71, 75, 75, 78, 81, 83, 84, 85, 85, 87, 89, 89, 91, 92, 93, 94, 95, 99 };
+
+            Percentile p = new Percentile(arr);
+
+            Assert.AreEqual(50, p.CalculateRank(85));
+        }
+
+        [TestMethod]
+        public void TestCalculateRank2()
+        {
+            //Test calculating rank on known data (non-quartile output)
+            double[] arr = { 55, 59, 59, 60, 61, 63, 64, 64, 65, 68, 68, 69, 72, 74 };
+
+            Percentile p = new Percentile(arr);
+
+            Assert.AreEqual(32, Math.Round(p.CalculateRank(61))); //Rounded
+        }
+
+        [TestMethod]
+        public void TestCalculateRank3()
+        {
+            //Test that calculating rank is the inverse of calculating percentile (won't always be true for arbitrary 
+            //values on a small data set like this, but as the data set tends towards infinity, the difference 
+            //between them will tend towards 0)
+            //So here a value for which it will be true has been selected
+            double[] arr = { 62, 66, 71, 75, 75, 78, 81, 83, 84, 85, 85, 87, 89, 89, 91, 92, 93, 94, 95, 99 };
+
+            Percentile p = new Percentile(arr);
+
+            double percentile = 50;
+            double percentileVal = p.CalculatePercentile(percentile);
+
+            Assert.AreEqual(percentile, p.CalculateRank(percentileVal));
+        }
     }
 }

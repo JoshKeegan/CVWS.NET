@@ -61,6 +61,32 @@ namespace SharedHelpers.Maths.Statistics
             return linearlyInterpolate(Data[lowerIndex], Data[upperIndex], pointBetweenIndexes);
         }
 
+        public double CalculateRank(double value)
+        {
+            //Calculate rank based on the standard formula here http://en.wikipedia.org/wiki/Percentile_rank
+            
+            //Count the num values less than this & the same as the supplied value
+            int numLess = 0;
+            int numSame = 0;
+            foreach(double d in Data)
+            {
+                if(d < value)
+                {
+                    numLess++;
+                }
+                else if(d == value)
+                {
+                    numSame++;
+                }
+                else //Larger, since the array is ordered there's no need to look any further
+                {
+                    break;
+                }
+            }
+
+            return ((numLess + (numSame * 0.5d)) / Data.Length) * 100;
+        }
+
         /*
          * Helpers
          */
