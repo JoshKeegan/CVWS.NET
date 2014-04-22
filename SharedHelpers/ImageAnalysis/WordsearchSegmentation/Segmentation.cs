@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation - class to hold the indices that split rows & cols
  * By Josh Keegan 02/04/2014
- * Last Edit 03/04/2014
+ * Last Edit 22/04/2014
  */
 
 using System;
@@ -18,6 +18,16 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
 {
     public class Segmentation
     {
+        //Protected vars (used for Wordsearch Recognition candidate scoring)
+        protected int? width = null;
+        protected int? height = null;
+
+        protected int? numCols = null;
+        protected int? numRows = null;
+
+        protected int[,] rowStartEnds = null;
+        protected int[,] colStartEnds = null;
+
         //Public vars
         public int[] Rows { get; private set; } // The indices splitting rows/cols
         public int[] Cols { get; private set; }
@@ -39,6 +49,18 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
         }
 
         //Constructors
+        protected Segmentation(Segmentation copy)
+        {
+            this.width = copy.width;
+            this.height = copy.height;
+            this.numCols = copy.numCols;
+            this.numRows = copy.numRows;
+            this.rowStartEnds = copy.rowStartEnds;
+            this.colStartEnds = copy.colStartEnds;
+            this.Rows = copy.Rows;
+            this.Cols = copy.Cols;
+        }
+
         public Segmentation(int[] rows, int[] cols)
         {
             this.Cols = cols;
@@ -58,6 +80,12 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             {
                 throw new InvalidImageDimensionsException("Image dimensions must be positive");
             }
+
+            //Store the raw input to the constructor
+            this.numRows = numRows;
+            this.numCols = numCols;
+            this.width = width;
+            this.height = height;
 
             //Comvert num. of rows & cols to incices
             //Cols
@@ -168,6 +196,12 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 //Update prevEnd for next iter
                 prevEnd = cols[i, 1];
             }
+
+            //Store the raw input to the constructor
+            this.rowStartEnds = rows;
+            this.colStartEnds = cols;
+            this.width = width;
+            this.height = height;
 
             //Convert row/col start & end indices into indices splitting them by finding the mid-point between the end of one & start of the next
             int[] rowSplits = new int[rows.GetLength(0) - 1];

@@ -49,6 +49,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\AForge.Imaging.dll</HintPath>
     </Reference>
+    <Reference Include="AForge.Math, Version=2.2.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AForge.NET\Framework\Release\AForge.Math.dll</HintPath>
+    </Reference>
     <Reference Include="AForge.Neuro, Version=2.2.5.0, Culture=neutral, PublicKeyToken=2094f4ea39731d4f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\AForge.Neuro.dll</HintPath>
@@ -65,6 +69,8 @@
   <ItemGroup>
     <Compile Include="Exceptions\InvalidImageDimensionsException.cs" />
     <Compile Include="Exceptions\UnexpectedArrayDimensionsException.cs" />
+    <Compile Include="ImageAnalysis\WordsearchRecognition\CandidateScorer.cs" />
+    <Compile Include="ImageAnalysis\WordsearchRecognition\RecognitionAlgorithm.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotation.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotationCorrection.cs" />
     <Compile Include="ClassifierInterfacing\AForgeActivationNeuralNetClassifier.cs" />
@@ -105,12 +111,14 @@
     <Compile Include="Imaging\DrawShapes.cs" />
     <Compile Include="Exceptions\UnexpectedPixelFormatException.cs" />
     <Compile Include="Imaging\FilterCombinations.cs" />
+    <Compile Include="Imaging\ShapeFinder.cs" />
     <Compile Include="Imaging\SplitImage.cs" />
     <Compile Include="Exceptions\InvalidShapeException.cs" />
     <Compile Include="Maths\Geometry.cs" />
     <Compile Include="Maths\Statistics\BimodalHistogram.cs" />
     <Compile Include="Maths\Statistics\Histogram.cs" />
     <Compile Include="Maths\Statistics\Percentile.cs" />
+    <Compile Include="Maths\Statistics\Stats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

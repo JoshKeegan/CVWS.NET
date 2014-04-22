@@ -3,7 +3,7 @@
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014
- * Last Edit 06/03/2014
+ * Last Edit 22/04/2014
  */
 
 using System;
@@ -111,6 +111,19 @@ namespace ImageMarkup
                 throw new DatabaseNotInitialisedException();
             }
 
+        }
+
+        public static List<Image> GetImages()
+        {
+            //If the dataset has been loaded
+            if(images != null)
+            {
+                return images.Values.ToList();
+            }
+            else //Otherwise the data hasn't been loaded 
+            {
+                throw new DatabaseNotInitialisedException();
+            }
         }
 
         public static Image GetImage(string hash)

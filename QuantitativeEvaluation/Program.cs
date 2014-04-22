@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 03/04/2014
+ * Last Edit 22/04/2014
  */
 
 using System;
@@ -35,7 +35,8 @@ namespace QuantitativeEvaluation
         internal const string NEURAL_NETWORK_FILE_EXTENSION = ".networkWeights";
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
-        private const bool EVALUATE_WORDSEARCH_SEGMENTATION = true;
+        private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
+        private const bool EVALUATE_WORDSEARCH_RECOGNITION = true;
 
         static void Main(string[] args)
         {
@@ -182,7 +183,7 @@ namespace QuantitativeEvaluation
                  * are fresh data and can be used for evaluation
                  */
 
-                Log.Info("Strating to evaluhate Wordsearch Segmentation");
+                Log.Info("Starting to evaluate Wordsearch Segmentation");
 
                 //Evaluate by the number of rows and cols returned
                 Dictionary<string, double> scoresByNumRowsCols = EvaluateWordsearchSegmentation.EvaluateByNumRowsAndCols(wordsearchImages);
@@ -192,6 +193,26 @@ namespace QuantitativeEvaluation
                 printScores(scoresByNumRowsCols);
 
                 Log.Info("Wordsearch Segmentation Evaluation complete");
+            }
+
+            //If we're evaluating Wordsearch Recognition
+            if(EVALUATE_WORDSEARCH_RECOGNITION)
+            {
+                /*
+                 * Note that here all Images are used for evaluation (essentially they are all in the evaluation data set)
+                 * This is because the training & cross validation data haven't been used to develop the algorithms, meaning
+                 * that they are fresh data and can be used for evaluation
+                 */
+
+                Log.Info("Starting to evaluate Wordsearch Recognition");
+
+                Dictionary<string, double> scores = EvaluateWordsearchRecognition.EvaluateReturnsWordsearch(ImageMarkupDatabase.GetImages());
+
+                //Print out scores
+                Log.Info("Scores for Evaluation based on a single wordsearch returned (the best candidate)");
+                printScores(scores);
+
+                Log.Info("Wordsearch Recognition Evaluation Complete");
             }
         }
 

@@ -61,6 +61,7 @@
     <Compile Include="CharData.cs" />
     <Compile Include="ConfusionMatrix.cs" />
     <Compile Include="EvaluateNeuralNetworks.cs" />
+    <Compile Include="EvaluateWordsearchRecognition.cs" />
     <Compile Include="EvaluateWordsearchRotationCorrection.cs" />
     <Compile Include="EvaluateWordsearchSegmentation.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />

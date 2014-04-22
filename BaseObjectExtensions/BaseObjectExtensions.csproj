@@ -46,6 +46,7 @@
     <Compile Include="2dArrayExtensionsUint.cs" />
     <Compile Include="CollectionExtensionsIDisposable.cs" />
     <Compile Include="BitmapExtensions.cs" />
+    <Compile Include="CollectionExtensionsInt.cs" />
     <Compile Include="CollectionExtensionsUint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
