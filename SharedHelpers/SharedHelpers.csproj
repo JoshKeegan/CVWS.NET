@@ -89,11 +89,9 @@
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByHistogramThresholdDarkPixels.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByHistogramThresholdPercentileRankTwoThreshold.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByMeanDarkPixels.cs" />
-    <Compile Include="ImageAnalysis\WordsearchSegmentation\EqualRowColSize\ISegmentationAlgorithmOnBoolArr.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\Segmentation.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithm.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithmHelpers.cs" />
-    <Compile Include="ImageAnalysis\WordsearchSegmentation\EqualRowColSize\SegmentationAlgorithmByNumRowsCols.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\ISegmentationAlgorithmOnBoolArr.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentationAlgorithmByStartEndIndices.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByMedianDarkPixels.cs" />
@@ -120,9 +118,6 @@
       <Project>{6fc68f2c-22b6-4909-895a-4c845b761422}</Project>
       <Name>BaseObjectExtensions</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ImageAnalysis\WordsearchSegmentation\EqualRowColSize\README" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
