@@ -4,6 +4,7 @@
  * Wordsearch Segmentation Algorithm splitting by extracting character sized blobs from an Image of a wordsearch
  *  and then estimating row & col positions from the blob positions & sizes
  * By Josh Keegan 04/04/2014
+ * Last Edit 22/04/2014
  */
 
 using System;
@@ -124,11 +125,11 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
             //Now find cols in the sorted blobs by looking for overlapping blobs
             List<Tuple<int, int>> liCols = new List<Tuple<int, int>>();
             int colStart = sorted[0].Rectangle.X;
-            int colEnd = sorted[0].Rectangle.X + sorted[0].Rectangle.Width;
+            int colEnd = sorted[0].Rectangle.X + sorted[0].Rectangle.Width - 1; //-1 because start & end indices used for segmentation should be inclusive & the width makes it exclusive of the end index
             for(int i = 1; i < sorted.Length; i++)
             {
                 int start = sorted[i].Rectangle.X;
-                int end = start + sorted[i].Rectangle.Width;
+                int end = start + sorted[i].Rectangle.Width - 1; //-1 because start & end indices used for segmentation should be inclusive & the width makes it exclusive of the end index
 
                 //If we have reached the start of a new col
                 if(start > colEnd)
@@ -168,11 +169,11 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
             //Now find rows in the sorted blobs by looking for overlapping blobs
             List<Tuple<int, int>> liRows = new List<Tuple<int, int>>();
             int rowStart = sorted[0].Rectangle.Y;
-            int rowEnd = sorted[0].Rectangle.Y + sorted[0].Rectangle.Height;
+            int rowEnd = sorted[0].Rectangle.Y + sorted[0].Rectangle.Height - 1; //-1 because start & end indices used for segmentation should be inclusive & the width makes it exclusive of the end index
             for(int i = 1; i < sorted.Length; i++)
             {
                 int start = sorted[i].Rectangle.Y;
-                int end = start + sorted[i].Rectangle.Height;
+                int end = start + sorted[i].Rectangle.Height - 1; //-1 because start & end indices used for segmentation should be inclusive & the width makes it exclusive of the end index
 
                 //If we have reached the start of a new row
                 if(start > rowEnd)
