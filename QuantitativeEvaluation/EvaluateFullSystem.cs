@@ -88,6 +88,7 @@ namespace QuantitativeEvaluation
             Log.Info("Evaluating Full System . . .");
 
             int numCorrect = 0;
+            List<WordsearchSolutionEvaluator> evaluators = new List<WordsearchSolutionEvaluator>();
 
             foreach(Image image in images)
             {
@@ -224,6 +225,8 @@ namespace QuantitativeEvaluation
                  */
                 WordsearchSolutionEvaluator evaluator = new WordsearchSolutionEvaluator(solution, correctSolutions);
 
+                evaluators.Add(evaluator);
+
                 Log.Info(evaluator.ToString());
 
                 if(evaluator.Correct)
@@ -233,6 +236,32 @@ namespace QuantitativeEvaluation
             }
 
             Log.Info(String.Format("System found all words correctly for {0} / {1} Images correctly", numCorrect, images.Count));
+
+            //Calculate some extra statistics
+            int numWordsearchesNoWordsFound = 0;
+            int numDidntReachEvaluation = images.Count - evaluators.Count;
+            double fMeasureSum = 0;
+            int numValidFMeasures = 0;
+
+            foreach (WordsearchSolutionEvaluator evaluator in evaluators)
+            {
+                //If no words were found correctly
+                if(evaluator.TruePositive == 0)
+                {
+                    numWordsearchesNoWordsFound++;
+                }
+
+                //If there was a valid F-Measure
+                if(!double.IsNaN(evaluator.FMeasure))
+                {
+                    fMeasureSum += evaluator.FMeasure;
+                    numValidFMeasures++;
+                }
+            }
+
+            Log.Info(String.Format("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound));
+            Log.Info(String.Format("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures));
+
             Log.Info("Full System Evaluation Completed");
 
             return (double)numCorrect / images.Count;

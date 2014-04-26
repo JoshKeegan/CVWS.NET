@@ -21,21 +21,20 @@ namespace QuantitativeEvaluation.Evaluators
 {
     public class WordsearchSolutionEvaluator
     {
-        //Private variables
+        //Public variables
 
         //Note that the following definitions are altered slightly to apply to the context of finding only a single solution for each word, rather than the full set of 
         //  solutions contained in the gold standard data set
-        private int numTruePositive; // Words found in correct positions
-        private int numFalsePositive; // Words found in the wrong position
-        private int numFalseNegative; // Words not found but are in the wordsearch
-        private int numTrueNegative; // Words not in wordsearch
+        public int TruePositive { get; private set; } // Words found in correct positions
+        public int FalsePositive { get; private set; } // Words found in the wrong position
+        public int FalseNegative { get; private set; } // Words not found but are in the wordsearch
+        public int TrueNegative { get; private set; } // Words not in wordsearch
 
-        //Public Variables
         public double Precision
         {
             get
             {
-                return (double)numTruePositive / (numTruePositive + numFalsePositive);
+                return (double)TruePositive / (TruePositive + FalsePositive);
             }
         }
 
@@ -43,7 +42,7 @@ namespace QuantitativeEvaluation.Evaluators
         {
             get
             {
-                return (double)numTruePositive / (numTruePositive + numFalseNegative);
+                return (double)TruePositive / (TruePositive + FalseNegative);
             }
         }
 
@@ -59,17 +58,17 @@ namespace QuantitativeEvaluation.Evaluators
         {
             get
             {
-                return numFalsePositive == 0 && numFalseNegative == 0;
+                return FalsePositive == 0 && FalseNegative == 0;
             }
         }
 
         //Constructor
         public WordsearchSolutionEvaluator(Solution proposedSolution, Dictionary<string, List<WordPosition>> correctSolutions)
         {
-            numTruePositive = 0;
-            numFalsePositive = 0;
-            numFalseNegative = 0;
-            numTrueNegative = 0;
+            TruePositive = 0;
+            FalsePositive = 0;
+            FalseNegative = 0;
+            TrueNegative = 0;
 
             //For each word there was to look for
             foreach(KeyValuePair<string, List<WordPosition>> kvp in correctSolutions)
@@ -96,16 +95,16 @@ namespace QuantitativeEvaluation.Evaluators
 
                         if(inCorrectPosition)
                         {
-                            numTruePositive++;
+                            TruePositive++;
                         }
                         else //Otherwise the proposed solution contains the word in the wrong position (false positive)
                         {
-                            numFalsePositive++;
+                            FalsePositive++;
                         }
                     }
                     else //Otherwise the proposed solution didn't find this word (false negative)
                     {
-                        numFalseNegative++;
+                        FalseNegative++;
                     }
                 }
                 else //Otherwise this word was not in the wordsearch
@@ -113,11 +112,11 @@ namespace QuantitativeEvaluation.Evaluators
                     //Did the proposed solution give a position for this word (false positive)
                     if(proposedSolution.ContainsKey(word))
                     {
-                        numFalsePositive++;
+                        FalsePositive++;
                     }
                     else //Otherwise the proposed solution recognised that this word isn't actually there (true negative)
                     {
-                        numTrueNegative++;
+                        TrueNegative++;
                     }
                 }
             }
@@ -133,7 +132,7 @@ namespace QuantitativeEvaluation.Evaluators
             {
                 return String.Format("Solution Incorrect\nTrue Positives: {0}\nTrue Negatives: {1}\n"
                     + "False Positives: {2}\nFalse Negatives: {3}\nPrecision: {4}\nRecall: {5}\nF-Measure: {6}",
-                    numTruePositive, numTrueNegative, numFalsePositive, numFalseNegative, Precision, Recall, FMeasure);
+                    TruePositive, TrueNegative, FalsePositive, FalseNegative, Precision, Recall, FMeasure);
             }
         }
     }
