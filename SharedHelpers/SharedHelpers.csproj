@@ -120,6 +120,8 @@
     <Compile Include="Maths\Statistics\Percentile.cs" />
     <Compile Include="Maths\Statistics\Stats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WordsearchSolver\Solution.cs" />
+    <Compile Include="WordsearchSolver\WordPosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseObjectExtensions\BaseObjectExtensions.csproj">
