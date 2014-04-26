@@ -20,7 +20,7 @@ using BaseObjectExtensions;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
-    public class SegmentByHistogramThresholdPercentileRankTwoThreshold : SegmentationAlgorithmByStartEndIndices, ISegmentationAlgorithmOnBoolArr
+    public class SegmentByHistogramThresholdPercentileRankTwoThresholds : SegmentationAlgorithmByStartEndIndices, ISegmentationAlgorithmOnBoolArr
     {
         //Constants
         private const double PERCENTILE_EITHER_SIDE = 10;

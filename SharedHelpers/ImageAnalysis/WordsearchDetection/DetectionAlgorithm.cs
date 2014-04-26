@@ -37,9 +37,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchDetection
         //  the Wordsearch Segmentation Algorithm decided as being best in evaluation)
         public static Bitmap ExtractBestWordsearch(Bitmap image)
         {
-            throw new NotImplementedException();
-            //TODO: Change the segmentation algorithm to the one that actually performs best in evaluation
-            SegmentationAlgorithm segAlg = new SegmentByBlobRecognition();
+            //TODO: Change the segmentation algorithm to the one that actually performs best in final evaluation
+            SegmentationAlgorithm segAlg = new SegmentByHistogramThresholdPercentileRankTwoThresholds();
 
             //Just return the Bitmap Image as the coordinates are only really useful during evaluation
             Tuple<List<IntPoint>, Bitmap> bestCandidate = ExtractBestWordsearch(image, segAlg);

@@ -93,7 +93,7 @@
     <Compile Include="Exceptions\UntrainedFeatureExtractionAlgorithmException.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByBlobRecognition.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByHistogramThresholdDarkPixels.cs" />
-    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByHistogramThresholdPercentileRankTwoThreshold.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByHistogramThresholdPercentileRankTwoThresholds.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByMeanDarkPixels.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\Segmentation.cs" />
     <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithm.cs" />
