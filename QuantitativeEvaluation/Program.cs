@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 22/04/2014
+ * Last Edit 26/04/2014
  */
 
 using System;
@@ -206,7 +206,7 @@ namespace QuantitativeEvaluation
 
                 Log.Info("Starting to evaluate Wordsearch Recognition");
 
-                Dictionary<string, double> scores = EvaluateWordsearchRecognition.EvaluateReturnsWordsearch(ImageMarkupDatabase.GetImages());
+                Dictionary<string, double> scores = EvaluateWordsearchDetection.EvaluateReturnsWordsearch(ImageMarkupDatabase.GetImages());
 
                 //Print out scores
                 Log.Info("Scores for Evaluation based on a single wordsearch returned (the best candidate)");

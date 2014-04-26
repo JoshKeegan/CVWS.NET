@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Quantitative Evaluation
- * Evaluate Wordsearch Recognition
+ * Evaluate Wordsearch Detection
  * By Josh Keegan 22/04/2014
+ * Last Edit 26/04/2014
  */
 
 using System;
@@ -16,14 +17,14 @@ using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash 
 using AForge;
 
 using ImageMarkup;
-using SharedHelpers.ImageAnalysis.WordsearchRecognition;
+using SharedHelpers.ImageAnalysis.WordsearchDetection;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
 using SharedHelpers.Maths;
 
 namespace QuantitativeEvaluation
 {
-    internal static class EvaluateWordsearchRecognition
+    internal static class EvaluateWordsearchDetection
     {
         //Evaluate the wordsearch recognition system by checking that for each image it returns one of the wordsearches contained within
         //  (as some images may contain more than one wordsearch)
@@ -71,7 +72,7 @@ namespace QuantitativeEvaluation
                 //Register an interest in the Bitmap of the Image
                 image.RegisterInterestInBitmap();
 
-                Tuple<List<IntPoint>, Bitmap> bestCandidate = RecognitionAlgorithm.ExtractBestWordsearch(image.Bitmap, segAlgorithm);
+                Tuple<List<IntPoint>, Bitmap> bestCandidate = DetectionAlgorithm.ExtractBestWordsearch(image.Bitmap, segAlgorithm);
                 
                 //If we found a valid best candidate
                 if (bestCandidate != null)

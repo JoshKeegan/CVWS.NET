@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Shared Helpers
- * Wordsearch Recognition Algorithm
+ * Wordsearch Detection Algorithm
  * By Josh Keegan 22/04/2014
+ * Last Edit 26/04/2014
  * 
  * Note: This is a static class containing the methods to recognise a wordsearch in an image that is bounded by a rectangle.
  *  This will be used in the final dissertation due to time constraints. If any future work were done in this area, then this
@@ -25,9 +26,9 @@ using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
 using SharedHelpers.Imaging;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchRecognition
+namespace SharedHelpers.ImageAnalysis.WordsearchDetection
 {
-    public static class RecognitionAlgorithm
+    public static class DetectionAlgorithm
     {
         //Constants
         private const double BLOB_MIN_DIMENSION_PERCENTAGE = 10; //min width and height a blob must be in order to be a wordsearch candidate, as a percentage of that dimension of the image

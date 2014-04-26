@@ -3,6 +3,7 @@
  * Shared Helpers
  * Candidate Scorer class - for scoring a wordsearch candidate so that they can be ranked
  * By Josh Keegan 22/04/2014
+ * Last Edit 26/04/2014
  */
 
 using System;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 using SharedHelpers.Maths.Statistics;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchRecognition
+namespace SharedHelpers.ImageAnalysis.WordsearchDetection
 {
     internal class CandidateScorer : Segmentation
     {
