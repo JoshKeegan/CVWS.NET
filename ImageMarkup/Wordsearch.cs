@@ -90,12 +90,6 @@ namespace ImageMarkup
                                 //If this character is the same as the starting character of the word then the word could start here
                                 if(word[0] == Chars[i, j])
                                 {
-                                    //Calculate whether the word could fit in each direction
-                                    /*bool canGoUp = j >= word.Length - 1;
-                                    bool canGoDown = j + word.Length - 1 < Chars.GetLength(1);
-                                    bool canGoLeft = i >= word.Length - 1;
-                                    bool canGoRight = i + word.Length - 1 < Chars.GetLength(0);*/ //Superceded by the easier to follow code below
-
                                     //Calculate the indices it would finish at in each direction
                                     int finishUp = j - word.Length + 1;
                                     int finishDown = j + word.Length - 1;

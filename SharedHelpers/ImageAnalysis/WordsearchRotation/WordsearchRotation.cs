@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using AForge.Imaging.Filters;
 
 using BaseObjectExtensions;
+using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 
 namespace SharedHelpers.ImageAnalysis.WordsearchRotation
 {
@@ -33,6 +34,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
             this.Rows = rows;
             this.Cols = cols;
         }
+
+        //TODO: Constructor taking Segmentation so that segmentations more complex than a simple number of rows & columns can be used
 
         public void Rotate(int angleDeg)
         {

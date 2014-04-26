@@ -3,6 +3,7 @@
  * Shared helpers
  * Neural Network Helpers - functions to help interface with the AForge.NET Neural Networks
  * By Josh Keegan 08/03/2014
+ * Last Edit 26/04/2014
  */
 
 using System;
@@ -66,6 +67,21 @@ namespace SharedHelpers.ClassifierInterfacing
             }
 
             return (char)('A' + maxIdx);
+        }
+
+        public static char[,] GetMostLikelyChars(double[][][] networkOutputs)
+        {
+            char[,] toRet = new char[networkOutputs.Length, networkOutputs[0].Length];
+
+            for(int i = 0; i < networkOutputs.Length; i++) //Col
+            {
+                for(int j = 0; j < networkOutputs[i].Length; j++) //Row
+                {
+                    toRet[i, j] = GetMostLikelyChar(networkOutputs[i][j]);
+                }
+            }
+
+            return toRet;
         }
     }
 }

@@ -121,6 +121,8 @@
     <Compile Include="Maths\Statistics\Stats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WordsearchSolver\Solution.cs" />
+    <Compile Include="WordsearchSolver\Solver.cs" />
+    <Compile Include="WordsearchSolver\SolverNonProbablistic.cs" />
     <Compile Include="WordsearchSolver\WordPosition.cs" />
   </ItemGroup>
   <ItemGroup>

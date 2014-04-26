@@ -36,7 +36,8 @@ namespace QuantitativeEvaluation
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
-        private const bool EVALUATE_WORDSEARCH_RECOGNITION = true;
+        private const bool EVALUATE_WORDSEARCH_RECOGNITION = false;
+        private const bool EVALUATE_FULL_SYSTEM = true;
 
         static void Main(string[] args)
         {
@@ -213,6 +214,20 @@ namespace QuantitativeEvaluation
                 printScores(scores);
 
                 Log.Info("Wordsearch Recognition Evaluation Complete");
+            }
+
+            //If we're evaluating the Full System
+            if(EVALUATE_FULL_SYSTEM)
+            {
+                Log.Info("Starting to Evaluate the Full System");
+
+                Dictionary<string, double> scores = EvaluateFullSystem.Evaluate(ImageMarkupDatabase.GetImages(), trainingWordsearchImages);
+
+                //Print out scores
+                Log.Info("Scores for Evaluation of the Full System");
+                printScores(scores);
+
+                Log.Info("Full System Evaluation Complete");
             }
         }
 

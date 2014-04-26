@@ -60,12 +60,14 @@
   <ItemGroup>
     <Compile Include="CharData.cs" />
     <Compile Include="ConfusionMatrix.cs" />
+    <Compile Include="EvaluateFullSystem.cs" />
     <Compile Include="EvaluateNeuralNetworks.cs" />
-    <Compile Include="EvaluateWordsearchRecognition.cs" />
+    <Compile Include="EvaluateWordsearchDetection.cs" />
     <Compile Include="EvaluateWordsearchRotationCorrection.cs" />
     <Compile Include="EvaluateWordsearchSegmentation.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />
     <Compile Include="Evaluators\NeuralNetworkEvaluator.cs" />
+    <Compile Include="Evaluators\WordsearchSolutionEvaluator.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

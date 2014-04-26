@@ -47,7 +47,7 @@ namespace QuantitativeEvaluation
             scores.Add("BlobRecognition", EvaluateReturnsWordsearch(images, new SegmentByBlobRecognition())); //TODO: Bug here prevents running (bug spotted when whole image was always being returned as blob)
             scores.Add("HistogramThresholdDarkPixels", EvaluateReturnsWordsearch(images, new SegmentByHistogramThresholdDarkPixels()));
             scores.Add("ThresholdDarkPixels", EvaluateReturnsWordsearch(images, new SegmentByThresholdDarkPixels()));
-            scores.Add("HistogramThresholdPercentileRankTwoThresholds", EvaluateReturnsWordsearch(images, new SegmentByHistogramThresholdPercentileRankTwoThreshold()));
+            scores.Add("HistogramThresholdPercentileRankTwoThresholds", EvaluateReturnsWordsearch(images, new SegmentByHistogramThresholdPercentileRankTwoThresholds()));
 
             //Deregsiter an interest in all of the images
             foreach(Image image in images)
@@ -110,102 +110,114 @@ namespace QuantitativeEvaluation
         {
             foreach (WordsearchImage wordsearchImage in image.WordsearchImages)
             {
-                IntPoint[] wordsearchPoints = wordsearchImage.Coordinates;
-
-                //Does the candidate match this wordsearch (allowing for some margin of error so the points needn't be pixel perfect)
-
-                //Margin for error should be an average cell dimension for a wordsearch grid in a circle around each corner of the wordsearch
-                double widthTop = Geometry.EuclideanDistance(wordsearchImage.TopLeft, wordsearchImage.TopRight);
-                double widthBottom = Geometry.EuclideanDistance(wordsearchImage.BottomLeft, wordsearchImage.BottomRight);
-                double avgWidth = (widthTop + widthBottom) / 2;
-                double avgCellWidth = avgWidth / wordsearchImage.Cols;
-
-                double heightLeft = Geometry.EuclideanDistance(wordsearchImage.TopLeft, wordsearchImage.BottomLeft);
-                double heightRight = Geometry.EuclideanDistance(wordsearchImage.TopRight, wordsearchImage.BottomRight);
-                double avgHeight = (heightLeft + heightRight) / 2;
-                double avgCellHeight = avgHeight / wordsearchImage.Rows;
-
-
-                double errorMarginRadius = (avgCellWidth + avgCellHeight) / 2;
-
-                //CandidatePoint => WordsearchPoint
-                List<List<int>> matchedPoints = new List<List<int>>(candidate.Count);
-                for (int i = 0; i < candidate.Count; i++)
-                {
-                    matchedPoints.Add(new List<int>());
-                }
-
-                //For each candidate point, attempt to match each actual wordsearch point, storing the matches
-                bool brokeEarly = false;
-                for (int i = 0; i < candidate.Count; i++)
-                {
-                    for(int j = 0; j < wordsearchPoints.Length; j++)
-                    {
-                        IntPoint candidatePoint = candidate[i];
-                        IntPoint wordsearchPoint = wordsearchPoints[j];
-
-                        double pointDistance = Geometry.EuclideanDistance(candidatePoint, wordsearchPoint);
-
-                        if(pointDistance <= errorMarginRadius)
-                        {
-                            matchedPoints[i].Add(j);
-                        }
-                    }
-
-                    //If there were no wordsearch points that could be matched to this candidate point, fail for this wordsearch
-                    if(matchedPoints[i].Count == 0)
-                    {
-                        brokeEarly = true;
-                        break;
-                    }
-                }
-
-                //If we already know for sure that this isn't a match, continue to the next wordsearch 
-                if(brokeEarly)
-                {
-                    continue;
-                }
-
-                //Each point matched to another, now to check that there is a way for each point to mapped onto a distinct point in the other set
-                List<List<int>> pointMatchCandidates = new List<List<int>>();
-
-                //Initialise the search with the first possible matches
-                foreach(int n in matchedPoints[0])
-                {
-                    List<int> li = new List<int>();
-                    li.Add(n);
-
-                    pointMatchCandidates.Add(li);
-                }
-
-                for(int i = 1; i < matchedPoints.Count; i++)
-                {
-                    List<List<int>> newCandidates = new List<List<int>>();
-                    foreach(int wordsearchPoint in matchedPoints[i])
-                    {
-                        for(int j = 0; j < pointMatchCandidates.Count; j++)
-                        {
-                            //If this branch of the tree doesn't already contain this point, add it as it is a possible next branch to a solution
-                            if(!pointMatchCandidates[j].Contains(wordsearchPoint))
-                            {
-                                List<int> copied = copy(pointMatchCandidates[j]);
-                                copied.Add(wordsearchPoint);
-                                newCandidates.Add(copied);
-                            }
-                        }
-                    }
-                    //Update the list of candidates
-                    pointMatchCandidates = newCandidates;
-                }
-
-                //If we are left with any solutions, then the candidate matches the wordsearch
-                if(pointMatchCandidates.Count > 0)
+                if(IsWordsearch(candidate, wordsearchImage))
                 {
                     return true;
                 }
             }
             //Didn't match any wordsearches
             return false;
+        }
+
+        internal static bool IsWordsearch(List<IntPoint> candidate, WordsearchImage wordsearchImage)
+        {
+            IntPoint[] wordsearchPoints = wordsearchImage.Coordinates;
+
+            //Does the candidate match this wordsearch (allowing for some margin of error so the points needn't be pixel perfect)
+
+            //Margin for error should be an average cell dimension for a wordsearch grid in a circle around each corner of the wordsearch
+            double widthTop = Geometry.EuclideanDistance(wordsearchImage.TopLeft, wordsearchImage.TopRight);
+            double widthBottom = Geometry.EuclideanDistance(wordsearchImage.BottomLeft, wordsearchImage.BottomRight);
+            double avgWidth = (widthTop + widthBottom) / 2;
+            double avgCellWidth = avgWidth / wordsearchImage.Cols;
+
+            double heightLeft = Geometry.EuclideanDistance(wordsearchImage.TopLeft, wordsearchImage.BottomLeft);
+            double heightRight = Geometry.EuclideanDistance(wordsearchImage.TopRight, wordsearchImage.BottomRight);
+            double avgHeight = (heightLeft + heightRight) / 2;
+            double avgCellHeight = avgHeight / wordsearchImage.Rows;
+
+
+            double errorMarginRadius = (avgCellWidth + avgCellHeight) / 2;
+
+            //CandidatePoint => WordsearchPoint
+            List<List<int>> matchedPoints = new List<List<int>>(candidate.Count);
+            for (int i = 0; i < candidate.Count; i++)
+            {
+                matchedPoints.Add(new List<int>());
+            }
+
+            //For each candidate point, attempt to match each actual wordsearch point, storing the matches
+            bool brokeEarly = false;
+            for (int i = 0; i < candidate.Count; i++)
+            {
+                for (int j = 0; j < wordsearchPoints.Length; j++)
+                {
+                    IntPoint candidatePoint = candidate[i];
+                    IntPoint wordsearchPoint = wordsearchPoints[j];
+
+                    double pointDistance = Geometry.EuclideanDistance(candidatePoint, wordsearchPoint);
+
+                    if (pointDistance <= errorMarginRadius)
+                    {
+                        matchedPoints[i].Add(j);
+                    }
+                }
+
+                //If there were no wordsearch points that could be matched to this candidate point, fail for this wordsearch
+                if (matchedPoints[i].Count == 0)
+                {
+                    brokeEarly = true;
+                    break;
+                }
+            }
+
+            //If we already know for sure that this isn't a match, continue to the next wordsearch 
+            if (brokeEarly)
+            {
+                return false;
+            }
+
+            //Each point matched to another, now to check that there is a way for each point to mapped onto a distinct point in the other set
+            List<List<int>> pointMatchCandidates = new List<List<int>>();
+
+            //Initialise the search with the first possible matches
+            foreach (int n in matchedPoints[0])
+            {
+                List<int> li = new List<int>();
+                li.Add(n);
+
+                pointMatchCandidates.Add(li);
+            }
+
+            for (int i = 1; i < matchedPoints.Count; i++)
+            {
+                List<List<int>> newCandidates = new List<List<int>>();
+                foreach (int wordsearchPoint in matchedPoints[i])
+                {
+                    for (int j = 0; j < pointMatchCandidates.Count; j++)
+                    {
+                        //If this branch of the tree doesn't already contain this point, add it as it is a possible next branch to a solution
+                        if (!pointMatchCandidates[j].Contains(wordsearchPoint))
+                        {
+                            List<int> copied = copy(pointMatchCandidates[j]);
+                            copied.Add(wordsearchPoint);
+                            newCandidates.Add(copied);
+                        }
+                    }
+                }
+                //Update the list of candidates
+                pointMatchCandidates = newCandidates;
+            }
+
+            //If we are left with any solutions, then the candidate matches the wordsearch
+            if (pointMatchCandidates.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private static List<int> copy(List<int> list)

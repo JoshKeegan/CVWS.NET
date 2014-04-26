@@ -37,5 +37,13 @@ namespace SharedHelpers.WordsearchSolver
             this.EndCol = endCol;
             this.EndRow = endRow;
         }
+
+        public bool Equals(WordPosition wordPosition)
+        {
+            return StartCol == wordPosition.StartCol &&
+                StartRow == wordPosition.StartRow &&
+                EndCol == wordPosition.EndCol &&
+                EndRow == wordPosition.EndRow;
+        }
     }
 }
