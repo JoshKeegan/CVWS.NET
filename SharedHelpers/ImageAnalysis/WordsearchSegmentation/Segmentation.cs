@@ -68,7 +68,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 throw new InvalidImageDimensionsException("Image dimensions must be positive");
             }
 
-            //TODO: Validation: each row & col must be less than height & width respectively (and also positive)
+            //Validation: each row & col must be less than height & width respectively (and also positive)
             foreach(int row in rows)
             {
                 if(row >= height || row < 0)
