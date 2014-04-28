@@ -627,5 +627,72 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             CollectionAssert.AreEqual(expectedRows, rows);
             CollectionAssert.AreEqual(expectedCols, cols);
         }
+
+        /*
+         * Test Rotate
+         */
+        [TestMethod]
+        public void TestRotate1()
+        {
+            //Basic test - gives expected output for a rotation through 90 degrees
+            int[] rows = { 1, 2, 4 };
+            int[] cols = { 2, 7, 11 };
+            int width = 20;
+            int height = 5;
+
+            Segmentation s = new Segmentation(rows, cols, width, height);
+
+            int[] expectedRows = { 2, 7, 11 };
+            int[] expectedCols = { 0, 2, 3 };
+
+            s.Rotate(90);
+
+            CollectionAssert.AreEqual(expectedRows, s.Rows);
+            CollectionAssert.AreEqual(expectedCols, s.Cols);
+        }
+
+        [TestMethod]
+        public void TestRotate2()
+        {
+            //Check a rotation returns back to itself when rotated 360 deg
+            int[] rows = { 324, 563463, 43543212 };
+            int[] cols = { 5 };
+
+            int width = 6;
+            int height = int.MaxValue;
+
+            Segmentation s = new Segmentation(rows, cols, width, height);
+
+            s.Rotate(360);
+
+            int[] expectedRows = { 324, 563463, 43543212 };
+            int[] expectedCols = { 5 };
+
+            CollectionAssert.AreEqual(expectedRows, rows);
+            CollectionAssert.AreEqual(expectedCols, cols);
+        }
+
+        [TestMethod]
+        public void TestRotate3()
+        {
+            //Check that rotations can only take place around 90 degrees
+            Segmentation s = new Segmentation(10, 10, 20, 20);
+
+            try
+            {
+                s.Rotate(5);
+                //No Exception: Fail
+                Assert.Fail();
+            }
+            catch(ArgumentException)
+            {
+                //Correct exception: Pass
+            }
+            catch(Exception)
+            {
+                //Wrong type of exception: Fail
+                Assert.Fail();
+            }
+        }
     }
 }

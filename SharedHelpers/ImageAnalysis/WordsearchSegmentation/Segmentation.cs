@@ -293,5 +293,20 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 colStartEnds = reversedRowStartEnds;
             }
         }
+
+        public void Rotate(int angleDeg)
+        {
+            //Validation: Check that we've been asked to rotate through a multiple of 90 deg
+            if (angleDeg % 90 != 0)
+            {
+                throw new ArgumentException("angleDeg must be a multiple of 90");
+            }
+
+            int numRotations = (angleDeg % 360) / 90; //Modulo 360 to prevent unnecessary rotations for angles of more than 360 deg
+            for(int i = 0; i < numRotations; i++)
+            {
+                Rotate90();
+            }
+        }
     }
 }
