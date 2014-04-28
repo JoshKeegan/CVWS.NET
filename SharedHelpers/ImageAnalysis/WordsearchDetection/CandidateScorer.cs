@@ -3,7 +3,7 @@
  * Shared Helpers
  * Candidate Scorer class - for scoring a wordsearch candidate so that they can be ranked
  * By Josh Keegan 22/04/2014
- * Last Edit 26/04/2014
+ * Last Edit 28/04/2014
  */
 
 using System;
@@ -47,12 +47,12 @@ namespace SharedHelpers.ImageAnalysis.WordsearchDetection
         private void calculateWordsearchRecognitionScore()
         {
             //If we have the start & end positions of the rows and cols
-            if (rowStartEnds != null && colStartEnds != null && width != null && height != null)
+            if (rowStartEnds != null && colStartEnds != null)
             {
                 calculateWordsearchRecognitionScoreByStartAndEndPositions();
             }
             //Else if Segmentation was constructed by the number of rows and cols
-            else if(numRows != null && numCols != null && width != null && height != null)
+            else if(numRows != null && numCols != null)
             {
                 //Not really sure how this scenario could be scored
                 throw new NotImplementedException("Don't currently support wordsearch candidate scoring by num rows and cols (and cannot think of a way for this to even be possible)");

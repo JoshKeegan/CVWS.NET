@@ -1,9 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Unit Tests
- * SharedHelpers.ImageAnalysis.WordsearchSegmentation.WordsearchSegmentation Tests
+ * SharedHelpers.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
  * By Josh Keegan 02/04/2014
- * Last Edit 03/04/2014
+ * Last Edit 28/04/2014
  */
 
 using System;
@@ -26,7 +26,7 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             //Basic Tests
             int[] rows = { 1, 2, 3, 67, 12 };
             int[] cols = { 89, 5, 4 };
-            Segmentation segmentation = new Segmentation(rows, cols);
+            Segmentation segmentation = new Segmentation(rows, cols, 90, 68);
             CollectionAssert.AreEqual(rows, segmentation.Rows);
             CollectionAssert.AreEqual(cols, segmentation.Cols);
         }
@@ -562,7 +562,7 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             int[] rows = { };
             int[] cols = { 1 };
 
-            Segmentation s = new Segmentation(rows, cols);
+            Segmentation s = new Segmentation(rows, cols, 2, 2);
 
             Assert.AreEqual(1, s.NumRows);
         }
@@ -576,9 +576,56 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             int[] rows = { };
             int[] cols = { 1 };
 
-            Segmentation s = new Segmentation(rows, cols);
+            Segmentation s = new Segmentation(rows, cols, 2, 2);
 
             Assert.AreEqual(2, s.NumCols);
+        }
+
+        /*
+         * Test Rotate90
+         */
+        [TestMethod]
+        public void TestRotate901()
+        {
+            //Basic test - gives expected output
+            int[] rows = { 1, 2, 4 };
+            int[] cols = { 2, 7, 11 };
+            int width = 20;
+            int height = 5;
+
+            Segmentation s = new Segmentation(rows, cols, width, height);
+
+            int[] expectedRows = { 2, 7, 11 };
+            int[] expectedCols = { 0, 2, 3 };
+
+            s.Rotate90();
+
+            CollectionAssert.AreEqual(expectedRows, s.Rows);
+            CollectionAssert.AreEqual(expectedCols, s.Cols);
+        }
+
+        [TestMethod]
+        public void TestRotate902()
+        {
+            //Check a rotation returns back to itself when rotated 360 deg
+            int[] rows = { 324, 563463, 43543212 };
+            int[] cols = { 5 };
+
+            int width = 6;
+            int height = int.MaxValue;
+
+            Segmentation s = new Segmentation(rows, cols, width, height);
+
+            s.Rotate90();
+            s.Rotate90();
+            s.Rotate90();
+            s.Rotate90();
+
+            int[] expectedRows = { 324, 563463, 43543212 };
+            int[] expectedCols = { 5 };
+
+            CollectionAssert.AreEqual(expectedRows, rows);
+            CollectionAssert.AreEqual(expectedCols, cols);
         }
     }
 }

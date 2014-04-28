@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation - class to hold the indices that split rows & cols
  * By Josh Keegan 02/04/2014
- * Last Edit 22/04/2014
+ * Last Edit 28/04/2014
  */
 
 using System;
@@ -19,8 +19,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
     public class Segmentation
     {
         //Protected vars (used for Wordsearch Recognition candidate scoring)
-        protected int? width = null;
-        protected int? height = null;
+        protected int width;
+        protected int height;
 
         protected int? numCols = null;
         protected int? numRows = null;
@@ -61,8 +61,18 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             this.Cols = copy.Cols;
         }
 
-        public Segmentation(int[] rows, int[] cols)
+        public Segmentation(int[] rows, int[] cols, int width, int height)
         {
+            //Validation: width & height must be >= 0
+            if (width < 0 || height < 0)
+            {
+                throw new InvalidImageDimensionsException("Image dimensions must be positive");
+            }
+
+            //Store the raw input to the constructor
+            this.width = width;
+            this.height = height;
+
             this.Cols = cols;
             this.Rows = rows;
         }
@@ -87,7 +97,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             this.width = width;
             this.height = height;
 
-            //Comvert num. of rows & cols to incices
+            //Convert num. of rows & cols to incices
             //Cols
             double colWidth = (double)width / numCols;
             int[] cols = new int[numCols - 1];
@@ -235,6 +245,53 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
 
             this.Rows = rowSplits;
             this.Cols = colSplits;
+        }
+
+        //Public Methods
+        public void Rotate90()
+        {
+            //When rotating 90 deg, the col order is maintained, but row order gets reversed:
+            int[] reversedRows = new int[Rows.Length];
+
+            for(int i = 0; i < Rows.Length; i++)
+            {
+                reversedRows[reversedRows.Length - 1 - i] = height - 1 - Rows[i]; //height - 1 because bitmaps are zero indexed
+            }
+
+            //Swap rows & cols
+            Rows = Cols;
+            Cols = reversedRows;
+
+            //Swap width & height
+            int intTemp = width;
+            width = height;
+            height = intTemp;
+
+            //If we have the number of rows & number of cols stored explicitly, swap them
+            if(numRows != null && numCols != null)
+            {
+                int? nullIntTemp = numRows;
+                numRows = numCols;
+                numCols = nullIntTemp;
+            }
+
+            //If the have the row & col start & end points stored, swap them
+            if(rowStartEnds != null && colStartEnds != null)
+            {
+                //When rotating 90 deg, the col order is maintained, but row order gets reversed:
+                int[,] reversedRowStartEnds = new int[rowStartEnds.GetLength(0), rowStartEnds.GetLength(1)];
+
+                for(int i = 0; i < rowStartEnds.GetLength(0); i++)
+                {
+                    //Swap the start & end
+                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 0] = height - 1 - rowStartEnds[i, 1];
+                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 1] = height = 1 - rowStartEnds[i, 0];
+                }
+
+                //Swap rows & cols
+                rowStartEnds = colStartEnds;
+                colStartEnds = reversedRowStartEnds;
+            }
         }
     }
 }
