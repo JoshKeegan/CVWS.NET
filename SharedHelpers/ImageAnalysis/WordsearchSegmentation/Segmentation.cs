@@ -19,9 +19,6 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
     public class Segmentation
     {
         //Protected vars (used for Wordsearch Recognition candidate scoring)
-        protected int width;
-        protected int height;
-
         protected int? numCols = null;
         protected int? numRows = null;
 
@@ -29,6 +26,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
         protected int[,] colStartEnds = null;
 
         //Public vars
+        public int Width { get; private set; }
+        public int Height { get; private set; }
         public int[] Rows { get; private set; } // The indices splitting rows/cols
         public int[] Cols { get; private set; }
 
@@ -51,8 +50,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
         //Constructors
         protected Segmentation(Segmentation copy)
         {
-            this.width = copy.width;
-            this.height = copy.height;
+            this.Width = copy.Width;
+            this.Height = copy.Height;
             this.numCols = copy.numCols;
             this.numRows = copy.numRows;
             this.rowStartEnds = copy.rowStartEnds;
@@ -69,9 +68,25 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 throw new InvalidImageDimensionsException("Image dimensions must be positive");
             }
 
+            //TODO: Validation: each row & col must be less than height & width respectively (and also positive)
+            foreach(int row in rows)
+            {
+                if(row >= height || row < 0)
+                {
+                    throw new InvalidRowsAndColsException("Row indices must be positive and less than image height to be valid");
+                }
+            }
+            foreach(int col in cols)
+            {
+                if(col >= width || col < 0)
+                {
+                    throw new InvalidRowsAndColsException("Col indices must be positive and less than image width to be valid");
+                }
+            }
+
             //Store the raw input to the constructor
-            this.width = width;
-            this.height = height;
+            this.Width = width;
+            this.Height = height;
 
             this.Cols = cols;
             this.Rows = rows;
@@ -94,8 +109,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             //Store the raw input to the constructor
             this.numRows = numRows;
             this.numCols = numCols;
-            this.width = width;
-            this.height = height;
+            this.Width = width;
+            this.Height = height;
 
             //Convert num. of rows & cols to incices
             //Cols
@@ -210,8 +225,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             //Store the raw input to the constructor
             this.rowStartEnds = rows;
             this.colStartEnds = cols;
-            this.width = width;
-            this.height = height;
+            this.Width = width;
+            this.Height = height;
 
             //Convert row/col start & end indices into indices splitting them by finding the mid-point between the end of one & start of the next
             int[] rowSplits = new int[rows.GetLength(0) - 1];
@@ -255,7 +270,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
 
             for(int i = 0; i < Rows.Length; i++)
             {
-                reversedRows[reversedRows.Length - 1 - i] = height - 1 - Rows[i]; //height - 1 because bitmaps are zero indexed
+                reversedRows[reversedRows.Length - 1 - i] = Height - 1 - Rows[i]; //height - 1 because bitmaps are zero indexed
             }
 
             //Swap rows & cols
@@ -263,9 +278,9 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             Cols = reversedRows;
 
             //Swap width & height
-            int intTemp = width;
-            width = height;
-            height = intTemp;
+            int intTemp = Width;
+            Width = Height;
+            Height = intTemp;
 
             //If we have the number of rows & number of cols stored explicitly, swap them
             if(numRows != null && numCols != null)
@@ -284,8 +299,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 for(int i = 0; i < rowStartEnds.GetLength(0); i++)
                 {
                     //Swap the start & end
-                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 0] = height - 1 - rowStartEnds[i, 1];
-                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 1] = height = 1 - rowStartEnds[i, 0];
+                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 0] = Height - 1 - rowStartEnds[i, 1];
+                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 1] = Height = 1 - rowStartEnds[i, 0];
                 }
 
                 //Swap rows & cols
