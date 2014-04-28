@@ -3,7 +3,7 @@
  * Shared Helpers
  * Split Image class - methods for splitting an image up into a collection of smaller images
  * By Josh Keegan 06/03/2014
- * Last Edit 26/03/2014
+ * Last Edit 28/04/2014
  */
 
 using System;
@@ -18,6 +18,7 @@ using AForge.Imaging;
 
 using BaseObjectExtensions;
 using SharedHelpers.Exceptions;
+using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 
 namespace SharedHelpers.Imaging
 {
@@ -82,6 +83,74 @@ namespace SharedHelpers.Imaging
                                 for(int k = 0; k < bytesPerPixel; k++)
                                 {
                                     ptrCharData[charOffset + k] = ptrImgData[imgOffset + k];
+                                }
+                            }
+                        }
+
+                        charBitmap.UnlockBits(charData);
+                        chars[col, row] = charBitmap;
+                    }
+                }
+            }
+
+            img.UnlockBits(imgData);
+
+            return chars;
+        }
+
+        public static Bitmap[,] Segment(Bitmap img, Segmentation segmentation)
+        {
+            //Validation: Check that the Bitmap has the dimensions listed in the Segmentation
+            if(img.Width != segmentation.Width || img.Height != segmentation.Height)
+            {
+                throw new ArgumentException("Bitmap dimensions must match Segmentation dimensions");
+            }
+
+            //Determine the number of Bytes Per pixel in this image
+            int bytesPerPixel = img.GetBitsPerPixel() / 8;
+
+            Bitmap[,] chars = new Bitmap[segmentation.NumCols, segmentation.NumRows];
+
+            //Lock the image for read so we can access it with pointers
+            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.ReadOnly, img.PixelFormat);
+
+            unsafe
+            {
+                byte* ptrImageData = (byte*)imgData.Scan0;
+
+                for (int col = 0; col < chars.GetLength(0); col++)
+                {
+                    for(int row = 0; row < chars.GetLength(1); row++)
+                    {
+                        //Get the start & end indices of this char based on the segmentation points
+                        int colStart = col == 0 ? 0 : segmentation.Cols[col - 1]; //If this is the first col, it starts at zero. Otherwise where the previous col ended
+                        int colEnd = col == chars.GetLength(0) - 1 ? segmentation.Width - 1 : segmentation.Cols[col]; //If this is the last col, ends at width. Otherwise at the segmentation index
+
+                        int rowStart = row == 0 ? 0 : segmentation.Rows[row - 1]; //If this is the first row, it starts at zero. Otherwise where the previous row ended
+                        int rowEnd = row == chars.GetLength(1) - 1 ? segmentation.Height - 1 : segmentation.Rows[row]; //If this is the last row, ends at height. Otherwise at the segmentation index
+
+                        //Make a new Bitmap to hold the char
+                        Bitmap charBitmap = new Bitmap(colEnd + 1 - colStart, rowEnd + 1 - rowStart, img.PixelFormat);
+
+                        //Lock image for write so we can write to it
+                        BitmapData charData = charBitmap.LockBits(new Rectangle(0, 0, charBitmap.Width, charBitmap.Height),
+                            ImageLockMode.WriteOnly, charBitmap.PixelFormat);
+
+                        byte* ptrCharData = (byte*)charData.Scan0;
+
+                        //Loop over each pixel in this char to be extracted
+                        for(int pxCol = colStart; pxCol <= colEnd; pxCol++)
+                        {
+                            for(int pxRow = rowStart; pxRow <= rowEnd; pxRow++)
+                            {
+                                int imgOffset = (pxRow * imgData.Stride) + (pxCol * bytesPerPixel);
+                                int charOffset = ((pxRow - rowStart) * charData.Stride) + ((pxCol - colStart) * bytesPerPixel);
+
+                                //Copy the bytes for this pixel
+                                for(int i = 0; i < bytesPerPixel; i++)
+                                {
+                                    ptrCharData[charOffset + i] = ptrImageData[imgOffset + i];
                                 }
                             }
                         }
