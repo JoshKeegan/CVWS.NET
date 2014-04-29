@@ -5,7 +5,7 @@
  *  When you rotate a wordsearch image 90 deg, the rows and cols will swap
  *  This class exists to encapsulate this behaviour
  * By Josh Keegan 25/03/2014
- * Last Edit 28/04/2014
+ * Last Edit 29/04/2014
  */
 
 using System;
@@ -118,7 +118,15 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
 
         public WordsearchRotation DeepCopy()
         {
-            return new WordsearchRotation(Bitmap.DeepCopy(), Rows, Cols);
+            //If this WordsearchRotation works on rows & cols, use them
+            if(rows != null & cols != null)
+            {
+                return new WordsearchRotation(Bitmap.DeepCopy(), Rows, Cols);
+            }
+            else //Otherwise, it works with a Segmentation object
+            {
+                return new WordsearchRotation(Bitmap.DeepCopy(), Segmentation.DeepCopy());
+            }
         }
     }
 }

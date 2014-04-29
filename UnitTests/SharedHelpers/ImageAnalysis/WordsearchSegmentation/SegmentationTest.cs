@@ -3,7 +3,7 @@
  * Unit Tests
  * SharedHelpers.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
  * By Josh Keegan 02/04/2014
- * Last Edit 28/04/2014
+ * Last Edit 29/04/2014
  */
 
 using System;
@@ -848,6 +848,46 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 //Wrong type of exception: Fail
                 Assert.Fail();
             }
+        }
+
+        /*
+         * Test DeepCopy
+         */
+        [TestMethod]
+        public void TestDeepCopy1()
+        {
+            //Basic test
+            int[] rows = { 1, 2, 3, 67, 12 };
+            int[] cols = { 89, 5, 4 };
+            int width = 90;
+            int height = 68;
+            Segmentation orig = new Segmentation(rows, cols, width, height);
+            Segmentation clone = orig.DeepCopy();
+
+            CollectionAssert.AreEqual(orig.Rows, clone.Rows);
+            CollectionAssert.AreEqual(orig.Cols, clone.Cols);
+            Assert.AreEqual(orig.Width, clone.Width);
+            Assert.AreEqual(orig.Height, clone.Height);
+        }
+
+        [TestMethod]
+        public void TestDeepCopy2()
+        {
+            //Test the copy is actually deep
+            int[] rows = { 1, 2, 3, 67, 12 };
+            int[] cols = { 89, 5, 4 };
+            int width = 90;
+            int height = 68;
+            Segmentation orig = new Segmentation(rows, cols, width, height);
+            Segmentation clone = orig.DeepCopy();
+
+            //Rotating through 90 deg changes all of the supplied parameters
+            orig.Rotate90();
+
+            CollectionAssert.AreEqual(new int[] { 1, 2, 3, 67, 12 }, clone.Rows);
+            CollectionAssert.AreEqual(new int[] { 89, 5, 4 }, clone.Cols);
+            Assert.AreEqual(width, clone.Width);
+            Assert.AreEqual(height, clone.Height);
         }
     }
 }

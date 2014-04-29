@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation - class to hold the indices that split rows & cols
  * By Josh Keegan 02/04/2014
- * Last Edit 28/04/2014
+ * Last Edit 29/04/2014
  */
 
 using System;
@@ -322,6 +322,28 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             {
                 Rotate90();
             }
+        }
+
+        public Segmentation DeepCopy()
+        {
+            //Deep copy of object, but shallow for object values
+            Segmentation copy = new Segmentation(this);
+
+            //Deep copy object values
+            copy.Rows = (int[])copy.Rows.Clone();
+            copy.Cols = (int[])copy.Cols.Clone();
+
+            if(copy.rowStartEnds != null)
+            {
+                copy.rowStartEnds = (int[,])copy.rowStartEnds.Clone();
+            }
+            if(copy.colStartEnds != null)
+            {
+                copy.colStartEnds = (int[,])copy.colStartEnds.Clone();
+            }
+           
+
+            return copy;
         }
     }
 }
