@@ -277,11 +277,6 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             Rows = Cols;
             Cols = reversedRows;
 
-            //Swap width & height
-            int intTemp = Width;
-            Width = Height;
-            Height = intTemp;
-
             //If we have the number of rows & number of cols stored explicitly, swap them
             if(numRows != null && numCols != null)
             {
@@ -300,13 +295,18 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 {
                     //Swap the start & end
                     reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 0] = Height - 1 - rowStartEnds[i, 1];
-                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 1] = Height = 1 - rowStartEnds[i, 0];
+                    reversedRowStartEnds[reversedRowStartEnds.GetLength(0) - 1 - i, 1] = Height - 1 - rowStartEnds[i, 0];
                 }
 
                 //Swap rows & cols
                 rowStartEnds = colStartEnds;
                 colStartEnds = reversedRowStartEnds;
             }
+
+            //Swap width & height
+            int intTemp = Width;
+            Width = Height;
+            Height = intTemp;
         }
 
         public void Rotate(int angleDeg)

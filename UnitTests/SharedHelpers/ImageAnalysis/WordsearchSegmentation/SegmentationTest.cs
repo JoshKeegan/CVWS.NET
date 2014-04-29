@@ -752,11 +752,15 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
 
             int[] expectedRows = { 2, 7, 11 };
             int[] expectedCols = { 0, 2, 3 };
+            int expectedWidth = 5;
+            int expectedHeight = 20;
 
             s.Rotate90();
 
             CollectionAssert.AreEqual(expectedRows, s.Rows);
             CollectionAssert.AreEqual(expectedCols, s.Cols);
+            Assert.AreEqual(expectedWidth, s.Width);
+            Assert.AreEqual(expectedHeight, s.Height);
         }
 
         [TestMethod]
@@ -778,9 +782,13 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
 
             int[] expectedRows = { 324, 563463, 43543212 };
             int[] expectedCols = { 5 };
+            int expectedWidth = 6;
+            int expectedHeight = int.MaxValue;
 
             CollectionAssert.AreEqual(expectedRows, rows);
             CollectionAssert.AreEqual(expectedCols, cols);
+            Assert.AreEqual(expectedWidth, s.Width);
+            Assert.AreEqual(expectedHeight, s.Height);
         }
 
         /*
@@ -799,11 +807,15 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
 
             int[] expectedRows = { 2, 7, 11 };
             int[] expectedCols = { 0, 2, 3 };
+            int expectedWidth = 5;
+            int expectedHeight = 20;
 
             s.Rotate(90);
 
             CollectionAssert.AreEqual(expectedRows, s.Rows);
             CollectionAssert.AreEqual(expectedCols, s.Cols);
+            Assert.AreEqual(expectedWidth, s.Width);
+            Assert.AreEqual(expectedHeight, s.Height);
         }
 
         [TestMethod]
@@ -822,9 +834,13 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
 
             int[] expectedRows = { 324, 563463, 43543212 };
             int[] expectedCols = { 5 };
+            int expectedWidth = 6;
+            int expectedHeight = int.MaxValue;
 
             CollectionAssert.AreEqual(expectedRows, rows);
             CollectionAssert.AreEqual(expectedCols, cols);
+            Assert.AreEqual(expectedWidth, s.Width);
+            Assert.AreEqual(expectedHeight, s.Height);
         }
 
         [TestMethod]
@@ -848,6 +864,30 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 //Wrong type of exception: Fail
                 Assert.Fail();
             }
+        }
+
+        [TestMethod]
+        public void TestRotate4()
+        {
+            //Test rotating 180 deg
+            int[] rows = { 1, 2, 4 };
+            int[] cols = { 2, 7, 11 };
+            int width = 25;
+            int height = 15;
+
+            Segmentation s = new Segmentation(rows, cols, width, height);
+
+            int[] expectedRows = { 10, 12, 13 };
+            int[] expectedCols = { 13, 17, 22 };
+            int expectedWidth = 25;
+            int expectedHeight = 15;
+
+            s.Rotate(180);
+
+            CollectionAssert.AreEqual(expectedRows, s.Rows);
+            CollectionAssert.AreEqual(expectedCols, s.Cols);
+            Assert.AreEqual(expectedWidth, s.Width);
+            Assert.AreEqual(expectedHeight, s.Height);
         }
 
         /*
