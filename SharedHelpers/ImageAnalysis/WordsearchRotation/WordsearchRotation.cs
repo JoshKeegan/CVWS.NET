@@ -76,9 +76,10 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
         public WordsearchRotation(Bitmap bitmap, Segmentation segmentation)
         {
             this.Bitmap = bitmap;
+            this.Segmentation = segmentation;
         }
 
-        //TODO: Constructor taking Segmentation so that segmentations more complex than a simple number of rows & columns can be used
+        //Public Methods
 
         public void Rotate(int angleDeg)
         {
@@ -119,7 +120,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
         public WordsearchRotation DeepCopy()
         {
             //If this WordsearchRotation works on rows & cols, use them
-            if(rows != null & cols != null)
+            if(rows != null && cols != null)
             {
                 return new WordsearchRotation(Bitmap.DeepCopy(), Rows, Cols);
             }
