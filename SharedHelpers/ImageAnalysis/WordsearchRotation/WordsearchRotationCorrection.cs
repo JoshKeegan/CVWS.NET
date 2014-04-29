@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Rotation Correction class - takes an image containing just a Wordsearch and returns it in it's correct orientation
  * By Josh Keegan 25/03/2014
- * Last Edit 02/04/2014
+ * Last Edit 29/04/2014
  */
 
 using System;
@@ -41,7 +41,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
             int bestIdx = -1;
             for(int i = 0; i < rotations.Length; i++)
             {
-                double score = scoreBitmap(rotations[i].Bitmap, rotations[i].Rows, rotations[i].Cols, classifier);
+                double score = scoreBitmap(rotations[i], classifier);
 
                 if(score > bestScore)
                 {
@@ -62,20 +62,35 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
             return rotations[bestIdx];
         }
 
-        private static double scoreBitmap(Bitmap imgIn, int rows, int cols, Classifier classifier)
+        private static double scoreBitmap(WordsearchRotation rotation, Classifier classifier)
         {
             //Extract each charcater in this wordsearch, then run them through the classifier and sum the liklihoods of 
             //  the most probable class to determine an overall score for the image
+            Bitmap[,] chars = null;
 
-            //Use standardised width & height for characters (do this by first resizing the image)
-            int wordsearchWidth = Constants.CHAR_WITH_WHITESPACE_WIDTH * cols;
-            int wordsearchHeight = Constants.CHAR_WITH_WHITESPACE_HEIGHT * rows;
+            //If using number of rows & cols for a fixed row/col width/height
+            if(rotation.Segmentation == null)
+            {
+                //Use standardised width & height for characters (do this by first resizing the image)
+                int wordsearchWidth = Constants.CHAR_WITH_WHITESPACE_WIDTH * rotation.Cols;
+                int wordsearchHeight = Constants.CHAR_WITH_WHITESPACE_HEIGHT * rotation.Rows;
 
-            ResizeBicubic resize = new ResizeBicubic(wordsearchWidth, wordsearchHeight);
-            Bitmap resizedImg = resize.Apply(imgIn);
+                ResizeBicubic resize = new ResizeBicubic(wordsearchWidth, wordsearchHeight);
+                Bitmap resizedImg = resize.Apply(rotation.Bitmap);
 
-            //Split the bitmap up into a 2D array of bitmaps
-            Bitmap[,] chars = SplitImage.Grid(resizedImg, rows, cols);
+                //Split the bitmap up into a 2D array of bitmaps
+                chars = SplitImage.Grid(resizedImg, rotation.Rows, rotation.Cols);
+
+                //If the image got resized, dispose of the resized copy
+                if(resizedImg != rotation.Bitmap)
+                {
+                    resizedImg.Dispose();
+                }
+            }
+            else //Otherwise we have a Segmentation object to use
+            {
+                chars = SplitImage.Segment(rotation.Bitmap, rotation.Segmentation);
+            }
 
             double score = 0;
             foreach(Bitmap charImg in chars)

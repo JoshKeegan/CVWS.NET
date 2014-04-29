@@ -71,6 +71,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
             this.Bitmap = bitmap;
             this.rows = rows;
             this.cols = cols;
+            this.Segmentation = null;
         }
 
         public WordsearchRotation(Bitmap bitmap, Segmentation segmentation)
