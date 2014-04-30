@@ -3,7 +3,7 @@
  * Unit Tests
  * SharedHelpers.Maths.Geometry Tests
  * By Josh Keegan 05/03/2014
- * Last Edit 08/03/2014
+ * Last Edit 30/04/2014
  */
 
 using System;
@@ -68,7 +68,7 @@ namespace UnitTests.SharedHelpers.Maths
         }
 
         [TestMethod]
-        public void TestQuclideanDistance5()
+        public void TestEuclideanDistance5()
         {
             //0 distance / points equal
             IntPoint a = new IntPoint(0, 0);
