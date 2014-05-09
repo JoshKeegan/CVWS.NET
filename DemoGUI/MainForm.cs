@@ -117,6 +117,10 @@ namespace DemoGUI
                 currentBitmap = null;
             }
 
+            //Clear everthing that is set on a per-file basis
+            clearImageLog();
+            //TODO: Add more fields to be cleared here as they get added/used
+
             //If there is a selected file & a selected directory
             if(listViewFiles.SelectedItems.Count == 1 && currentDirectory != null)
             {
@@ -173,14 +177,28 @@ namespace DemoGUI
             //Clear the currently displayed image
             pictureBox.Image = null;
 
+            //Clear everything related to the image log
+            clearImageLog();
+
+            //Clear the File List View
+            listViewFiles.Items.Clear();
+
+            //Clear the Text Log
+            txtLog.Text = "";
+
+            //TODO: Clear the status strip
+        }
+
+        private void clearImageLog()
+        {
             //Dispose of all of the Bitmaps on the Image Log (to prevent memory leaks). 
             //  Do not dispose of the current Bitmap (so that it doesn't have to be loaded again
             //  if we're going to run another algorithm on it)
-            if(imageLog != null)
+            if (imageLog != null)
             {
-                foreach(Bitmap img in imageLog.Values)
+                foreach (Bitmap img in imageLog.Values)
                 {
-                    if(img != currentBitmap)
+                    if (img != currentBitmap)
                     {
                         img.Dispose();
                     }
@@ -188,15 +206,8 @@ namespace DemoGUI
             }
             imageLog = null;
 
-
-            //Clear the List Views
+            //Clear the List View
             listViewImageLog.Items.Clear();
-            listViewFiles.Items.Clear();
-
-            //Clear the Text Log
-            txtLog.Text = "";
-
-            //TODO: Clear the status strip
         }
         #endregion
     }
