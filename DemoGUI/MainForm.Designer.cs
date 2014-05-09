@@ -34,6 +34,13 @@
             this.recentDirectoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.normalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.centreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stretchImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewFiles = new System.Windows.Forms.ListView();
             this.columnHeaderFileNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -65,7 +72,8 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.toolsToolStripMenuItem});
+            this.toolsToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(984, 24);
@@ -93,7 +101,7 @@
             // recentDirectoriesToolStripMenuItem
             // 
             this.recentDirectoriesToolStripMenuItem.Name = "recentDirectoriesToolStripMenuItem";
-            this.recentDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.recentDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.recentDirectoriesToolStripMenuItem.Text = "&Recent Directories";
             this.recentDirectoriesToolStripMenuItem.Click += new System.EventHandler(this.recentDirectoriesToolStripMenuItem_Click);
             // 
@@ -109,6 +117,61 @@
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.imageViewToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "&Settings";
+            // 
+            // imageViewToolStripMenuItem
+            // 
+            this.imageViewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.zoomToolStripMenuItem,
+            this.normalToolStripMenuItem,
+            this.centreToolStripMenuItem,
+            this.autoSizeToolStripMenuItem,
+            this.stretchImageToolStripMenuItem});
+            this.imageViewToolStripMenuItem.Name = "imageViewToolStripMenuItem";
+            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.imageViewToolStripMenuItem.Text = "Image &View";
+            // 
+            // zoomToolStripMenuItem
+            // 
+            this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
+            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.zoomToolStripMenuItem.Text = "&Zoom";
+            this.zoomToolStripMenuItem.Click += new System.EventHandler(this.zoomToolStripMenuItem_Click);
+            // 
+            // normalToolStripMenuItem
+            // 
+            this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.normalToolStripMenuItem.Text = "&Normal";
+            this.normalToolStripMenuItem.Click += new System.EventHandler(this.normalToolStripMenuItem_Click);
+            // 
+            // centreToolStripMenuItem
+            // 
+            this.centreToolStripMenuItem.Name = "centreToolStripMenuItem";
+            this.centreToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.centreToolStripMenuItem.Text = "&Centre";
+            this.centreToolStripMenuItem.Click += new System.EventHandler(this.centreToolStripMenuItem_Click);
+            // 
+            // autoSizeToolStripMenuItem
+            // 
+            this.autoSizeToolStripMenuItem.Name = "autoSizeToolStripMenuItem";
+            this.autoSizeToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.autoSizeToolStripMenuItem.Text = "&Auto Size";
+            this.autoSizeToolStripMenuItem.Click += new System.EventHandler(this.autoSizeToolStripMenuItem_Click);
+            // 
+            // stretchImageToolStripMenuItem
+            // 
+            this.stretchImageToolStripMenuItem.Name = "stretchImageToolStripMenuItem";
+            this.stretchImageToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.stretchImageToolStripMenuItem.Text = "&Stretch Image";
+            this.stretchImageToolStripMenuItem.Click += new System.EventHandler(this.stretchImageToolStripMenuItem_Click);
             // 
             // listViewFiles
             // 
@@ -221,6 +284,7 @@
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(803, 378);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             // 
@@ -246,6 +310,8 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
             this.Text = "Computer Vision Wordsearch Solver Demo GUI";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.splitContainerMain.Panel1.ResumeLayout(false);
@@ -286,6 +352,13 @@
         private System.Windows.Forms.ToolStripMenuItem recentDirectoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem imageViewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem zoomToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem normalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem centreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stretchImageToolStripMenuItem;
     }
 }
 

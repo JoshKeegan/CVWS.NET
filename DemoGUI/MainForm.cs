@@ -22,15 +22,152 @@ namespace DemoGUI
 {
     public partial class MainForm : Form
     {
+        //Constants
+        private const string CONFIG_X = "MainFormX";
+        private const string CONFIG_Y = "MainFormY";
+        private const string CONFIG_WIDTH = "MainFormWidth";
+        private const string CONFIG_HEIGHT = "MainFormHeight";
+        private const string CONFIG_STATE = "MainFormState";
+        private const string CONFIG_MAIN_SPLITTER = "MainFormMainSplitter";
+        private const string CONFIG_LEFT_SPLITTER = "MainFormLeftSplitter";
+        private const string CONFIG_RIGHT_SPLITTER = "MainFormRightSplitter";
+        private const string CONFIG_RECENT_DIRECTORY = "RecentDirectory";
+        private const string CONFIG_PICTURE_BOX_SIZE_MODE = "MainFormPictureBoxSizeMode";
+
+        private const int NUM_RECENT_DIRECTORIES = 8;
+
         //Private Variables
+        private LinkedList<string> recentDirectories = new LinkedList<string>();
         private string currentDirectory = null;
         private Bitmap currentBitmap = null;
         private Dictionary<string, Bitmap> imageLog = null;
 
+        #region Object Construction & Form Initialisation
         public MainForm()
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            //If the configuration from a previous run of the program can be loaded, use those settings
+            if(Configuration.Load())
+            {
+                //Attempt to load each setting from the configuration file
+
+                //Load Window Position, Size & State
+                int windowX = int.Parse(Configuration.GetConfigurationOption(CONFIG_X));
+                int windowY = int.Parse(Configuration.GetConfigurationOption(CONFIG_Y));
+                int windowWidth = int.Parse(Configuration.GetConfigurationOption(CONFIG_WIDTH));
+                int windowHeight = int.Parse(Configuration.GetConfigurationOption(CONFIG_HEIGHT));
+
+                Size windowSize = new Size(windowWidth, windowHeight);
+                Point windowTopLeft = new Point(windowX, windowY);
+                Point windowTopRight = new Point(windowX + windowWidth, windowY + windowHeight);
+
+                //Validate window position & size by checking it's (at least partially) within the area covered by a display
+                bool validWindowPosition = false;
+                foreach (Screen screen in Screen.AllScreens)
+                {
+                    //If any part of the top of the window lies within a screen, then this is a valid window position
+                    if (screen.WorkingArea.Contains(windowTopLeft)
+                        || screen.WorkingArea.Contains(windowTopRight))
+                    {
+                        validWindowPosition = true;
+                        break;
+                    }
+                }
+
+                //Only set the window to the position from the config if it's valid
+                if (validWindowPosition)
+                {
+                    this.Location = windowTopLeft;
+                    this.Size = windowSize;
+
+                    this.WindowState = (FormWindowState)Enum.Parse(typeof(FormWindowState),
+                        Configuration.GetConfigurationOption(CONFIG_STATE));
+
+                    //Load the splitter distances too
+                    splitContainerMain.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_MAIN_SPLITTER));
+                    splitContainerLeft.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_LEFT_SPLITTER));
+                    splitContainerRight.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_SPLITTER));
+                }
+
+                //Load Recent Directories
+                for (int i = 0; i < NUM_RECENT_DIRECTORIES; i++)
+                {
+                    string dirPath = Configuration.GetConfigurationOption(CONFIG_RECENT_DIRECTORY + i);
+
+                    if (dirPath != null)
+                    {
+                        recentDirectories.AddLast(dirPath);
+                    }
+                }
+                //Show the loaded list of recent dirs in the menu
+                generateRecentDirsList();
+
+                //Load Picture View Mode
+                PictureBoxSizeMode pictureBoxSizeMode = (PictureBoxSizeMode)Enum.Parse(typeof(PictureBoxSizeMode),
+                    Configuration.GetConfigurationOption(CONFIG_PICTURE_BOX_SIZE_MODE));
+                setPictureBoxSizeMode(pictureBoxSizeMode);
+            }
+        }
+        #endregion
+
+        #region Form Controls
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Save Window Position, Size & State
+            if(this.WindowState != FormWindowState.Minimized) //Don't save the current position if minimised
+            {
+                //Don't save the location, width & height if maximised
+                if(this.WindowState != FormWindowState.Maximized)
+                {
+                    Configuration.SetConfigurationOption(CONFIG_X, Location.X.ToString());
+                    Configuration.SetConfigurationOption(CONFIG_Y, Location.Y.ToString());
+                    Configuration.SetConfigurationOption(CONFIG_WIDTH, Width.ToString());
+                    Configuration.SetConfigurationOption(CONFIG_HEIGHT, Height.ToString());
+                }
+
+                //Save the Form state
+                Configuration.SetConfigurationOption(CONFIG_STATE, WindowState.ToString());
+
+                //Save the Splitter Distances
+                Configuration.SetConfigurationOption(CONFIG_MAIN_SPLITTER, splitContainerMain.SplitterDistance.ToString());
+                Configuration.SetConfigurationOption(CONFIG_LEFT_SPLITTER, splitContainerLeft.SplitterDistance.ToString());
+                Configuration.SetConfigurationOption(CONFIG_RIGHT_SPLITTER, splitContainerRight.SplitterDistance.ToString());
+            }
+
+            //Save Recent Directories
+            int idx = 0;
+            //Write out any recent directories stored in memory
+            foreach(string dirPath in recentDirectories)
+            {
+                Configuration.SetConfigurationOption(CONFIG_RECENT_DIRECTORY + idx, dirPath);
+
+                idx++;
+            }
+
+            //Null any remaining slots (to overwrite data that may have previously been stored there)
+            for(; idx < NUM_RECENT_DIRECTORIES; idx++)
+            {
+                Configuration.SetConfigurationOption(CONFIG_RECENT_DIRECTORY + idx, null);
+            }
+
+            //Save Picture View Mode
+            Configuration.SetConfigurationOption(CONFIG_PICTURE_BOX_SIZE_MODE, pictureBox.SizeMode.ToString());
+
+            //Save the config out to file
+            try
+            {
+                Configuration.Save();
+            }
+            catch
+            {
+                MessageBox.Show("Could not save Configuration file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
 
         #region Tool Strip Click Event Handlers
         /*
@@ -47,24 +184,66 @@ namespace DemoGUI
                 //If this directory opens without error
                 if(openDirectory(dirPath))
                 {
-                    //Store this as the current directory
-                    currentDirectory = dirPath;
-
-                    //TODO: When recent directories is implemented, remember this dir having been opened
+                    //Remember this dir having been opened
+                    addRecentDir(dirPath);
+                    //Refresh the recent directory list to include this new directory (and get rid of one removed to make way for it if applicable)
+                    generateRecentDirsList();
                 }
             }
         }
 
-        //Recent Directories
         private void recentDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TODO: Yet to implement this functionality
+            //TODO: Remove this unused method
+        }
+
+        //When one of the recent directories gets selected to be opened
+        private void recentDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string dirPath = ((ToolStripMenuItem)sender).Text;
+
+            //If this directory opens without error
+            if(openDirectory(dirPath))
+            {
+                //Move this recent directory to the top of the list
+                addRecentDir(dirPath);
+                //Refresh the recent directory list shown in the menu
+                generateRecentDirsList();
+            }
         }
 
         //Exit
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        /*
+         * Settings
+         */
+        private void zoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setPictureBoxSizeMode(PictureBoxSizeMode.Zoom);
+        }
+
+        private void normalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setPictureBoxSizeMode(PictureBoxSizeMode.Normal);
+        }
+
+        private void centreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setPictureBoxSizeMode(PictureBoxSizeMode.CenterImage);
+        }
+
+        private void autoSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setPictureBoxSizeMode(PictureBoxSizeMode.AutoSize);
+        }
+
+        private void stretchImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            setPictureBoxSizeMode(PictureBoxSizeMode.StretchImage);
         }
         #endregion
 
@@ -83,6 +262,69 @@ namespace DemoGUI
         #endregion
 
         #region Helper Methods
+        private void generateRecentDirsList()
+        {
+            //Remove onclick events for the existing list
+            foreach(ToolStripItem toolStripItem in recentDirectoriesToolStripMenuItem.DropDownItems)
+            {
+                toolStripItem.Click -= new EventHandler(recentDirectoryToolStripMenuItem_Click);
+            }
+
+            //Remove all items currently in the list
+            recentDirectoriesToolStripMenuItem.DropDownItems.Clear();
+
+            //Add new Items to the list & onclick events for them
+            foreach(string dirPath in recentDirectories)
+            {
+                //Make the tool strip item
+                ToolStripItem toolStripItem = recentDirectoriesToolStripMenuItem.DropDownItems.Add(dirPath);
+
+                //Add an event handler for it
+                toolStripItem.Click += new EventHandler(recentDirectoryToolStripMenuItem_Click);
+            }
+        }
+
+        private void addRecentDir(string dirPath)
+        {
+            //If this directory is already in the recent directories list, remove it
+            recentDirectories.Remove(dirPath);
+
+            //Insert it as the most recent
+            recentDirectories.AddFirst(dirPath);
+
+            //If we now have too many recently accessed directories, remove the one that was accessed the longest time ago
+            if(recentDirectories.Count > NUM_RECENT_DIRECTORIES)
+            {
+                recentDirectories.RemoveLast();
+            }
+        }
+
+        private void removeRecentDir(string dirPath)
+        {
+            recentDirectories.Remove(dirPath);
+        }
+
+        private void setPictureBoxSizeMode(PictureBoxSizeMode sizeMode)
+        {
+            //The container for the picture box (will be used for scrolling if necessary)
+            SplitterPanel container = splitContainerRight.Panel1;
+
+            //If using AutoSize (where the PictureBox will automatically resize to the size of the image), show scroll bars
+            if(sizeMode == PictureBoxSizeMode.AutoSize)
+            {
+                pictureBox.Dock = DockStyle.None;
+                pictureBox.Location = new Point(0, 0);
+                container.AutoScroll = true;
+            }
+            else //Otherwise make the picture box fill all of the available space & hide the scroll bars
+            {
+                pictureBox.Dock = DockStyle.Fill;
+                container.AutoScroll = false;
+            }
+
+            pictureBox.SizeMode = sizeMode;
+        }
+
         //Open a directory
         private bool openDirectory(string dirPath)
         {
@@ -96,8 +338,18 @@ namespace DemoGUI
                 //Clear the interface ready to have the images for this dir displayed
                 clearInterface();
 
+                //Dispose of the current Bitmap if there is one stored
+                if(currentBitmap != null)
+                {
+                    currentBitmap.Dispose();
+                    currentBitmap = null;
+                }
+
                 //Show the file list for this Directory
                 listViewFiles.Items.AddRange(imageFileNames.Select(str => new ListViewItem(str)).ToArray());
+
+                //Store this as the current directory
+                currentDirectory = dirPath;
             }
             catch
             {
