@@ -103,7 +103,6 @@
             this.recentDirectoriesToolStripMenuItem.Name = "recentDirectoriesToolStripMenuItem";
             this.recentDirectoriesToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.recentDirectoriesToolStripMenuItem.Text = "&Recent Directories";
-            this.recentDirectoriesToolStripMenuItem.Click += new System.EventHandler(this.recentDirectoriesToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 

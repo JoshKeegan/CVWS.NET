@@ -192,11 +192,6 @@ namespace DemoGUI
             }
         }
 
-        private void recentDirectoriesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //TODO: Remove this unused method
-        }
-
         //When one of the recent directories gets selected to be opened
         private void recentDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
