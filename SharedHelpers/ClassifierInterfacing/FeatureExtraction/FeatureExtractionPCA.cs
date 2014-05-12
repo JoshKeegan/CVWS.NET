@@ -3,12 +3,14 @@
  * Shared Helpers
  * Feature Extraction Principal Components Analysis - return the PCA values given bitmaps
  * By Josh Keegan 11/03/2014
+ * Last Edit 12/05/2014
  */
 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +21,8 @@ using SharedHelpers.Imaging;
 
 namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
 {
-    public class FeatureExtractionPCA : TrainableFeatureExtractionAlgorithm
+    [Serializable]
+    public class FeatureExtractionPCA : TrainableFeatureExtractionAlgorithm, ISerializable
     {
         //Private variables
         private PrincipalComponentAnalysis pca;
@@ -32,6 +35,14 @@ namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
         public FeatureExtractionPCA(int numDimensions)
         {
             this.numDimensions = numDimensions;
+        }
+
+        //Deserialization constructor
+        public FeatureExtractionPCA(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            pca = (PrincipalComponentAnalysis)info.GetValue("pca", typeof(PrincipalComponentAnalysis));
+            numDimensions = (int?)info.GetValue("numDimensions", typeof(int?));
         }
 
         //Protected methods (called by the public methods in parent class)
@@ -60,6 +71,15 @@ namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
             }
 
             return components;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("pca", pca);
+            info.AddValue("numDimensions", numDimensions);
+
+            //Save out any data on the base object
+            base.GetObjectData(info, context);
         }
 
         //Private Helpers

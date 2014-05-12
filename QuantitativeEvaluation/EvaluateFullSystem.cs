@@ -44,8 +44,7 @@ namespace QuantitativeEvaluation
             VariedWidthWithResize
         }
 
-        //TODO: Remove Training Wordsearch Images dependency when PCA is loaded rather than trained every time
-        internal static Dictionary<string, double> Evaluate(List<Image> images, List<WordsearchImage> trainingWordsearchImages)
+        internal static Dictionary<string, double> Evaluate(List<Image> images)
         {
             Log.Info("Starting to Evaluate Full System with different combinations of algorithms . . .");
 
@@ -55,21 +54,14 @@ namespace QuantitativeEvaluation
                 image.RegisterInterestInBitmap();
             }
 
-            //TODO: Remove the following once PCA is loaded rather than trained every time
-            Dictionary<char, List<Bitmap>> trainingData = CharData.GetCharData(trainingWordsearchImages);
-
-            Bitmap[] pcaTrainingData;
-            double[][] output; //Unused
-            CharData.GetNeuralNetworkBitmapsAndOutput(trainingData, out pcaTrainingData, out output);
-
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
             SegmentationAlgorithm detectionSegmentationAlgorithm = new SegmentByHistogramThresholdPercentileRankTwoThresholds();
             SegmentationAlgorithm segmentationAlgorithm = new SegmentByBlobRecognition();
 
             //Use same classifier & feature extraction for both
-            FeatureExtractionPCA featureExtraction = new FeatureExtractionPCA(); //TODO: Load trained feature extraction algorithm rather than training it again
-            featureExtraction.Train(pcaTrainingData);
+            FeatureExtractionPCA featureExtraction = (FeatureExtractionPCA)TrainableFeatureExtractionAlgorithm.Load(
+                Program.FEATURE_EXTRACTORS_PATH + Program.PCA_ALL_FEATURES_FILE_NAME + Program.FEATURE_EXTRACTORS_FILE_EXTENSION);
 
             Classifier classifier = new AForgeActivationNeuralNetClassifier(featureExtraction, PCA_ALL_FEATURES_NEURAL_NETWORK_CLASSIFIER_PATH);
 

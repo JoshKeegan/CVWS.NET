@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 26/04/2014
+ * Last Edit 12/05/2014
  */
 
 using System;
@@ -31,8 +31,12 @@ namespace QuantitativeEvaluation
 #endif
         private const string EVALUATION_RESULTS_DIR_PATH = "EvaluationResults";
         private const string CLASSIFIERS_PATH = ImageMarkup.ImageMarkupDatabase.DATA_DIRECTORY_PATH + "Classifiers/";
+        internal const string FEATURE_EXTRACTORS_PATH = ImageMarkup.ImageMarkupDatabase.DATA_DIRECTORY_PATH + "FeatureExtractors/";
         internal const string NEURAL_NETWORKS_PATH = CLASSIFIERS_PATH + "NeuralNetworks/";
         internal const string NEURAL_NETWORK_FILE_EXTENSION = ".networkWeights";
+        internal const string FEATURE_EXTRACTORS_FILE_EXTENSION = ".featureExtraction";
+        internal const string PCA_ALL_FEATURES_FILE_NAME = "pcaAllFeatures";
+        internal const string PCA_TOP_FEATURES_FILE_NAME = "pcaTopFeatures";
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
@@ -153,13 +157,9 @@ namespace QuantitativeEvaluation
 
                 //Get the Feature Reduction Algorithm to be used
                 Log.Info("Loading Feature Extraction Algorithm . . .");
-                //TODO: Load a pre-trained feature reduction algorithm rather than training on the training data every time
-                FeatureExtractionPCA featureExtractionAlgorithm = new FeatureExtractionPCA(); //Full PCA (no dimensionality reduction)
-                Dictionary<char, List<Bitmap>> trainingData = CharData.GetCharData(trainingWordsearchImages);
-                Bitmap[] trainingCharImgs;
-                double[][] trainingOutput;
-                CharData.GetNeuralNetworkBitmapsAndOutput(trainingData, out trainingCharImgs, out trainingOutput);
-                featureExtractionAlgorithm.Train(trainingCharImgs);
+                //Load a pre-trained feature reduction algorithm rather than training on the training data every time
+                FeatureExtractionPCA featureExtractionAlgorithm = (FeatureExtractionPCA)TrainableFeatureExtractionAlgorithm.Load(
+                    FEATURE_EXTRACTORS_PATH + PCA_ALL_FEATURES_FILE_NAME + FEATURE_EXTRACTORS_FILE_EXTENSION);
                 Log.Info("Feature Extraction Algorithm Loaded");
 
                 //Get the classifier to be used
@@ -221,7 +221,7 @@ namespace QuantitativeEvaluation
             {
                 Log.Info("Starting to Evaluate the Full System");
 
-                Dictionary<string, double> scores = EvaluateFullSystem.Evaluate(ImageMarkupDatabase.GetImages(), trainingWordsearchImages);
+                Dictionary<string, double> scores = EvaluateFullSystem.Evaluate(ImageMarkupDatabase.GetImages());
 
                 //Print out scores
                 Log.Info("Scores for Evaluation of the Full System");

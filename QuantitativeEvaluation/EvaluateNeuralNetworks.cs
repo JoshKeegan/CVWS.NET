@@ -3,7 +3,11 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
- * Last Edit 25/03/2014
+ * Last Edit 12/05/2014
+ * 
+ * Note that if the data has changed between runs, it won't work with trainiable feature extraction 
+ *  techniques as the previous trained system will get overwritten (could be changed in the future 
+ *  to keep the previous weights for comparison)
  */
 
 using System;
@@ -73,6 +77,20 @@ namespace QuantitativeEvaluation
             pcaFeatureExtractionAllFeatures.Train(trainingCharImgs);
             TrainableFeatureExtractionAlgorithm pcaFeatureExtractionTopFeatures = new FeatureExtractionPCA(PCA_NUM_FEATURES);
             pcaFeatureExtractionTopFeatures.Train(trainingCharImgs);
+
+            //Export the trained Feature Extraction Algorithms
+            Log.Info("Saving Data for Trainable Feature Extraction Algorithms");
+
+            //If the Trainable Feature Extraction Algorithms directory doesn't exist, create it . . .
+            if(!Directory.Exists(Program.FEATURE_EXTRACTORS_PATH))
+            {
+                Log.Info("Feature Extractors Path didn't exist, creating . . .");
+                Directory.CreateDirectory(Program.FEATURE_EXTRACTORS_PATH);
+            }
+
+            pcaFeatureExtractionAllFeatures.Save(Program.FEATURE_EXTRACTORS_PATH + Program.PCA_ALL_FEATURES_FILE_NAME + Program.FEATURE_EXTRACTORS_FILE_EXTENSION);
+            pcaFeatureExtractionTopFeatures.Save(Program.FEATURE_EXTRACTORS_PATH + Program.PCA_TOP_FEATURES_FILE_NAME + Program.FEATURE_EXTRACTORS_FILE_EXTENSION);
+            Log.Info("Data for Trainable Feature Extraction Algorithms saved");
 
             double[][] pcaAllFeaturesInput = pcaFeatureExtractionAllFeatures.Extract(trainingCharImgs);
             double[][] pcaTopFeaturesInput = pcaFeatureExtractionTopFeatures.Extract(trainingCharImgs);
