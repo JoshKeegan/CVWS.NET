@@ -45,6 +45,7 @@ namespace DemoGUI
         private Bitmap currentBitmap = null;
         private Dictionary<string, Bitmap> imageLog = null;
         private string defaultTxtWordsToFind;
+        private Task processingTask = null;
 
         #region Object Construction & Form Initialisation
         public MainForm()
@@ -56,6 +57,11 @@ namespace DemoGUI
         {
             //Store the default value of txtWordsToFind for later use
             defaultTxtWordsToFind = txtWordsToFind.Text;
+
+            //Populate the Algorithms Menu, set it's defaults & place event handlers on anything that you can choose
+            populateAlgorithmsMenu();
+            //TODO: Set the Algorithms Menu default options
+            setupAlgorithmsEventHandlers();
 
             //If the configuration from a previous run of the program can be loaded, use those settings
             if(Configuration.Load())
@@ -256,6 +262,30 @@ namespace DemoGUI
         {
             setPictureBoxSizeMode(PictureBoxSizeMode.StretchImage);
         }
+
+        //When anything under Algorithms (or any level below that gets clicked), 
+        //  call this to mark it as checked
+        private void algorithmsMenuItemChild_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItemSender = (ToolStripMenuItem)sender;
+
+            //Find this Menu Item's siblings
+            ToolStripMenuItem parent = (ToolStripMenuItem)menuItemSender.OwnerItem;
+            ToolStripItemCollection siblings = parent.DropDownItems;
+
+            //If the sender has siblings
+            if(siblings.Count > 1)
+            {
+                //Uncheck all of the siblings
+                foreach(ToolStripMenuItem menuItem in siblings)
+                {
+                    menuItem.Checked = false;
+                }
+
+                //Check the menu item that got clicked (the sender)
+                menuItemSender.Checked = true;
+            }
+        }
         #endregion
 
         #region Other Event Handlers
@@ -290,9 +320,48 @@ namespace DemoGUI
                 txtWordsToFind.Text = defaultTxtWordsToFind;
             }
         }
+
+        //The button to start the processing has been clicked
+        private void btnStartProcessing_Click(object sender, EventArgs e)
+        {
+            //Disable the button so it cannot be clicked again
+            btnStartProcessing.Enabled = false;
+
+            //Do the processing asynchronously so that the main thread is still free to recieve events
+            processingTask = Task.Factory.StartNew(() =>
+            {
+                doProcessing();
+
+                //Re-enable the button so that it can be clicked again
+                btnStartProcessing.Enabled = true;
+            });
+        }
         #endregion
 
         #region Helper Methods
+        //Log some text
+        private void log(string text)
+        {
+            //If the text box already has content, then add a new line before appending this
+            if(txtLog.Text != "")
+            {
+                txtLog.Text += Environment.NewLine;
+            }
+
+            //Append this text to the log
+            txtLog.Text += text;
+        }
+
+        private void log(Bitmap img, string text)
+        {
+            //Add to the imageLog dictionary first, so if the key is already present the exception will be 
+            //  thrown before the text gets added to the list
+            imageLog.Add(text, img);
+
+            //Add the text to the list
+            listViewImageLog.Items.Add(text);
+        }
+
         private void generateRecentDirsList()
         {
             //Remove onclick events for the existing list
