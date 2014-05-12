@@ -1,8 +1,9 @@
 ﻿/*
  * Dissertation CV Wordsearch Solver
  * Shared Helpers
- * Wordsearch Solver Algorithm (Non-Probablistic)
+ * Wordsearch Solver Algorithm (Non-Probabilistic)
  * By Josh Keegan 26/04/2014
+ * Last Edit 12/05/2014
  */
 
 using System;
@@ -15,17 +16,17 @@ using SharedHelpers.ClassifierInterfacing;
 
 namespace SharedHelpers.WordsearchSolver
 {
-    public class SolverNonProbablistic : Solver
+    public class SolverNonProbabilistic : Solver
     {
-        public override Solution Solve(double[][][] wordsearch, string[] words)
+        protected override Solution doSolve(double[][][] wordsearch, string[] words)
         {
             //Convert probablistic input to non-probablistic
             char[,] charWordsearch = NeuralNetworkHelpers.GetMostLikelyChars(wordsearch);
 
-            return Solve(charWordsearch, words);
+            return solve(charWordsearch, words);
         }
 
-        public Solution Solve(char[,] chars, string[] words)
+        private Solution solve(char[,] chars, string[] words)
         {
             Solution solution = new Solution();
 
@@ -195,7 +196,7 @@ namespace SharedHelpers.WordsearchSolver
                                 }
                             }
 
-                            //Down && Left
+                            //Down & Left
                             if (canGoDown && canGoLeft)
                             {
                                 bool found = true;
