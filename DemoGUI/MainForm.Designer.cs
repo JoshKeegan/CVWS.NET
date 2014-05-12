@@ -49,8 +49,11 @@
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.splitContainerRight = new System.Windows.Forms.SplitContainer();
+            this.splitContainerRightTop = new System.Windows.Forms.SplitContainer();
             this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.splitContainerRightBottom = new System.Windows.Forms.SplitContainer();
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.txtWordsToFind = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -65,7 +68,14 @@
             this.splitContainerRight.Panel1.SuspendLayout();
             this.splitContainerRight.Panel2.SuspendLayout();
             this.splitContainerRight.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightTop)).BeginInit();
+            this.splitContainerRightTop.Panel1.SuspendLayout();
+            this.splitContainerRightTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightBottom)).BeginInit();
+            this.splitContainerRightBottom.Panel1.SuspendLayout();
+            this.splitContainerRightBottom.Panel2.SuspendLayout();
+            this.splitContainerRightBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -268,24 +278,54 @@
             // 
             // splitContainerRight.Panel1
             // 
-            this.splitContainerRight.Panel1.Controls.Add(this.pictureBox);
+            this.splitContainerRight.Panel1.Controls.Add(this.splitContainerRightTop);
             // 
             // splitContainerRight.Panel2
             // 
-            this.splitContainerRight.Panel2.Controls.Add(this.txtLog);
+            this.splitContainerRight.Panel2.Controls.Add(this.splitContainerRightBottom);
             this.splitContainerRight.Size = new System.Drawing.Size(803, 479);
             this.splitContainerRight.SplitterDistance = 378;
             this.splitContainerRight.TabIndex = 0;
+            // 
+            // splitContainerRightTop
+            // 
+            this.splitContainerRightTop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerRightTop.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerRightTop.Name = "splitContainerRightTop";
+            // 
+            // splitContainerRightTop.Panel1
+            // 
+            this.splitContainerRightTop.Panel1.Controls.Add(this.pictureBox);
+            this.splitContainerRightTop.Size = new System.Drawing.Size(803, 378);
+            this.splitContainerRightTop.SplitterDistance = 663;
+            this.splitContainerRightTop.TabIndex = 0;
             // 
             // pictureBox
             // 
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(803, 378);
+            this.pictureBox.Size = new System.Drawing.Size(663, 378);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
+            // 
+            // splitContainerRightBottom
+            // 
+            this.splitContainerRightBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerRightBottom.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerRightBottom.Name = "splitContainerRightBottom";
+            // 
+            // splitContainerRightBottom.Panel1
+            // 
+            this.splitContainerRightBottom.Panel1.Controls.Add(this.txtLog);
+            // 
+            // splitContainerRightBottom.Panel2
+            // 
+            this.splitContainerRightBottom.Panel2.Controls.Add(this.txtWordsToFind);
+            this.splitContainerRightBottom.Size = new System.Drawing.Size(803, 97);
+            this.splitContainerRightBottom.SplitterDistance = 519;
+            this.splitContainerRightBottom.TabIndex = 0;
             // 
             // txtLog
             // 
@@ -295,8 +335,21 @@
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(803, 97);
+            this.txtLog.Size = new System.Drawing.Size(519, 97);
             this.txtLog.TabIndex = 0;
+            // 
+            // txtWordsToFind
+            // 
+            this.txtWordsToFind.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtWordsToFind.Location = new System.Drawing.Point(0, 0);
+            this.txtWordsToFind.Multiline = true;
+            this.txtWordsToFind.Name = "txtWordsToFind";
+            this.txtWordsToFind.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtWordsToFind.Size = new System.Drawing.Size(280, 97);
+            this.txtWordsToFind.TabIndex = 0;
+            this.txtWordsToFind.Text = "Enter words to find here . . .\r\nPlease enter one word per line";
+            this.txtWordsToFind.Enter += new System.EventHandler(this.txtWordsToFind_Enter);
+            this.txtWordsToFind.Leave += new System.EventHandler(this.txtWordToFind_Leave);
             // 
             // MainForm
             // 
@@ -323,10 +376,18 @@
             this.splitContainerLeft.ResumeLayout(false);
             this.splitContainerRight.Panel1.ResumeLayout(false);
             this.splitContainerRight.Panel2.ResumeLayout(false);
-            this.splitContainerRight.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRight)).EndInit();
             this.splitContainerRight.ResumeLayout(false);
+            this.splitContainerRightTop.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightTop)).EndInit();
+            this.splitContainerRightTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            this.splitContainerRightBottom.Panel1.ResumeLayout(false);
+            this.splitContainerRightBottom.Panel1.PerformLayout();
+            this.splitContainerRightBottom.Panel2.ResumeLayout(false);
+            this.splitContainerRightBottom.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightBottom)).EndInit();
+            this.splitContainerRightBottom.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -358,6 +419,9 @@
         private System.Windows.Forms.ToolStripMenuItem centreToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stretchImageToolStripMenuItem;
+        private System.Windows.Forms.SplitContainer splitContainerRightTop;
+        private System.Windows.Forms.SplitContainer splitContainerRightBottom;
+        private System.Windows.Forms.TextBox txtWordsToFind;
     }
 }
 

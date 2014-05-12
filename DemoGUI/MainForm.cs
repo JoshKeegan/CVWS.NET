@@ -32,6 +32,8 @@ namespace DemoGUI
         private const string CONFIG_MAIN_SPLITTER = "MainFormMainSplitter";
         private const string CONFIG_LEFT_SPLITTER = "MainFormLeftSplitter";
         private const string CONFIG_RIGHT_SPLITTER = "MainFormRightSplitter";
+        private const string CONFIG_RIGHT_TOP_SPLITTER = "MainFormRightTopSplitter";
+        private const string CONFIG_RIGHT_BOTTOM_SPLITTER = "MainFormRightBottomSplitter";
         private const string CONFIG_RECENT_DIRECTORY = "RecentDirectory";
         private const string CONFIG_PICTURE_BOX_SIZE_MODE = "MainFormPictureBoxSizeMode";
 
@@ -42,6 +44,7 @@ namespace DemoGUI
         private string currentDirectory = null;
         private Bitmap currentBitmap = null;
         private Dictionary<string, Bitmap> imageLog = null;
+        private string defaultTxtWordsToFind;
 
         #region Object Construction & Form Initialisation
         public MainForm()
@@ -51,6 +54,9 @@ namespace DemoGUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            //Store the default value of txtWordsToFind for later use
+            defaultTxtWordsToFind = txtWordsToFind.Text;
+
             //If the configuration from a previous run of the program can be loaded, use those settings
             if(Configuration.Load())
             {
@@ -92,6 +98,8 @@ namespace DemoGUI
                     splitContainerMain.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_MAIN_SPLITTER));
                     splitContainerLeft.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_LEFT_SPLITTER));
                     splitContainerRight.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_SPLITTER));
+                    splitContainerRightTop.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_TOP_SPLITTER));
+                    splitContainerRightBottom.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_BOTTOM_SPLITTER));
                 }
 
                 //Load Recent Directories
@@ -142,6 +150,8 @@ namespace DemoGUI
                 Configuration.SetConfigurationOption(CONFIG_MAIN_SPLITTER, splitContainerMain.SplitterDistance.ToString());
                 Configuration.SetConfigurationOption(CONFIG_LEFT_SPLITTER, splitContainerLeft.SplitterDistance.ToString());
                 Configuration.SetConfigurationOption(CONFIG_RIGHT_SPLITTER, splitContainerRight.SplitterDistance.ToString());
+                Configuration.SetConfigurationOption(CONFIG_RIGHT_TOP_SPLITTER, splitContainerRightTop.SplitterDistance.ToString());
+                Configuration.SetConfigurationOption(CONFIG_RIGHT_BOTTOM_SPLITTER, splitContainerRightBottom.SplitterDistance.ToString());
             }
 
             //Save Recent Directories
@@ -248,7 +258,7 @@ namespace DemoGUI
         }
         #endregion
 
-        #region List View Click Event Handlers
+        #region Other Event Handlers
         //A new file has been selected for processing
         private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -259,6 +269,26 @@ namespace DemoGUI
         private void listViewImageLog_SelectedIndexChanged(object sender, EventArgs e)
         {
             showSelectedImageLogEntry();
+        }
+
+        //txtWordsToFind has become the active control (e.g. been clicked on )
+        private void txtWordsToFind_Enter(object sender, EventArgs e)
+        {
+            //If the text in txtWordsToFind is the default string, clear it so that it can be typed in
+            if(txtWordsToFind.Text == defaultTxtWordsToFind)
+            {
+                txtWordsToFind.Text = "";
+            }
+        }
+
+        //txtWordsToFind is no longer the active control (e.g. user has clicked elsewhere)
+        private void txtWordToFind_Leave(object sender, EventArgs e)
+        {
+            //If the text in txtWordsToFind is empty, then put the default text back
+            if(txtWordsToFind.Text == "")
+            {
+                txtWordsToFind.Text = defaultTxtWordsToFind;
+            }
         }
         #endregion
 
