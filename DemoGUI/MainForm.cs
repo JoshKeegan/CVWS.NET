@@ -331,6 +331,17 @@ namespace DemoGUI
             processingTask = Task.Factory.StartNew(() =>
             {
                 doProcessing();
+            }).ContinueWith(taskState =>
+            {
+                //If the Task completed due to an unhandled exception being thrown, tell the user & log the exception
+                if(taskState.IsFaulted)
+                {
+                    //Put the exception in the processing log for closer inspection
+                    log("Fatal Exception: " + taskState.Exception.ToString());
+
+                    //Tell the user that the processing operation couldn't be completed
+                    MessageBox.Show("Couldn't complete operation.\nSee Processing log for details", "Processing Failed to Complete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
 
                 //Re-enable the button so that it can be clicked again
                 btnStartProcessing.Enabled = true;
