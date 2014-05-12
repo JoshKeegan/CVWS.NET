@@ -3,6 +3,7 @@
  * Demo GUI
  * Main Form, Business Logic
  * By Josh Keegan 09/05/2014
+ * Last Edit 12/05/2014
  */
 
 using System;
@@ -110,6 +111,11 @@ namespace DemoGUI
                 PictureBoxSizeMode pictureBoxSizeMode = (PictureBoxSizeMode)Enum.Parse(typeof(PictureBoxSizeMode),
                     Configuration.GetConfigurationOption(CONFIG_PICTURE_BOX_SIZE_MODE));
                 setPictureBoxSizeMode(pictureBoxSizeMode);
+            }
+            else //Otherwise we couldn't load a configuration file
+            {
+                // Set any defaults that aren't already set
+                setPictureBoxSizeMode(PictureBoxSizeMode.Zoom);
             }
         }
         #endregion
@@ -318,6 +324,33 @@ namespace DemoGUI
             }
 
             pictureBox.SizeMode = sizeMode;
+
+            //Check the newly selected size mode in the menu
+            //First uncheck all
+            foreach(ToolStripMenuItem menuItem in imageViewToolStripMenuItem.DropDownItems)
+            {
+                menuItem.Checked = false;
+            }
+
+            //Now check the one we've just enabled
+            switch(sizeMode)
+            {
+                case PictureBoxSizeMode.AutoSize:
+                    autoSizeToolStripMenuItem.Checked = true;
+                    break;
+                case PictureBoxSizeMode.CenterImage:
+                    centreToolStripMenuItem.Checked = true;
+                    break;
+                case PictureBoxSizeMode.Normal:
+                    normalToolStripMenuItem.Checked = true;
+                    break;
+                case PictureBoxSizeMode.StretchImage:
+                    stretchImageToolStripMenuItem.Checked = true;
+                    break;
+                case PictureBoxSizeMode.Zoom:
+                    zoomToolStripMenuItem.Checked = true;
+                    break;
+            }
         }
 
         //Open a directory
