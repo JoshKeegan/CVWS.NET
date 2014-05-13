@@ -18,18 +18,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using AForge;
+using AForge.Imaging.Filters;
 
+using BaseObjectExtensions;
 using SharedHelpers;
 using SharedHelpers.ClassifierInterfacing;
 using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
 using SharedHelpers.ImageAnalysis.WordsearchDetection;
+using SharedHelpers.ImageAnalysis.WordsearchRotation;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
 using SharedHelpers.Imaging;
 using SharedHelpers.WordsearchSolver;
 
 using DemoGUI.Exceptions;
-using SharedHelpers.ImageAnalysis.WordsearchRotation;
 
 namespace DemoGUI
 {
@@ -194,6 +196,66 @@ namespace DemoGUI
             //Log the rotated image
             log(rotatedImage, "Rotated Wordsearch");
             log(DrawGrid.Segmentation(rotatedImage, segmentation), "Rotated Segmentation");
+
+            /*
+             * Character Image Extraction
+             */
+            //Split the image up using the Segmentation
+            Bitmap[,] rawCharImgs = null;
+
+            //If we're using equally spaced Segmentation
+            if(segmentation.IsEquallySpaced)
+            {
+                //Resize the image first, so that the characters returned when you split the image will already be the correct size
+                ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH * segmentation.NumCols,
+                    Constants.CHAR_WITH_WHITESPACE_HEIGHT * segmentation.NumRows);
+                Bitmap resizedImage = resize.Apply(rotatedImage);
+
+                //Split the image using a standard grid based on the number of rows & cols 
+                //  (which is correct because of the equally spaced Segmentation)
+                rawCharImgs = SplitImage.Grid(resizedImage, segmentation.NumRows, segmentation.NumCols);
+
+                //Resized image no longer required
+                resizedImage.Dispose();
+            }
+            else //Otherwise there is varied spacing between characters
+            {
+                rawCharImgs = SplitImage.Segment(rotatedImage, segmentation);
+
+                //Resize the raw char images so that they're all the same dimensions (gives results that are more consistent with how the 
+                //  classifier was trained: with equally spaced segmentation)
+                ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH, Constants.CHAR_WITH_WHITESPACE_HEIGHT);
+
+                for (int i = 0; i < rawCharImgs.GetLength(0); i++)
+                {
+                    for (int j = 0; j < rawCharImgs.GetLength(1); j++)
+                    {
+                        //Only do the resize if it isn't already that size
+                        if (rawCharImgs[i, j].Width != Constants.CHAR_WITH_WHITESPACE_WIDTH
+                            || rawCharImgs[i, j].Height != Constants.CHAR_WITH_WHITESPACE_HEIGHT)
+                        {
+                            Bitmap orig = rawCharImgs[i, j];
+
+                            rawCharImgs[i, j] = resize.Apply(orig);
+
+                            //Remove the now unnecessary original/not resized image
+                            orig.Dispose();
+                        }
+                    }
+                }
+            }
+
+            //Log the raw character images
+            log(CombineImages.Grid(rawCharImgs), "Raw Character Images (all chars set to equal width & height)");
+
+            //Get the part of the image that actually contains the character (without any whitespace)
+            Bitmap[,] charImgs = CharImgExtractor.ExtractAll(rawCharImgs);
+
+            //Raw char img's are no longer required
+            rawCharImgs.ToSingleDimension().DisposeAll();
+
+            //Log the extracted character images
+            log(CombineImages.Grid(charImgs), "Extracted Character Images");
         }
 
         //Get the words to find

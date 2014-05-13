@@ -105,6 +105,7 @@
     <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByThresholdDarkPixels.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Imaging\CharImgExtractor.cs" />
+    <Compile Include="Imaging\CombineImages.cs" />
     <Compile Include="Imaging\Converters.cs" />
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />
