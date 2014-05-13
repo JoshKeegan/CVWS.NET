@@ -29,6 +29,7 @@ using SharedHelpers.Imaging;
 using SharedHelpers.WordsearchSolver;
 
 using DemoGUI.Exceptions;
+using SharedHelpers.ImageAnalysis.WordsearchRotation;
 
 namespace DemoGUI
 {
@@ -154,6 +155,45 @@ namespace DemoGUI
             /*
              * Wordsearch Rotation Correction
              */
+            WordsearchRotation originalRotation;
+
+            //If the rows & cols in the Segmentation are all equally spaced apart, optimise by using the number of rows & cols
+            if(segmentation.IsEquallySpaced)
+            {
+                originalRotation = new WordsearchRotation(wordsearchImage, segmentation.NumRows, segmentation.NumCols);
+            }
+            else //Otherwise the Segmentation has varied sized row/col width
+            {
+                originalRotation = new WordsearchRotation(wordsearchImage, segmentation);
+            }
+
+            WordsearchRotation rotatedWordsearch = WordsearchRotationCorrection.CorrectOrientation(
+                originalRotation, rotationCorrectionClassifier);
+
+            Bitmap rotatedImage = rotatedWordsearch.Bitmap;
+
+            //If the wordsearch has been rotated
+            if(rotatedImage != wordsearchImage)
+            {
+                //Update the segmentation
+
+                //If the wordsearch rotation won't have passed a segmentation
+                if(segmentation.IsEquallySpaced)
+                {
+                    //Make a new fixed width segmentation from the wordsearchRotation
+                    segmentation = new Segmentation(rotatedWordsearch.Rows, rotatedWordsearch.Cols,
+                        rotatedImage.Width, rotatedImage.Height);
+                }
+                else //Otherwise the WordsearchRotation will have been working with a Segmentation
+                {
+                    //Use the rotated Segmentation object
+                    segmentation = rotatedWordsearch.Segmentation;
+                }
+            }
+
+            //Log the rotated image
+            log(rotatedImage, "Rotated Wordsearch");
+            log(DrawGrid.Segmentation(rotatedImage, segmentation), "Rotated Segmentation");
         }
 
         //Get the words to find
