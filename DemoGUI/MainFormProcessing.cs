@@ -267,8 +267,8 @@ namespace DemoGUI
                 throw new InvalidWordsException("You must enter some words to be found");
             }
 
-            //Get the lines, removing spaces & hyphens, then converting it all to upper-case
-            string[] lines = txtWordsToFind.Text.ToUpper().Replace(" ", "").Replace("-", "").Split('\n');
+            //Get the lines, removing carriage returns, tabs, spaces & hyphens, then converting it all to upper-case
+            string[] lines = txtWordsToFind.Text.ToUpper().Replace("\r", "").Replace("\t", "").Replace(" ", "").Replace("-", "").Split('\n');
 
             List<string> words = new List<string>(lines.Length);
             foreach(string line in lines)
