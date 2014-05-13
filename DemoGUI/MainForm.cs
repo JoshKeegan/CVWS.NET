@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form, Business Logic
  * By Josh Keegan 09/05/2014
- * Last Edit 12/05/2014
+ * Last Edit 13/05/2014
  */
 
 using System;
