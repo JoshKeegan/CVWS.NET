@@ -256,6 +256,30 @@ namespace DemoGUI
 
             //Log the extracted character images
             log(CombineImages.Grid(charImgs), "Extracted Character Images");
+
+            /*
+             * Feature Extraction & Classification
+             */
+            double[][][] charProbabilities = classifier.Classify(charImgs);
+
+            //Actual images of the characters are no longer required
+            charImgs.ToSingleDimension().DisposeAll();
+
+            //Log the wordsearch as classified
+            char[,] classifiedChars = NeuralNetworkHelpers.GetMostLikelyChars(charProbabilities);
+            log("Wordsearch as classified (character that was gievn the highest probability):");
+            for (int i = 0; i < classifiedChars.GetLength(1); i++) //Rows
+            {
+                StringBuilder builder = new StringBuilder();
+
+                //Cols
+                for(int j = 0; j < classifiedChars.GetLength(0); j++)
+                {
+                    builder.Append(classifiedChars[j, i]);
+                }
+
+                log(builder.ToString());
+            }
         }
 
         //Get the words to find

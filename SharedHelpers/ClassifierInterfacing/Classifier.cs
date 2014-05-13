@@ -4,6 +4,7 @@
  * Classifer class - abstract class for encapsulating classifiers (allowing for methods to use generic 
  *  classifiers rather than ones specific to a particular framework or of a specific type)
  * By Josh Keegan 25/03/2014
+ * Last Edit 13/05/2014
  */
 
 using System;
@@ -30,6 +31,24 @@ namespace SharedHelpers.ClassifierInterfacing
 
         //Public Methods
         public abstract void Load(String path);
+
+        //Perform classification on a 2D array of images (returns probabilities for each possible class for each image)
+        public double[][][] Classify(Bitmap[,] charImgs)
+        {
+            double[][][] toRet = new double[charImgs.GetLength(0)][][];
+
+            for (int i = 0; i < toRet.Length; i++) //Col
+            {
+                toRet[i] = new double[charImgs.GetLength(1)][];
+
+                for (int j = 0; j < toRet[i].Length; j++) //Row
+                {
+                    toRet[i][j] = this.Classify(charImgs[i, j]);
+                }
+            }
+
+            return toRet;
+        }
 
         public double[] Classify(Bitmap charImg)
         {

@@ -3,7 +3,7 @@
  * Quantitative Evaluate
  * Evaluate Full System
  * By Josh Keegan 26/04/2014
- * Last Edit 12/05/2014
+ * Last Edit 13/05/2014
  */
 
 using System;
@@ -261,18 +261,8 @@ namespace QuantitativeEvaluation
                 //Raw char img's are no longer required
                 rawCharImgs.ToSingleDimension().DisposeAll();
 
-                //TODO: Move loops to classifier as this is reuseable
-                double[][][] classifierOutput = new double[charImgs.GetLength(0)][][];
-
-                for(int i = 0; i < classifierOutput.Length; i++) //Col
-                {
-                    classifierOutput[i] = new double[charImgs.GetLength(1)][];
-
-                    for(int j = 0; j < classifierOutput[i].Length; j++) //Row
-                    {
-                        classifierOutput[i][j] = classifier.Classify(charImgs[i, j]);
-                    }
-                }
+                //Perform the classification on all of the images (returns probabilities for each possible class)
+                double[][][] classifierOutput = classifier.Classify(charImgs);
 
                 //Actual images of the characters are no longer required
                 charImgs.ToSingleDimension().DisposeAll();

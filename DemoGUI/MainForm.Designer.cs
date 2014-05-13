@@ -468,7 +468,7 @@
             this.splitContainerRightTop.Panel2.Controls.Add(this.btnStartProcessing);
             this.splitContainerRightTop.Panel2.Controls.Add(this.checkListProcessingStages);
             this.splitContainerRightTop.Size = new System.Drawing.Size(803, 378);
-            this.splitContainerRightTop.SplitterDistance = 638;
+            this.splitContainerRightTop.SplitterDistance = 612;
             this.splitContainerRightTop.TabIndex = 0;
             // 
             // pictureBox
@@ -476,7 +476,7 @@
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(638, 378);
+            this.pictureBox.Size = new System.Drawing.Size(612, 378);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
@@ -486,7 +486,7 @@
             this.btnStartProcessing.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnStartProcessing.Location = new System.Drawing.Point(0, 0);
             this.btnStartProcessing.Name = "btnStartProcessing";
-            this.btnStartProcessing.Size = new System.Drawing.Size(161, 23);
+            this.btnStartProcessing.Size = new System.Drawing.Size(187, 23);
             this.btnStartProcessing.TabIndex = 1;
             this.btnStartProcessing.Text = "Start";
             this.btnStartProcessing.UseVisualStyleBackColor = true;
@@ -503,13 +503,12 @@
             "Wordsearch Segmentation",
             "Rotation Correction",
             "Character Image Extraction",
-            "Feature Extraction",
-            "Classification",
+            "Feature Extraction & Classification",
             "Wordsearch Solver"});
             this.checkListProcessingStages.Location = new System.Drawing.Point(0, 26);
             this.checkListProcessingStages.Name = "checkListProcessingStages";
             this.checkListProcessingStages.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.checkListProcessingStages.Size = new System.Drawing.Size(158, 349);
+            this.checkListProcessingStages.Size = new System.Drawing.Size(184, 349);
             this.checkListProcessingStages.TabIndex = 0;
             // 
             // splitContainerRightBottom
@@ -532,6 +531,7 @@
             // txtLog
             // 
             this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtLog.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtLog.Location = new System.Drawing.Point(0, 0);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
