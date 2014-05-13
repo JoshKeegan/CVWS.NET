@@ -477,7 +477,7 @@ namespace DemoGUI
         private void setPictureBoxSizeMode(PictureBoxSizeMode sizeMode)
         {
             //The container for the picture box (will be used for scrolling if necessary)
-            SplitterPanel container = splitContainerRight.Panel1;
+            SplitterPanel container = splitContainerRightTop.Panel1;
 
             //If using AutoSize (where the PictureBox will automatically resize to the size of the image), show scroll bars
             if(sizeMode == PictureBoxSizeMode.AutoSize)
