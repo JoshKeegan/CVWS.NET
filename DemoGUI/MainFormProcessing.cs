@@ -17,14 +17,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using AForge;
+
 using SharedHelpers;
 using SharedHelpers.ClassifierInterfacing;
 using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
+using SharedHelpers.ImageAnalysis.WordsearchDetection;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
+using SharedHelpers.Imaging;
+using SharedHelpers.WordsearchSolver;
 
 using DemoGUI.Exceptions;
-using SharedHelpers.WordsearchSolver;
 
 namespace DemoGUI
 {
@@ -111,7 +115,78 @@ namespace DemoGUI
 
             log("Selected Algorithms Loaded Successfully!");
 
-            //TODO: Process the Image
+            /*
+             * Start Processing
+             */
+            //Get the input image
+            Bitmap img = currentBitmap; //TODO: copy for thread safety???
+
+            //Get the words to find
+            string[] wordsToFind = getWordsToFind();
+
+            /*
+             * Wordsearch Detection
+             */
+            //TODO: Get all candidates & their scores and show these in the image log
+
+            //Get the candidate most likely to be a Wordsearch
+            Tuple<List<IntPoint>, Bitmap> wordsearchImageTuple = DetectionAlgorithm.ExtractBestWordsearch(
+                img, wordsearchDetectionSegmentationAlgorithm);
+
+            //If the system failed to find anything remotely resembling a wordsearch, fail now
+            if(wordsearchImageTuple == null)
+            {
+                throw new ImageProcessingException("Wordsearch Detection could not find anything . . .");
+            }
+
+            Bitmap wordsearchImage = wordsearchImageTuple.Item2;
+
+            log(wordsearchImage, "Extracted Wordsearch Image");
+
+            /*
+             * Wordsearch Segmentation
+             */
+            Segmentation segmentation = wordsearchSegmentationAlgorithm.Segment(wordsearchImage);
+            
+            //Log the Segmentation (visually)
+            log(DrawGrid.Segmentation(wordsearchImage, segmentation), "Segmentation");
+
+            /*
+             * Wordsearch Rotation Correction
+             */
+        }
+
+        //Get the words to find
+        private string[] getWordsToFind()
+        {
+            //Check that something has actually been entered in the words text box
+            if(txtWordsToFind.Text == defaultTxtWordsToFind || txtWordsToFind.Text == "")
+            {
+                throw new InvalidWordsException("You must enter some words to be found");
+            }
+
+            //Get the lines, removing spaces & hyphens, then converting it all to upper-case
+            string[] lines = txtWordsToFind.Text.ToUpper().Replace(" ", "").Replace("-", "").Split('\n');
+
+            List<string> words = new List<string>(lines.Length);
+            foreach(string line in lines)
+            {
+                //If there is a word on this line
+                if(line != "")
+                {
+                    //Check that this word only contains the characters A-Z
+                    foreach(char c in line)
+                    {
+                        if(c < 'A' || c > 'Z')
+                        {
+                            throw new InvalidWordsException(String.Format(
+                                "Word \"{0}\" contains invalid character '{1}'. Only (A-Z) are allowed", line, c));
+                        }
+                    }
+                    words.Add(line);
+                }
+            }
+            return words.ToArray();
         }
 
         //Get the selected Wordsearch Solver

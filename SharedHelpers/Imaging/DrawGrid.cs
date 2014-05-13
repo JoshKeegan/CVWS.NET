@@ -3,7 +3,7 @@
  * Shared Helpers
  * Draw Grid class - various methods to draw grids on images
  * By Josh Keegan 03/03/2014
- * Last Edit 05/03/2014
+ * Last Edit 13/05/2014
  */
 
 using System;
@@ -18,6 +18,7 @@ using AForge;
 using AForge.Imaging;
 
 using SharedHelpers.Exceptions;
+using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 
 namespace SharedHelpers.Imaging
 {
@@ -184,6 +185,49 @@ namespace SharedHelpers.Imaging
                 IntPoint p3 = new IntPoint(0, (int)end);
                 IntPoint p4 = new IntPoint(img.Width, (int)end);
                 Drawing.Line(imgData, p3, p4, endColour);
+            }
+
+            img.UnlockBits(imgData);
+        }
+
+        public static Bitmap Segmentation(Bitmap img, Segmentation segmentation)
+        {
+            return Segmentation(img, segmentation, DrawDefaults.DEFAULT_COLOUR);
+        }
+
+        public static Bitmap Segmentation(Bitmap imgOrig, Segmentation segmentation, Color colour)
+        {
+            Bitmap img = new Bitmap(imgOrig);
+            SegmentationInPlace(img, segmentation, colour);
+            return img;
+        }
+
+        public static void SegmentationInPlace(Bitmap img, Segmentation segmentation)
+        {
+            SegmentationInPlace(img, segmentation, DrawDefaults.DEFAULT_COLOUR);
+        }
+
+        public static void SegmentationInPlace(Bitmap img, Segmentation segmentation, Color colour)
+        {
+            //Lock the image for write so we can alter it
+            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.WriteOnly, img.PixelFormat);
+
+            //Draw lines at the segmentation points for rows & cols
+            //Rows
+            foreach(int splitIdx in segmentation.Rows)
+            {
+                IntPoint p1 = new IntPoint(0, splitIdx);
+                IntPoint p2 = new IntPoint(img.Width, splitIdx);
+                Drawing.Line(imgData, p1, p2, colour);
+            }
+
+            //Cols
+            foreach(int splitIdx in segmentation.Cols)
+            {
+                IntPoint p1 = new IntPoint(splitIdx, 0);
+                IntPoint p2 = new IntPoint(splitIdx, img.Height);
+                Drawing.Line(imgData, p1, p2, colour);
             }
 
             img.UnlockBits(imgData);

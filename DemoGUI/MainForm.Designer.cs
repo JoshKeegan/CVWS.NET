@@ -50,9 +50,15 @@
             this.wordsearchSegmentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotationCorrectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.probabilisticClassificationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotationCorrectionFeatureExtractionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotationCorrectionClassificationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.characterExtractionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.biggestBlobToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.featureExtractionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.classificationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wordsearchSolverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nonProbabilisticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.probabilisticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewFiles = new System.Windows.Forms.ListView();
             this.columnHeaderFileNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -69,12 +75,6 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.txtWordsToFind = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.featureExtractionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rotationCorrectionFeatureExtractionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rotationCorrectionClassificationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wordsearchSolverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nonProbabilisticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.probabilisticToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
@@ -166,41 +166,41 @@
             this.autoSizeToolStripMenuItem,
             this.stretchImageToolStripMenuItem});
             this.imageViewToolStripMenuItem.Name = "imageViewToolStripMenuItem";
-            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.imageViewToolStripMenuItem.Text = "Image &View";
             // 
             // zoomToolStripMenuItem
             // 
             this.zoomToolStripMenuItem.Name = "zoomToolStripMenuItem";
-            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.zoomToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.zoomToolStripMenuItem.Text = "&Zoom";
             this.zoomToolStripMenuItem.Click += new System.EventHandler(this.zoomToolStripMenuItem_Click);
             // 
             // normalToolStripMenuItem
             // 
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.normalToolStripMenuItem.Text = "&Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.normalToolStripMenuItem_Click);
             // 
             // centreToolStripMenuItem
             // 
             this.centreToolStripMenuItem.Name = "centreToolStripMenuItem";
-            this.centreToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.centreToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.centreToolStripMenuItem.Text = "&Centre";
             this.centreToolStripMenuItem.Click += new System.EventHandler(this.centreToolStripMenuItem_Click);
             // 
             // autoSizeToolStripMenuItem
             // 
             this.autoSizeToolStripMenuItem.Name = "autoSizeToolStripMenuItem";
-            this.autoSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.autoSizeToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.autoSizeToolStripMenuItem.Text = "&Auto Size";
             this.autoSizeToolStripMenuItem.Click += new System.EventHandler(this.autoSizeToolStripMenuItem_Click);
             // 
             // stretchImageToolStripMenuItem
             // 
             this.stretchImageToolStripMenuItem.Name = "stretchImageToolStripMenuItem";
-            this.stretchImageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stretchImageToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.stretchImageToolStripMenuItem.Text = "&Stretch Image";
             this.stretchImageToolStripMenuItem.Click += new System.EventHandler(this.stretchImageToolStripMenuItem_Click);
             // 
@@ -215,7 +215,7 @@
             this.classificationToolStripMenuItem,
             this.wordsearchSolverToolStripMenuItem});
             this.algorithmsToolStripMenuItem.Name = "algorithmsToolStripMenuItem";
-            this.algorithmsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.algorithmsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.algorithmsToolStripMenuItem.Text = "&Algorithms";
             // 
             // wordsearchDetectionToolStripMenuItem
@@ -224,7 +224,7 @@
             this.candidateSelectionToolStripMenuItem,
             this.candidateRankingToolStripMenuItem});
             this.wordsearchDetectionToolStripMenuItem.Name = "wordsearchDetectionToolStripMenuItem";
-            this.wordsearchDetectionToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.wordsearchDetectionToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.wordsearchDetectionToolStripMenuItem.Text = "Wordsearch Detection";
             // 
             // candidateSelectionToolStripMenuItem
@@ -240,7 +240,7 @@
             this.quadrilateralsToolStripMenuItem.Checked = true;
             this.quadrilateralsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.quadrilateralsToolStripMenuItem.Name = "quadrilateralsToolStripMenuItem";
-            this.quadrilateralsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quadrilateralsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.quadrilateralsToolStripMenuItem.Text = "Quadrilaterals";
             // 
             // candidateRankingToolStripMenuItem
@@ -262,7 +262,7 @@
             // wordsearchSegmentationToolStripMenuItem
             // 
             this.wordsearchSegmentationToolStripMenuItem.Name = "wordsearchSegmentationToolStripMenuItem";
-            this.wordsearchSegmentationToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.wordsearchSegmentationToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.wordsearchSegmentationToolStripMenuItem.Text = "Wordsearch Segmentation";
             // 
             // rotationCorrectionToolStripMenuItem
@@ -270,7 +270,7 @@
             this.rotationCorrectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.probabilisticClassificationToolStripMenuItem});
             this.rotationCorrectionToolStripMenuItem.Name = "rotationCorrectionToolStripMenuItem";
-            this.rotationCorrectionToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.rotationCorrectionToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.rotationCorrectionToolStripMenuItem.Text = "Rotation Correction";
             // 
             // probabilisticClassificationToolStripMenuItem
@@ -283,6 +283,18 @@
             this.probabilisticClassificationToolStripMenuItem.Name = "probabilisticClassificationToolStripMenuItem";
             this.probabilisticClassificationToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.probabilisticClassificationToolStripMenuItem.Text = "Probabilistic Classification";
+            // 
+            // rotationCorrectionFeatureExtractionToolStripMenuItem
+            // 
+            this.rotationCorrectionFeatureExtractionToolStripMenuItem.Name = "rotationCorrectionFeatureExtractionToolStripMenuItem";
+            this.rotationCorrectionFeatureExtractionToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.rotationCorrectionFeatureExtractionToolStripMenuItem.Text = "Feature Extraction";
+            // 
+            // rotationCorrectionClassificationToolStripMenuItem
+            // 
+            this.rotationCorrectionClassificationToolStripMenuItem.Name = "rotationCorrectionClassificationToolStripMenuItem";
+            this.rotationCorrectionClassificationToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.rotationCorrectionClassificationToolStripMenuItem.Text = "Classification";
             // 
             // characterExtractionToolStripMenuItem
             // 
@@ -297,14 +309,43 @@
             this.biggestBlobToolStripMenuItem.Checked = true;
             this.biggestBlobToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.biggestBlobToolStripMenuItem.Name = "biggestBlobToolStripMenuItem";
-            this.biggestBlobToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.biggestBlobToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.biggestBlobToolStripMenuItem.Text = "Biggest Blob";
+            // 
+            // featureExtractionToolStripMenuItem
+            // 
+            this.featureExtractionToolStripMenuItem.Name = "featureExtractionToolStripMenuItem";
+            this.featureExtractionToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.featureExtractionToolStripMenuItem.Text = "Feature Extraction";
             // 
             // classificationToolStripMenuItem
             // 
             this.classificationToolStripMenuItem.Name = "classificationToolStripMenuItem";
-            this.classificationToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.classificationToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.classificationToolStripMenuItem.Text = "Classification";
+            // 
+            // wordsearchSolverToolStripMenuItem
+            // 
+            this.wordsearchSolverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nonProbabilisticToolStripMenuItem,
+            this.probabilisticToolStripMenuItem});
+            this.wordsearchSolverToolStripMenuItem.Name = "wordsearchSolverToolStripMenuItem";
+            this.wordsearchSolverToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.wordsearchSolverToolStripMenuItem.Text = "Wordsearch Solver";
+            // 
+            // nonProbabilisticToolStripMenuItem
+            // 
+            this.nonProbabilisticToolStripMenuItem.Name = "nonProbabilisticToolStripMenuItem";
+            this.nonProbabilisticToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.nonProbabilisticToolStripMenuItem.Text = "Non-Probabilistic";
+            // 
+            // probabilisticToolStripMenuItem
+            // 
+            this.probabilisticToolStripMenuItem.Checked = true;
+            this.probabilisticToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.probabilisticToolStripMenuItem.Name = "probabilisticToolStripMenuItem";
+            this.probabilisticToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.probabilisticToolStripMenuItem.Text = "Probabilistic";
             // 
             // listViewFiles
             // 
@@ -356,7 +397,7 @@
             // columnHeaderImageLog
             // 
             this.columnHeaderImageLog.Text = "Image Log";
-            this.columnHeaderImageLog.Width = 75;
+            this.columnHeaderImageLog.Width = 84;
             // 
             // splitContainerMain
             // 
@@ -511,47 +552,6 @@
             this.txtWordsToFind.Text = "Enter words to find here . . .\r\nPlease enter one word per line";
             this.txtWordsToFind.Enter += new System.EventHandler(this.txtWordsToFind_Enter);
             this.txtWordsToFind.Leave += new System.EventHandler(this.txtWordToFind_Leave);
-            // 
-            // featureExtractionToolStripMenuItem
-            // 
-            this.featureExtractionToolStripMenuItem.Name = "featureExtractionToolStripMenuItem";
-            this.featureExtractionToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.featureExtractionToolStripMenuItem.Text = "Feature Extraction";
-            // 
-            // rotationCorrectionFeatureExtractionToolStripMenuItem
-            // 
-            this.rotationCorrectionFeatureExtractionToolStripMenuItem.Name = "rotationCorrectionFeatureExtractionToolStripMenuItem";
-            this.rotationCorrectionFeatureExtractionToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.rotationCorrectionFeatureExtractionToolStripMenuItem.Text = "Feature Extraction";
-            // 
-            // rotationCorrectionClassificationToolStripMenuItem
-            // 
-            this.rotationCorrectionClassificationToolStripMenuItem.Name = "rotationCorrectionClassificationToolStripMenuItem";
-            this.rotationCorrectionClassificationToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.rotationCorrectionClassificationToolStripMenuItem.Text = "Classification";
-            // 
-            // wordsearchSolverToolStripMenuItem
-            // 
-            this.wordsearchSolverToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nonProbabilisticToolStripMenuItem,
-            this.probabilisticToolStripMenuItem});
-            this.wordsearchSolverToolStripMenuItem.Name = "wordsearchSolverToolStripMenuItem";
-            this.wordsearchSolverToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.wordsearchSolverToolStripMenuItem.Text = "Wordsearch Solver";
-            // 
-            // nonProbabilisticToolStripMenuItem
-            // 
-            this.nonProbabilisticToolStripMenuItem.Name = "nonProbabilisticToolStripMenuItem";
-            this.nonProbabilisticToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.nonProbabilisticToolStripMenuItem.Text = "Non-Probabilistic";
-            // 
-            // probabilisticToolStripMenuItem
-            // 
-            this.probabilisticToolStripMenuItem.Checked = true;
-            this.probabilisticToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.probabilisticToolStripMenuItem.Name = "probabilisticToolStripMenuItem";
-            this.probabilisticToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.probabilisticToolStripMenuItem.Text = "Probabilistic";
             // 
             // MainForm
             // 

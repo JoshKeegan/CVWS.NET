@@ -19,6 +19,8 @@ using System.Windows.Forms;
 
 using SharedHelpers;
 
+using DemoGUI.Exceptions;
+
 namespace DemoGUI
 {
     public partial class MainForm : Form
@@ -323,31 +325,44 @@ namespace DemoGUI
         //The button to start the processing has been clicked
         private void btnStartProcessing_Click(object sender, EventArgs e)
         {
-            //Disable the button so it cannot be clicked again
-            btnStartProcessing.Enabled = false;
+            //Check that there is an image loaded for us to start processing on
+            if(currentBitmap != null)
+            {
+                //Disable the button so it cannot be clicked again
+                btnStartProcessing.Enabled = false;
 
-            //Do the processing asynchronously so that the main thread is still free to recieve events
-            processingTask = Task.Factory.StartNew(() =>
-            {
-                doProcessing();
-            }).ContinueWith(taskState =>
-            {
-                //If the Task completed due to an unhandled exception being thrown, tell the user & log the exception
-                if(taskState.IsFaulted)
+                //Do the processing asynchronously so that the main thread is still free to recieve events
+                processingTask = Task.Factory.StartNew(() =>
                 {
-                    //Put the exception in the processing log for closer inspection
-                    log("Fatal Exception: " + taskState.Exception.ToString());
+                    doProcessing();
+                }).ContinueWith(taskState =>
+                {
+                    //If the Task completed due to an unhandled exception being thrown, tell the user & log the exception
+                    if (taskState.IsFaulted)
+                    {
+                        //TODO: Better handling of aggregate exceptions where there are two of the same exception thrown
+                        //TODO: More User friendly handling of the exception requiring you to enter words to be found
 
-                    //Tell the user that the processing operation couldn't be completed
-                    MessageBox.Show("Couldn't complete operation.\nSee Processing log for details", 
-                        "Processing Failed to Complete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                        //Put the exception in the processing log for closer inspection
+                        log("Fatal Exception: " + taskState.Exception.ToString());
 
-                //Re-enable the button so that it can be clicked again
-                //  Note: we're in another thread still, so do this thread-safely
-                threadSafeSetBtnStartProcessingEnabled(true);
-            });
+                        //Tell the user that the processing operation couldn't be completed
+                        MessageBox.Show("Couldn't complete operation.\nSee Processing log for details",
+                            "Processing Failed to Complete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
+                    //Re-enable the button so that it can be clicked again
+                    //  Note: we're in another thread still, so do this thread-safely
+                    threadSafeSetBtnStartProcessingEnabled(true);
+                });
+            }
+            else //Otherwise there is no Bitmap loaded for processing
+            {
+                MessageBox.Show("You must select an image for processing", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
+            
         #endregion
 
         #region Helper Methods
@@ -577,7 +592,7 @@ namespace DemoGUI
             {
                 //Set up the Image Log (with this being the first entry)
                 imageLog = new Dictionary<string, Bitmap>();
-                imageLogAdd("Input", currentBitmap);
+                log(currentBitmap, "Input");
 
                 //Select this item in the image log so it gets displayed in the picture box
                 listViewImageLog.Items[0].Selected = true;
@@ -592,14 +607,6 @@ namespace DemoGUI
                 //Show this Bitmap in the picture box
                 pictureBox.Image = imageLog[listViewImageLog.SelectedItems[0].Text];
             }
-        }
-
-        private void imageLogAdd(string txt, Bitmap img)
-        {
-            imageLog.Add(txt, img);
-
-            //Add this on the screen
-            listViewImageLog.Items.Add(txt);
         }
 
         //Clear the Interface of everything loaded (disposing of all images etc...)
