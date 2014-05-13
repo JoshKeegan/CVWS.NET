@@ -60,7 +60,6 @@ namespace DemoGUI
 
             //Populate the Algorithms Menu, set it's defaults & place event handlers on anything that you can choose
             populateAlgorithmsMenu();
-            //TODO: Set the Algorithms Menu default options
             setupAlgorithmsEventHandlers();
 
             //If the configuration from a previous run of the program can be loaded, use those settings

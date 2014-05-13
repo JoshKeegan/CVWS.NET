@@ -42,7 +42,7 @@ namespace DemoGUI
         private static readonly Dictionary<string, Type> FEATURE_EXTRACTORS = new Dictionary<string,Type>()
         {
             { "Discrete Cosine Transform (DCT)", typeof(FeatureExtractionDCT) },
-            { "Linear Discriminant Analysis (LDA)", typeof(FeatureExtractionLDA) }, //TODO: Implement serialization on LDA
+            //{ "Linear Discriminant Analysis (LDA)", typeof(FeatureExtractionLDA) }, //TODO: Implement serialization on LDA if this is to be included in the GUI
             { "Principal Component Analysis (PCA)", typeof(FeatureExtractionPCA) },
             { "Raw Pixel Values", typeof(FeatureExtractionPixelValues) }
         };
