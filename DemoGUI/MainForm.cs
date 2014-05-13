@@ -339,37 +339,82 @@ namespace DemoGUI
                     log("Fatal Exception: " + taskState.Exception.ToString());
 
                     //Tell the user that the processing operation couldn't be completed
-                    MessageBox.Show("Couldn't complete operation.\nSee Processing log for details", "Processing Failed to Complete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Couldn't complete operation.\nSee Processing log for details", 
+                        "Processing Failed to Complete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
                 //Re-enable the button so that it can be clicked again
-                btnStartProcessing.Enabled = true;
+                //  Note: we're in another thread still, so do this thread-safely
+                threadSafeSetBtnStartProcessingEnabled(true);
             });
         }
         #endregion
 
         #region Helper Methods
+        delegate void threadSafeSetBtnStartProcessingEnabledCallback(bool enabled);
+
+        //Method for setting whether btnStartProcessing is enabled from worker threads
+        private void threadSafeSetBtnStartProcessingEnabled(bool enabled)
+        {
+            //If we're currently in a worker thread, call this method on the GUI thread
+            if(btnStartProcessing.InvokeRequired)
+            {
+                threadSafeSetBtnStartProcessingEnabledCallback callback = 
+                    new threadSafeSetBtnStartProcessingEnabledCallback(threadSafeSetBtnStartProcessingEnabled);
+                //Run the function again (passed as a delegate) on the GUI thread using the Invoke method
+                this.Invoke(callback, new object[] { enabled });
+            }
+            else //Otherwise we're on the thread in charge of the Form, manipulate it
+            {
+                btnStartProcessing.Enabled = enabled;
+            }
+        }
+
+        delegate void logCallback(string text);
+
         //Log some text
         private void log(string text)
         {
-            //If the text box already has content, then add a new line before appending this
-            if(txtLog.Text != "")
+            //If we're currently in a worker thread, call this method on the GUI thread
+            if(txtLog.InvokeRequired)
             {
-                txtLog.Text += Environment.NewLine;
+                logCallback logCallbackDelegate = new logCallback(log);
+                //Run the function again (passed as a delegate) on the GUI thread using the Invoke method
+                this.Invoke(logCallbackDelegate, new object[] { text });
             }
+            else //Otherwise we're on the thread in charge of the Form, manipulate it
+            {
+                //If the text box already has content, then add a new line before appending this
+                if (txtLog.Text != "")
+                {
+                    txtLog.Text += Environment.NewLine;
+                }
 
-            //Append this text to the log
-            txtLog.Text += text;
+                //Append this text to the log
+                txtLog.Text += text;
+            }
         }
+
+        delegate void imgLogCallback(Bitmap img, string text);
 
         private void log(Bitmap img, string text)
         {
-            //Add to the imageLog dictionary first, so if the key is already present the exception will be 
-            //  thrown before the text gets added to the list
-            imageLog.Add(text, img);
+            //If we're currently in a worker thread, call this method on the GUI thread
+            if(listViewImageLog.InvokeRequired)
+            {
+                imgLogCallback logCallbackDelegate = new imgLogCallback(log);
+                //Run the function again (passed as a delegate) on the GUI thread using the Invoke method
+                this.Invoke(logCallbackDelegate, new object[] { img, text });
+            }
+            else //Otherwise we're on the thread in charge of the Form, manipulate it
+            {
+                //Add to the imageLog dictionary first, so if the key is already present the exception will be 
+                //  thrown before the text gets added to the list
+                imageLog.Add(text, img);
 
-            //Add the text to the list
-            listViewImageLog.Items.Add(text);
+                //Add the text to the list
+                listViewImageLog.Items.Add(text);
+            }
         }
 
         private void generateRecentDirsList()
