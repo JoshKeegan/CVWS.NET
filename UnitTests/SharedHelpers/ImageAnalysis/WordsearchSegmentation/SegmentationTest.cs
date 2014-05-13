@@ -3,7 +3,7 @@
  * Unit Tests
  * SharedHelpers.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
  * By Josh Keegan 02/04/2014
- * Last Edit 29/04/2014
+ * Last Edit 13/05/2014
  */
 
 using System;
@@ -734,6 +734,66 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             Segmentation s = new Segmentation(rows, cols, 2, 2);
 
             Assert.AreEqual(2, s.NumCols);
+        }
+
+        /*
+         * Test IsEquallySpaced
+         */
+        [TestMethod]
+        public void TestIsEquallySpaced1()
+        {
+            //Test with number of rows & cols (which therefore must be equally spaced)
+            Segmentation s = new Segmentation(5, 12, 123, 456);
+
+            Assert.AreEqual(true, s.IsEquallySpaced);
+        }
+
+        [TestMethod]
+        public void TestIsEquallySpaced2()
+        {
+            //Test with splitting indices that aren't equally spaced
+            int[] rows = { 1, 3, 4 };
+            int[] cols = { 1, 3, 4 };
+
+            Segmentation s = new Segmentation(rows, cols, 5, 5);
+
+            Assert.AreEqual(false, s.IsEquallySpaced);
+        }
+
+        [TestMethod]
+        public void TestIsEquallySpaced3()
+        {
+            //Test with splitting indices that are equally spaced
+            int[] rows = { 1, 2, 3, 4 };
+            int[] cols = { 1, 2, 3, 4, 5 };
+
+            Segmentation s = new Segmentation(rows, cols, 6, 5);
+
+            Assert.AreEqual(true, s.IsEquallySpaced);
+        }
+
+        [TestMethod]
+        public void TestIsEquallySpaced4()
+        {
+            //Test with splitting rows that are equally spaced, but cols that aren't
+            int[] rows = { 1, 2, 3, 4 };
+            int[] cols = { 1, 2, 4, 5 };
+
+            Segmentation s = new Segmentation(rows, cols, 6, 5);
+
+            Assert.AreEqual(false, s.IsEquallySpaced);
+        }
+
+        [TestMethod]
+        public void TestIsEquallySpaced5()
+        {
+            //Test with splitting cols that are equally spaced, but rows that aren't
+            int[] rows = { 1, 2, 4 };
+            int[] cols = { 1, 2, 3, 4, 5 };
+
+            Segmentation s = new Segmentation(rows, cols, 6, 5);
+
+            Assert.AreEqual(false, s.IsEquallySpaced);
         }
 
         /*

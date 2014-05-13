@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation - class to hold the indices that split rows & cols
  * By Josh Keegan 02/04/2014
- * Last Edit 29/04/2014
+ * Last Edit 13/05/2014
  */
 
 using System;
@@ -44,6 +44,68 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             get
             {
                 return Cols.Length + 1;
+            }
+        }
+
+        //Is each row/col equally spaced (i.e. are they all the same size)
+        public bool IsEquallySpaced
+        {
+            get
+            {
+                //If this Segmentation was constructed from a number of rows & cols, then they must be equally spaced
+                if(numRows != null && numCols != null)
+                {
+                    return true;
+                }
+                else //Otherwise check if each row & col are the same distance from one another
+                {
+                    //Rows
+                    int? rowDistance = null;
+                    int prevRowIdx = -1; //Unused default (required by compiler)
+                    foreach(int idx in Rows)
+                    {
+                        //If this is the first index, set the distance to the index
+                        if(rowDistance == null)
+                        {
+                            rowDistance = idx;
+                        }
+                        else //Otherwise check if this distance is the same as all of the distances up until now
+                        {
+                            //If this isn't the same distance
+                            if((idx - prevRowIdx) != rowDistance)
+                            {
+                                return false;
+                            }
+                        }
+                        //Store this index for the next iteration
+                        prevRowIdx = idx;
+                    }
+
+                    //Cols
+                    int? colDistance = null;
+                    int prevColIdx = -1; //Unused default (required by compiler)
+                    foreach (int idx in Cols)
+                    {
+                        //If this is the first index, set the distance to the index
+                        if (colDistance == null)
+                        {
+                            colDistance = idx;
+                        }
+                        else //Otherwise check if this distance is the same as all of the distances up until now
+                        {
+                            //If this isn't the same distance
+                            if ((idx - prevColIdx) != colDistance)
+                            {
+                                return false;
+                            }
+                        }
+                        //Store this index for the next iteration
+                        prevColIdx = idx;
+                    }
+
+                    //If we've got this far then all rows & cols have been checked & they're all equally spaced
+                    return true;
+                }
             }
         }
 
