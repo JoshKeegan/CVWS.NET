@@ -37,7 +37,28 @@ namespace DemoGUI
 {
     public partial class MainForm : Form
     {
+        private enum ProcessingStage
+        {
+            WordsearchDetection,
+            WordsearchSegmentation,
+            RotationCorrection,
+            CharacterImageExtraction,
+            FeatureExtractionAndClassification,
+            WordsearchSolver
+        };
+
         //Constants
+        private static readonly Dictionary<ProcessingStage, string> PROCESSING_STAGE_NAMES = new Dictionary<ProcessingStage, string>()
+        {
+            //These names should be exactly the same as the ones in checkListProcessingStages
+            { ProcessingStage.WordsearchDetection, "Wordsearch Detection" },
+            { ProcessingStage.WordsearchSegmentation, "Wordsearch Segmentation" },
+            { ProcessingStage.RotationCorrection, "Rotation Correction" },
+            { ProcessingStage.CharacterImageExtraction, "Character Image Extraction" },
+            { ProcessingStage.FeatureExtractionAndClassification, "Feature Extraction & Classification" },
+            { ProcessingStage.WordsearchSolver, "Wordsearch Solver" }
+        };
+
         private const string TRAINED_ALGORITHMS_PATH = "TrainedAlgorithms/";
         private const string TRAINED_FEATURE_EXTRACTORS_PATH = TRAINED_ALGORITHMS_PATH + "FeatureExtractors/";
         private const string TRAINED_CLASSIFIERS_PATH = TRAINED_ALGORITHMS_PATH + "Classifiers/";
@@ -130,6 +151,9 @@ namespace DemoGUI
             /*
              * Wordsearch Detection
              */
+            //Show that we're starting Wordsearch Detection
+            setProcessingStageState(ProcessingStage.WordsearchDetection, CheckState.Indeterminate);
+
             //TODO: Get all candidates & their scores and show these in the image log
 
             //Get the candidate most likely to be a Wordsearch
@@ -146,17 +170,29 @@ namespace DemoGUI
 
             log(wordsearchImage, "Extracted Wordsearch Image");
 
+            //Mark Wordsearch Detection as completed
+            setProcessingStageState(ProcessingStage.WordsearchDetection, CheckState.Checked);
+
             /*
              * Wordsearch Segmentation
              */
+            //Show that we're starting Wordsearch Segmentation
+            setProcessingStageState(ProcessingStage.WordsearchSegmentation, CheckState.Indeterminate);
+
             Segmentation segmentation = wordsearchSegmentationAlgorithm.Segment(wordsearchImage);
             
             //Log the Segmentation (visually)
             log(DrawGrid.Segmentation(wordsearchImage, segmentation), "Segmentation");
 
+            //Mark Wordsearch Segmentation as completed
+            setProcessingStageState(ProcessingStage.WordsearchSegmentation, CheckState.Checked);
+
             /*
              * Wordsearch Rotation Correction
              */
+            //Show that we're starting Rotation Correction
+            setProcessingStageState(ProcessingStage.RotationCorrection, CheckState.Indeterminate);
+
             WordsearchRotation originalRotation;
 
             //If the rows & cols in the Segmentation are all equally spaced apart, optimise by using the number of rows & cols
@@ -197,9 +233,15 @@ namespace DemoGUI
             log(rotatedImage, "Rotated Wordsearch");
             log(DrawGrid.Segmentation(rotatedImage, segmentation), "Rotated Segmentation");
 
+            //Mark Rotation Correction as completed
+            setProcessingStageState(ProcessingStage.RotationCorrection, CheckState.Checked);
+
             /*
              * Character Image Extraction
              */
+            //Show that we're starting Character Image Extraction
+            setProcessingStageState(ProcessingStage.CharacterImageExtraction, CheckState.Indeterminate);
+
             //Split the image up using the Segmentation
             Bitmap[,] rawCharImgs = null;
 
@@ -257,9 +299,15 @@ namespace DemoGUI
             //Log the extracted character images
             log(CombineImages.Grid(charImgs), "Extracted Character Images");
 
+            //Mark Character Image Extraction as completed
+            setProcessingStageState(ProcessingStage.CharacterImageExtraction, CheckState.Checked);
+
             /*
              * Feature Extraction & Classification
              */
+            //Show that we're starting Feature Extraction & Classification
+            setProcessingStageState(ProcessingStage.FeatureExtractionAndClassification, CheckState.Indeterminate);
+
             double[][][] charProbabilities = classifier.Classify(charImgs);
 
             //Actual images of the characters are no longer required
@@ -281,15 +329,24 @@ namespace DemoGUI
                 log(builder.ToString());
             }
 
+            //Mark Feature Extraction & Classification as completed
+            setProcessingStageState(ProcessingStage.FeatureExtractionAndClassification, CheckState.Checked);
+
             /*
              * Solve Wordsearch
              */
+            //Show that we're starting to Solve the Wordsearch
+            setProcessingStageState(ProcessingStage.WordsearchSolver, CheckState.Indeterminate);
+
             Solution solution = wordsearchSolver.Solve(charProbabilities, wordsToFind);
 
             //Log the solution visually
             Bitmap bitmapSolution = DrawSolution.Solution(rotatedImage, segmentation, solution);
             log(bitmapSolution, "Solution");
             log(DrawGrid.Segmentation(bitmapSolution, segmentation), "Solution + Segmentation");
+
+            //Mark the wordsearch as having been solved
+            setProcessingStageState(ProcessingStage.WordsearchSolver, CheckState.Checked);
         }
 
         //Get the words to find

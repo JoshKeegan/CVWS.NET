@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form, Business Logic
  * By Josh Keegan 09/05/2014
- * Last Edit 13/05/2014
+ * Last Edit 14/05/2014
  */
 
 using System;
@@ -366,6 +366,41 @@ namespace DemoGUI
         #endregion
 
         #region Helper Methods
+        delegate void setProcessingStageStateCallback(ProcessingStage processingStage, CheckState checkState);
+
+        private void setProcessingStageState(ProcessingStage processingStage, CheckState checkState)
+        {
+            //If we're currently in a worker thread, call this method on the GUI thread
+            if(checkListProcessingStages.InvokeRequired)
+            {
+                setProcessingStageStateCallback callback = new setProcessingStageStateCallback(setProcessingStageState);
+                //Run the function again (passed as a delegate) on the GUI using the Invoke method
+                this.Invoke(callback, new object[] { processingStage, checkState });
+            }
+            else //Otherwise we're on a thread in charge of the Form, manipulate it
+            {
+                //Get what the Item text should be for this ProcessingStage
+                string strProcessingStage = PROCESSING_STAGE_NAMES[processingStage];
+
+                //Find the Item specified by it's name
+                for (int i = 0; i < checkListProcessingStages.Items.Count; i++)
+                {
+                    object item = checkListProcessingStages.Items[i];
+                    string itemText = checkListProcessingStages.GetItemText(item);
+
+                    //If this is the item we're looking for
+                    if(itemText == strProcessingStage)
+                    {
+                        //Set this item to the state specified
+                        checkListProcessingStages.SetItemCheckState(i, checkState);
+
+                        //Look no further
+                        break;
+                    }
+                }
+            }
+        }
+
         delegate void threadSafeSetBtnStartProcessingEnabledCallback(bool enabled);
 
         //Method for setting whether btnStartProcessing is enabled from worker threads
