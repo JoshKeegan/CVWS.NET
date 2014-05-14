@@ -3,7 +3,7 @@
  * Shared Helpers
  * Draw Grid class - various methods to draw grids on images
  * By Josh Keegan 03/03/2014
- * Last Edit 13/05/2014
+ * Last Edit 14/05/2014
  */
 
 using System;
@@ -209,6 +209,12 @@ namespace SharedHelpers.Imaging
 
         public static void SegmentationInPlace(Bitmap img, Segmentation segmentation, Color colour)
         {
+            //Validation: Check that the image dimensions & segmentation dimensions match
+            if(img.Width != segmentation.Width || img.Height != segmentation.Height)
+            {
+                throw new ArgumentException("Bitmap dimensions do not match Segmentation dimensions");
+            }
+
             //Lock the image for write so we can alter it
             BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
                 ImageLockMode.WriteOnly, img.PixelFormat);

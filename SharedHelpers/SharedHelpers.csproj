@@ -111,6 +111,7 @@
     <Compile Include="Imaging\DrawGrid.cs" />
     <Compile Include="Imaging\DrawShapes.cs" />
     <Compile Include="Exceptions\UnexpectedPixelFormatException.cs" />
+    <Compile Include="Imaging\DrawSolution.cs" />
     <Compile Include="Imaging\FilterCombinations.cs" />
     <Compile Include="Imaging\ShapeFinder.cs" />
     <Compile Include="Imaging\SplitImage.cs" />

@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
  * By Josh Keegan 12/05/2014
- * Last Edit 13/05/2014
+ * Last Edit 14/05/2014
  */
 
 using System;
@@ -267,7 +267,7 @@ namespace DemoGUI
 
             //Log the wordsearch as classified
             char[,] classifiedChars = NeuralNetworkHelpers.GetMostLikelyChars(charProbabilities);
-            log("Wordsearch as classified (character that was gievn the highest probability):");
+            log("Wordsearch as classified (character that was given the highest probability):");
             for (int i = 0; i < classifiedChars.GetLength(1); i++) //Rows
             {
                 StringBuilder builder = new StringBuilder();
@@ -280,6 +280,16 @@ namespace DemoGUI
 
                 log(builder.ToString());
             }
+
+            /*
+             * Solve Wordsearch
+             */
+            Solution solution = wordsearchSolver.Solve(charProbabilities, wordsToFind);
+
+            //Log the solution visually
+            Bitmap bitmapSolution = DrawSolution.Solution(rotatedImage, segmentation, solution);
+            log(bitmapSolution, "Solution");
+            log(DrawGrid.Segmentation(bitmapSolution, segmentation), "Solution + Segmentation");
         }
 
         //Get the words to find
@@ -321,11 +331,11 @@ namespace DemoGUI
             //Check if each menu item is checked in turn
             if(nonProbabilisticToolStripMenuItem.Checked)
             {
-                return new SolverProbabilistic();
+                return new SolverNonProbabilistic();
             }
             else if(probabilisticClassificationToolStripMenuItem.Checked)
             {
-                return new SolverNonProbabilistic();
+                return new SolverProbabilistic();
             }
             else //Otherwise no Menu Item was checked (or we didn't test for the checked one)
             {
