@@ -41,6 +41,8 @@ namespace DemoGUI
 
         private const int NUM_RECENT_DIRECTORIES = 8;
 
+        private const string INPUT_IMAGE_LOG_LABEL = "Input";
+
         //Private Variables
         private LinkedList<string> recentDirectories = new LinkedList<string>();
         private string currentDirectory = null;
@@ -331,6 +333,16 @@ namespace DemoGUI
                 //Disable the button so it cannot be clicked again
                 btnStartProcessing.Enabled = false;
 
+                //Clear anything in the interface that gets used when processing an image 
+                //  (in case we've processed this image already with different settings)
+                clearInterfacePerImageBasis();
+
+                //Set up the image log data structure
+                imageLog = new Dictionary<string, Bitmap>();
+
+                //Add the input image back on to the image log
+                log(currentBitmap, INPUT_IMAGE_LOG_LABEL);
+
                 //Do the processing asynchronously so that the main thread is still free to recieve events
                 processingTask = Task.Factory.StartNew(() =>
                 {
@@ -602,8 +614,7 @@ namespace DemoGUI
             }
 
             //Clear everthing that is set on a per-file basis
-            clearImageLog();
-            //TODO: Add more fields to be cleared here as they get added/used
+            clearInterfacePerImageBasis();
 
             //If there is a selected file & a selected directory
             if(listViewFiles.SelectedItems.Count == 1 && currentDirectory != null)
@@ -627,7 +638,7 @@ namespace DemoGUI
             {
                 //Set up the Image Log (with this being the first entry)
                 imageLog = new Dictionary<string, Bitmap>();
-                log(currentBitmap, "Input");
+                log(currentBitmap, INPUT_IMAGE_LOG_LABEL);
 
                 //Select this item in the image log so it gets displayed in the picture box
                 listViewImageLog.Items[0].Selected = true;
@@ -662,7 +673,24 @@ namespace DemoGUI
             //Clear the Text Log
             txtLog.Text = "";
 
+            //Clear the Processing Stages List
+            clearProcessingStagesList();
+
             //TODO: Clear the status strip
+        }
+
+        //Clear anything on the interface that gets used on a per-image basis
+        private void clearInterfacePerImageBasis()
+        {
+            //Clear everything related to the image log
+            clearImageLog();
+
+            //Clear the Processing Stages List
+            clearProcessingStagesList();
+
+            //Clear the Text Log
+            txtLog.Text = "";
+            //TODO: Add more things to clear here as they get added to the interface
         }
 
         private void clearImageLog()
@@ -684,6 +712,15 @@ namespace DemoGUI
 
             //Clear the List View
             listViewImageLog.Items.Clear();
+        }
+
+        private void clearProcessingStagesList()
+        {
+            //Set all of the checkboxes to being unchecked
+            for(int i = 0; i < checkListProcessingStages.Items.Count; i++)
+            {
+                checkListProcessingStages.SetItemChecked(i, false);
+            }
         }
         #endregion
     }
