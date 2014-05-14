@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -65,6 +66,14 @@ namespace DemoGUI
             //Populate the Algorithms Menu, set it's defaults & place event handlers on anything that you can choose
             populateAlgorithmsMenu();
             setupAlgorithmsEventHandlers();
+
+            //Initialise the Processing Stage Stopwatches
+            processingStageStopwatches = new Dictionary<ProcessingStage, Stopwatch>();
+            //Iterate over all of the enum values for ProcessingStage, creating Stopwatches for them
+            foreach(ProcessingStage processingStage in (ProcessingStage[])Enum.GetValues(typeof(ProcessingStage)))
+            {
+                processingStageStopwatches.Add(processingStage, new Stopwatch());
+            }
 
             //If the configuration from a previous run of the program can be loaded, use those settings
             if(Configuration.Load())
@@ -391,24 +400,47 @@ namespace DemoGUI
             }
             else //Otherwise we're on a thread in charge of the Form, manipulate it
             {
-                //Get what the Item text should be for this ProcessingStage
-                string strProcessingStage = PROCESSING_STAGE_NAMES[processingStage];
-
-                //Find the Item specified by it's name
-                for (int i = 0; i < checkListProcessingStages.Items.Count; i++)
+                //If this is an actually Processing Stage (not All), update the CheckList
+                if(processingStage != ProcessingStage.All)
                 {
-                    object item = checkListProcessingStages.Items[i];
-                    string itemText = checkListProcessingStages.GetItemText(item);
+                    //Get what the Item text should be for this ProcessingStage
+                    string strProcessingStage = PROCESSING_STAGE_NAMES[processingStage];
 
-                    //If this is the item we're looking for
-                    if(itemText == strProcessingStage)
+                    //Find the Item specified by it's name
+                    for (int i = 0; i < checkListProcessingStages.Items.Count; i++)
                     {
-                        //Set this item to the state specified
-                        checkListProcessingStages.SetItemCheckState(i, checkState);
+                        object item = checkListProcessingStages.Items[i];
+                        string itemText = checkListProcessingStages.GetItemText(item);
 
-                        //Look no further
-                        break;
+                        //If this is the item we're looking for
+                        if (itemText == strProcessingStage)
+                        {
+                            //Set this item to the state specified
+                            checkListProcessingStages.SetItemCheckState(i, checkState);
+
+                            //Look no further
+                            break;
+                        }
                     }
+                }
+                
+                //Handle timing for each stage
+
+                //Get the Stopwatch for this Processing stage
+                Stopwatch stopwatch = processingStageStopwatches[processingStage];
+
+                //If the stage has finished
+                if(checkState == CheckState.Checked)
+                {
+                    stopwatch.Stop();
+
+                    //Display the time taken for this stage
+                    log(String.Format("{0} took {1}ms to complete", 
+                        PROCESSING_STAGE_NAMES[processingStage], stopwatch.ElapsedMilliseconds));
+                }
+                else //Otherwise the stage is starting, start timing
+                {
+                    stopwatch.Restart();
                 }
             }
         }

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -44,7 +45,8 @@ namespace DemoGUI
             RotationCorrection,
             CharacterImageExtraction,
             FeatureExtractionAndClassification,
-            WordsearchSolver
+            WordsearchSolver,
+            All
         };
 
         //Constants
@@ -56,7 +58,8 @@ namespace DemoGUI
             { ProcessingStage.RotationCorrection, "Rotation Correction" },
             { ProcessingStage.CharacterImageExtraction, "Character Image Extraction" },
             { ProcessingStage.FeatureExtractionAndClassification, "Feature Extraction & Classification" },
-            { ProcessingStage.WordsearchSolver, "Wordsearch Solver" }
+            { ProcessingStage.WordsearchSolver, "Wordsearch Solver" },
+            { ProcessingStage.All, "All Processing Stages" }
         };
 
         private const string TRAINED_ALGORITHMS_PATH = "TrainedAlgorithms/";
@@ -92,10 +95,8 @@ namespace DemoGUI
 
         private static readonly Type DEFAULT_WORDSEARCH_DETECTION_SEGMENTATION = typeof(SegmentByHistogramThresholdPercentileRankTwoThresholds);
         private static readonly Type DEFAULT_WORDSEARCH_SEGMENTATION = typeof(SegmentByBlobRecognition);
-        //private static readonly Type DEFAULT_ROTATION_CORRECTION_FEATURE_EXTRACTION = typeof(FeatureExtractionPCA);
         private const string DEFAULT_ROTATION_CORRECTION_FEATURE_EXTRACTION = "Principal Component Analysis (PCA) All Features"; //Feature Extraction as a stirng because there can be more than one opention per type
         private static readonly Type DEFAULT_ROTATION_CORRECTION_CLASSIFICATION = typeof(AForgeActivationNeuralNetClassifier);
-        //private static readonly Type DEFAULT_FEATURE_EXTRACTION = typeof(FeatureExtractionPCA );
         private const string DEFAULT_FEATURE_EXTRACTION = "Principal Component Analysis (PCA) All Features";
         private static readonly Type DEFAULT_CLASSIFICATION = typeof(AForgeActivationNeuralNetClassifier);
 
@@ -111,6 +112,9 @@ namespace DemoGUI
         {
             { "Single Layer Neural Network", "neuralNetwork_singleLayer" }
         };
+
+        //Variables
+        private Dictionary<ProcessingStage, Stopwatch> processingStageStopwatches;
 
         //Helper method to do all of the processing to solve a wordsearch
         private void doProcessing()
@@ -142,8 +146,11 @@ namespace DemoGUI
             /*
              * Start Processing
              */
+            //Start the timer for all processing
+            setProcessingStageState(ProcessingStage.All, CheckState.Indeterminate);
+
             //Get the input image
-            Bitmap img = currentBitmap; //TODO: copy for thread safety???
+            Bitmap img = currentBitmap;
 
             //Get the words to find
             string[] wordsToFind = getWordsToFind();
@@ -347,6 +354,9 @@ namespace DemoGUI
 
             //Mark the wordsearch as having been solved
             setProcessingStageState(ProcessingStage.WordsearchSolver, CheckState.Checked);
+
+            //Log the time taken to complete all of the processing
+            setProcessingStageState(ProcessingStage.All, CheckState.Checked);
         }
 
         //Get the words to find
