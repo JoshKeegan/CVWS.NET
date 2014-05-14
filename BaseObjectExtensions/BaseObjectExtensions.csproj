@@ -48,6 +48,7 @@
     <Compile Include="BitmapExtensions.cs" />
     <Compile Include="CollectionExtensionsInt.cs" />
     <Compile Include="CollectionExtensionsUint.cs" />
+    <Compile Include="ImageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

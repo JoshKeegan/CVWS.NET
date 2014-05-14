@@ -62,6 +62,9 @@
             this.listViewFiles = new System.Windows.Forms.ListView();
             this.columnHeaderFileNames = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.numImagesLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.processingTimeLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.imageDimensionsLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.listViewImageLog = new System.Windows.Forms.ListView();
             this.columnHeaderImageLog = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
@@ -76,6 +79,7 @@
             this.txtWordsToFind = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -368,15 +372,57 @@
             // 
             this.columnHeaderFileNames.Tag = "";
             this.columnHeaderFileNames.Text = "File Names";
-            this.columnHeaderFileNames.Width = 131;
+            this.columnHeaderFileNames.Width = 127;
             // 
             // statusStrip
             // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.numImagesLabel,
+            this.processingTimeLabel,
+            this.imageDimensionsLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 503);
             this.statusStrip.Name = "statusStrip";
+            this.statusStrip.ShowItemToolTips = true;
             this.statusStrip.Size = new System.Drawing.Size(984, 22);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
+            // 
+            // numImagesLabel
+            // 
+            this.numImagesLabel.AutoSize = false;
+            this.numImagesLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.numImagesLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenInner;
+            this.numImagesLabel.Name = "numImagesLabel";
+            this.numImagesLabel.Size = new System.Drawing.Size(150, 17);
+            this.numImagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.numImagesLabel.ToolTipText = "Number of images in the current directory";
+            // 
+            // processingTimeLabel
+            // 
+            this.processingTimeLabel.AutoSize = false;
+            this.processingTimeLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.processingTimeLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenInner;
+            this.processingTimeLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.processingTimeLabel.Name = "processingTimeLabel";
+            this.processingTimeLabel.Size = new System.Drawing.Size(150, 17);
+            this.processingTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.processingTimeLabel.ToolTipText = "Processing Time";
+            // 
+            // imageDimensionsLabel
+            // 
+            this.imageDimensionsLabel.AutoSize = false;
+            this.imageDimensionsLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.imageDimensionsLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenInner;
+            this.imageDimensionsLabel.Name = "imageDimensionsLabel";
+            this.imageDimensionsLabel.Size = new System.Drawing.Size(200, 17);
+            this.imageDimensionsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.imageDimensionsLabel.ToolTipText = "Image Dimensions";
             // 
             // listViewImageLog
             // 
@@ -397,7 +443,7 @@
             // columnHeaderImageLog
             // 
             this.columnHeaderImageLog.Text = "Image Log";
-            this.columnHeaderImageLog.Width = 84;
+            this.columnHeaderImageLog.Width = 139;
             // 
             // splitContainerMain
             // 
@@ -568,6 +614,8 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.splitContainerMain.Panel1.ResumeLayout(false);
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
@@ -645,6 +693,9 @@
         private System.Windows.Forms.ToolStripMenuItem wordsearchSolverToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nonProbabilisticToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem probabilisticToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel numImagesLabel;
+        private System.Windows.Forms.ToolStripStatusLabel processingTimeLabel;
+        private System.Windows.Forms.ToolStripStatusLabel imageDimensionsLabel;
     }
 }
 

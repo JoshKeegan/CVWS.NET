@@ -2,6 +2,7 @@
  * Dissertation CV Wordsearch Solver
  * Bitmap Extensions Tests
  * By Josh Keegan 03/04/2014
+ * Last Edit 14/05/2014
  */
 
 using System;
@@ -18,11 +19,14 @@ namespace UnitTests.BaseObjectExtensions
     [TestClass]
     public class BitmapExtensions
     {
+        /*
+         * Test DataEquals
+         */
         [TestMethod]
         public void TestDataEquals1()
         {
             //Test that a bitmap is the same as itself returns true
-            Bitmap b = getArbitraryBitmap();
+            Bitmap b = Helpers.getArbitraryBitmap();
 
             Assert.IsTrue(b.DataEquals(b));
 
@@ -34,8 +38,8 @@ namespace UnitTests.BaseObjectExtensions
         public void TestDataEquals2()
         {
             //Test that two bitmaps that are exactly the same returns true
-            Bitmap a = getArbitraryBitmap();
-            Bitmap b = getArbitraryBitmap();
+            Bitmap a = Helpers.getArbitraryBitmap();
+            Bitmap b = Helpers.getArbitraryBitmap();
 
             Assert.IsTrue(a.DataEquals(b));
 
@@ -48,8 +52,8 @@ namespace UnitTests.BaseObjectExtensions
         public void TestDataEquals3()
         {
             //Test that two 8bpp bitmaps return true
-            Bitmap a = getGreyscaleBitmap();
-            Bitmap b = getGreyscaleBitmap();
+            Bitmap a = Helpers.getGreyscaleBitmap();
+            Bitmap b = Helpers.getGreyscaleBitmap();
 
             Assert.IsTrue(a.DataEquals(b));
 
@@ -98,33 +102,6 @@ namespace UnitTests.BaseObjectExtensions
             //Clean Up
             a.Dispose();
             b.Dispose();
-        }
-
-        /*
-         * Private Helpers
-         */
-        private static Bitmap getArbitraryBitmap()
-        {
-            Bitmap b = new Bitmap(2, 2, PixelFormat.Format32bppArgb);
-            b.SetPixel(0, 0, Color.Blue);
-            b.SetPixel(0, 1, Color.BurlyWood);
-            b.SetPixel(1, 0, Color.Lime);
-            b.SetPixel(1, 1, Color.Teal);
-            return b;
-        }
-
-        private static Bitmap getGreyscaleBitmap()
-        {
-            //Cannot use SetPixel on Indexed bitmaps (which 8bpp must be), so make a colour one and then greyscale it
-            Bitmap colourBitmap = new Bitmap(2, 1, PixelFormat.Format32bppArgb);
-            colourBitmap.SetPixel(0, 0, Color.Black);
-            colourBitmap.SetPixel(1, 0, Color.White);
-
-            Bitmap greyBitmap = Grayscale.CommonAlgorithms.BT709.Apply(colourBitmap);
-
-            colourBitmap.Dispose();
-
-            return greyBitmap;
         }
     }
 }

@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using BaseObjectExtensions;
 using SharedHelpers;
 
 using DemoGUI.Exceptions;
@@ -437,6 +438,12 @@ namespace DemoGUI
                     //Display the time taken for this stage
                     log(String.Format("{0} took {1}ms to complete", 
                         PROCESSING_STAGE_NAMES[processingStage], stopwatch.ElapsedMilliseconds));
+
+                    //If we were timing all of the processing, put the time in the status bar
+                    if(processingStage == ProcessingStage.All)
+                    {
+                        setProcessingTimeLabel(stopwatch.ElapsedMilliseconds);
+                    }
                 }
                 else //Otherwise the stage is starting, start timing
                 {
@@ -626,6 +633,9 @@ namespace DemoGUI
 
                 //Store this as the current directory
                 currentDirectory = dirPath;
+
+                //Update the status bar item telling the user how many images there are in the current directory
+                setNumImagesLabel(imageFileNames.Count);
             }
             catch
             {
@@ -684,7 +694,54 @@ namespace DemoGUI
             {
                 //Show this Bitmap in the picture box
                 pictureBox.Image = imageLog[listViewImageLog.SelectedItems[0].Text];
+
+                //Show the dimensions of this image in the status bar
+                updateImageDimensionsLabel();
             }
+        }
+
+        //Tell the user how many images are in the current directory
+        //  If numImages is null, it will clear the status bar item
+        private void setNumImagesLabel(int? numImages)
+        {
+            string txt = "";
+
+            //If we were passed a number to be used as the number of images, show that with some descriptive text
+            if(numImages != null)
+            {
+                txt = String.Format("{0} Images for processing", numImages);
+            }
+
+            numImagesLabel.Text = txt;
+        }
+
+        private void setProcessingTimeLabel(long? timeInMilliseconds)
+        {
+            string txt = "";
+
+            //If we were passed a number to be used, show that with some descriptive text
+            if(timeInMilliseconds != null)
+            {
+                double timeInSeconds = (double)timeInMilliseconds / 1000;
+
+                txt = String.Format("Processing Time: {0:0.000}s", timeInSeconds);
+            }
+
+            processingTimeLabel.Text = txt;
+        }
+
+        private void updateImageDimensionsLabel()
+        {
+            string txt = "";
+
+            //If there is an image we're looking at to show the dimensions for
+            //  and it hasn't been disposed of
+            if(pictureBox.Image != null && !pictureBox.Image.IsDisposed())
+            {
+                txt = String.Format("Image Dimensions: {0}x{1}", pictureBox.Image.Width, pictureBox.Image.Height);
+            }
+
+            imageDimensionsLabel.Text = txt;
         }
 
         //Clear the Interface of everything loaded (disposing of all images etc...)
@@ -708,7 +765,8 @@ namespace DemoGUI
             //Clear the Processing Stages List
             clearProcessingStagesList();
 
-            //TODO: Clear the status strip
+            //Clear the status strip
+            clearStatusStrip();
         }
 
         //Clear anything on the interface that gets used on a per-image basis
@@ -722,6 +780,13 @@ namespace DemoGUI
 
             //Clear the Text Log
             txtLog.Text = "";
+
+            //Clear the processing time label
+            setProcessingTimeLabel(null);
+
+            //Clear the image dimensions label
+            updateImageDimensionsLabel(); //Note that this won't clear it if there is still an image being shown
+
             //TODO: Add more things to clear here as they get added to the interface
         }
 
@@ -753,6 +818,18 @@ namespace DemoGUI
             {
                 checkListProcessingStages.SetItemChecked(i, false);
             }
+        }
+
+        private void clearStatusStrip()
+        {
+            //Clear the number of images status label
+            setNumImagesLabel(null);
+
+            //Clear the processing time label
+            setProcessingTimeLabel(null);
+
+            //Clear the image dimensions label
+            updateImageDimensionsLabel(); //Note that this won't clear it if there is still an image being shown
         }
         #endregion
     }
