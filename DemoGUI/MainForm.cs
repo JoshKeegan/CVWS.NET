@@ -242,9 +242,14 @@ namespace DemoGUI
             {
                 //Move this recent directory to the top of the list
                 addRecentDir(dirPath);
-                //Refresh the recent directory list shown in the menu
-                generateRecentDirsList();
             }
+            else //Otherwise we couldn't open this directory, remove it from the recent directories list
+            {
+                removeRecentDir(dirPath);
+            }
+
+            //Refresh the recent directory list shown in the menu
+            generateRecentDirsList();
         }
 
         //Exit
@@ -766,6 +771,9 @@ namespace DemoGUI
 
             //Clear the Text Log
             txtLog.Text = "";
+
+            //Clear the words to find text box
+            txtWordsToFind.Text = defaultTxtWordsToFind;
 
             //Clear the Processing Stages List
             clearProcessingStagesList();
