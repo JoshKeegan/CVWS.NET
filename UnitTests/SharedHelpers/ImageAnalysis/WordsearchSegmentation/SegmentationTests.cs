@@ -15,7 +15,7 @@ using SharedHelpers.Exceptions;
 namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
 {
     [TestClass]
-    public class SegmentationTest
+    public class SegmentationTests
     {
         /*
          * Constructor Tests

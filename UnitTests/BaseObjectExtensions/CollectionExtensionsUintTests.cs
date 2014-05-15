@@ -15,7 +15,7 @@ using BaseObjectExtensions;
 namespace UnitTests.BaseObjectExtensions
 {
     [TestClass]
-    public class CollectionExtensionsUint
+    public class CollectionExtensionsUintTests
     {
         /*
          * Mean Function Tests

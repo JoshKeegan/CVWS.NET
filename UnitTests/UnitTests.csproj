@@ -59,14 +59,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BaseObjectExtensions\CollectionExtensionsUint.cs" />
-    <Compile Include="BaseObjectExtensions\BitmapExtensions.cs" />
-    <Compile Include="BaseObjectExtensions\2dArrayExtensionsUintTest.cs" />
+    <Compile Include="BaseObjectExtensions\CollectionExtensionsUintTests.cs" />
+    <Compile Include="BaseObjectExtensions\BitmapExtensionsTests.cs" />
+    <Compile Include="BaseObjectExtensions\2dArrayExtensionsUintTests.cs" />
     <Compile Include="BaseObjectExtensions\ImageExtensionsTests.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharedHelpers\ImageAnalysis\WordsearchSegmentation\SegmentationTest.cs" />
-    <Compile Include="SharedHelpers\Imaging\ConvertersTest.cs" />
+    <Compile Include="SharedHelpers\ImageAnalysis\WordsearchSegmentation\SegmentationTests.cs" />
+    <Compile Include="SharedHelpers\Imaging\ConvertersTests.cs" />
     <Compile Include="SharedHelpers\Imaging\SplitImageTests.cs" />
     <Compile Include="SharedHelpers\Maths\GeometryTests.cs" />
     <Compile Include="SharedHelpers\Maths\Statistics\BimodalHistogramTests.cs" />

@@ -12,7 +12,7 @@ using BaseObjectExtensions;
 namespace UnitTests.BaseObjectExtensions
 {
     [TestClass]
-    public class _2dArrayExtensionsUnitTest
+    public class _2dArrayExtensionsUnitTests
     {
         [TestMethod]
         public void TestToIntArr1()

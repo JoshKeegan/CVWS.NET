@@ -17,7 +17,7 @@ using BaseObjectExtensions;
 namespace UnitTests.BaseObjectExtensions
 {
     [TestClass]
-    public class BitmapExtensions
+    public class BitmapExtensionsTests
     {
         /*
          * Test DataEquals
