@@ -113,6 +113,9 @@ namespace DemoGUI
             { "Single Layer Neural Network", "neuralNetwork_singleLayer" }
         };
 
+        private static readonly Color DRAW_WORDS_COLOUR = Color.Blue;
+        private static readonly Color DRAW_SEGMENTATION_COLOUR = Color.Red;
+
         //Variables
         private Dictionary<ProcessingStage, Stopwatch> processingStageStopwatches;
 
@@ -189,7 +192,7 @@ namespace DemoGUI
             Segmentation segmentation = wordsearchSegmentationAlgorithm.Segment(wordsearchImage);
             
             //Log the Segmentation (visually)
-            log(DrawGrid.Segmentation(wordsearchImage, segmentation), "Segmentation");
+            log(DrawGrid.Segmentation(wordsearchImage, segmentation, DRAW_SEGMENTATION_COLOUR), "Segmentation");
 
             //Mark Wordsearch Segmentation as completed
             setProcessingStageState(ProcessingStage.WordsearchSegmentation, CheckState.Checked);
@@ -238,7 +241,7 @@ namespace DemoGUI
 
             //Log the rotated image
             log(rotatedImage, "Rotated Wordsearch");
-            log(DrawGrid.Segmentation(rotatedImage, segmentation), "Rotated Segmentation");
+            log(DrawGrid.Segmentation(rotatedImage, segmentation, DRAW_SEGMENTATION_COLOUR), "Rotated Segmentation");
 
             //Mark Rotation Correction as completed
             setProcessingStageState(ProcessingStage.RotationCorrection, CheckState.Checked);
@@ -348,9 +351,9 @@ namespace DemoGUI
             Solution solution = wordsearchSolver.Solve(charProbabilities, wordsToFind);
 
             //Log the solution visually
-            Bitmap bitmapSolution = DrawSolution.Solution(rotatedImage, segmentation, solution);
+            Bitmap bitmapSolution = DrawSolution.Solution(rotatedImage, segmentation, solution, DRAW_WORDS_COLOUR);
             log(bitmapSolution, "Solution");
-            log(DrawGrid.Segmentation(bitmapSolution, segmentation), "Solution + Segmentation");
+            log(DrawGrid.Segmentation(bitmapSolution, segmentation, DRAW_SEGMENTATION_COLOUR), "Solution + Segmentation");
 
             //Log an Image for the solution to each word so that you can see where it thinks each word is
             foreach(KeyValuePair<string, WordPosition> kvp in solution)
@@ -359,7 +362,7 @@ namespace DemoGUI
                 WordPosition position = kvp.Value;
 
                 //Draw this WordPosition onto the rotated image
-                log(DrawSolution.WordPosition(rotatedImage, segmentation, position),
+                log(DrawSolution.WordPosition(rotatedImage, segmentation, position, DRAW_WORDS_COLOUR),
                     String.Format("Solution for Word: {0}", word));
             }
 
