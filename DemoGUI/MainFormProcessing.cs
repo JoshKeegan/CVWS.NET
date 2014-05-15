@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
  * By Josh Keegan 12/05/2014
- * Last Edit 14/05/2014
+ * Last Edit 15/05/2014
  */
 
 using System;
@@ -351,6 +351,17 @@ namespace DemoGUI
             Bitmap bitmapSolution = DrawSolution.Solution(rotatedImage, segmentation, solution);
             log(bitmapSolution, "Solution");
             log(DrawGrid.Segmentation(bitmapSolution, segmentation), "Solution + Segmentation");
+
+            //Log an Image for the solution to each word so that you can see where it thinks each word is
+            foreach(KeyValuePair<string, WordPosition> kvp in solution)
+            {
+                string word = kvp.Key;
+                WordPosition position = kvp.Value;
+
+                //Draw this WordPosition onto the rotated image
+                log(DrawSolution.WordPosition(rotatedImage, segmentation, position),
+                    String.Format("Solution for Word: {0}", word));
+            }
 
             //Mark the wordsearch as having been solved
             setProcessingStageState(ProcessingStage.WordsearchSolver, CheckState.Checked);

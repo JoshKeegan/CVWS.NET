@@ -3,6 +3,7 @@
  * Shared Helpers
  * Draw Solution class
  * By Josh Keegan 14/05/2014
+ * Last Edit 15/05/2014
  */
 
 using System;
@@ -82,6 +83,72 @@ namespace SharedHelpers.Imaging
             }
 
             img.UnlockBits(imgData);
+        }
+
+        public static Bitmap WordPosition(Bitmap img, Segmentation segmentation, WordPosition wordPosition)
+        {
+            return WordPosition(img, segmentation, wordPosition, DrawDefaults.DEFAULT_COLOUR);
+        }
+
+        public static Bitmap WordPosition(Bitmap origImg, Segmentation segmentation, WordPosition wordPosition, Color colour)
+        {
+            Bitmap img = new Bitmap(origImg);
+            WordPositionInPlace(img, segmentation, wordPosition, colour);
+            return img;
+        }
+
+        public static void WordPositionInPlace(Bitmap img, Segmentation segmentation, WordPosition wordPosition)
+        {
+            WordPositionInPlace(img, segmentation, wordPosition, DrawDefaults.DEFAULT_COLOUR);
+        }
+
+        public static void WordPositionInPlace(Bitmap img, Segmentation segmentation, WordPosition wordPosition, Color colour)
+        {
+            //Validation: Check that the image dimensions & segmentation dimensions match
+            if (img.Width != segmentation.Width || img.Height != segmentation.Height)
+            {
+                throw new ArgumentException("Bitmap dimensions do not match Segmentation dimensions");
+            }
+
+            //Lock the image for write so we can alter it
+            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.WriteOnly, img.PixelFormat);
+
+            //Draw on the Word Position
+            IntPoint start = getCentrePoint(segmentation, wordPosition.StartRow, wordPosition.StartCol);
+            IntPoint end = getCentrePoint(segmentation, wordPosition.EndRow, wordPosition.EndCol);
+
+            Drawing.Line(imgData, start, end, colour);
+
+            img.UnlockBits(imgData);
+        }
+
+        /*
+         * Private Helpers
+         */
+        private static IntPoint getCentrePoint(Segmentation segmentation, int rowIdx, int colIdx)
+        {
+            //Validation: Check Row Index is within bounds
+            if(rowIdx >= segmentation.NumRows)
+            {
+                throw new ArgumentException("Row Index is out of bounds");
+            }
+
+            //Validation: Check Col Index is within bounds
+            if(colIdx >= segmentation.NumCols)
+            {
+                throw new ArgumentException("Col Index is out of bounds");
+            }
+
+            int colStart = (colIdx == 0) ? 0 : segmentation.Cols[colIdx - 1];
+            int colEnd = (colIdx == segmentation.NumCols - 1) ? segmentation.Width : segmentation.Cols[colIdx];
+            int colCentre = (int)Math.Round(colStart + (((double)colEnd - colStart) / 2));
+
+            int rowStart = (rowIdx == 0) ? 0 : segmentation.Rows[rowIdx - 1];
+            int rowEnd = (rowIdx == segmentation.NumRows - 1) ? segmentation.Height : segmentation.Rows[rowIdx];
+            int rowCentre = (int)Math.Round(rowStart + (((double)rowEnd - rowStart) / 2));
+
+            return new IntPoint(colCentre, rowCentre);
         }
     }
 }
