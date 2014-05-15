@@ -382,8 +382,11 @@ namespace DemoGUI
                 throw new InvalidWordsException("You must enter some words to be found");
             }
 
-            //Get the lines, removing carriage returns, tabs, spaces & hyphens, then converting it all to upper-case
-            string[] lines = txtWordsToFind.Text.ToUpper().Replace("\r", "").Replace("\t", "").Replace(" ", "").Replace("-", "").Split('\n');
+            //Get the lines
+            string[] lines = txtWordsToFind.Text.ToUpper() //All chars are handled in upper case
+                .Replace("\r", "").Replace("\t", "").Replace(" ", "") //Ignore carriage returns, tabs or spaces
+                .Replace("-", "").Replace("'", "") //Ignore punctuation (that could be in the words to find)
+                .Split('\n');
 
             List<string> words = new List<string>(lines.Length);
             foreach(string line in lines)
@@ -400,7 +403,12 @@ namespace DemoGUI
                                 "Word \"{0}\" contains invalid character '{1}'. Only (A-Z) are allowed", line, c));
                         }
                     }
-                    words.Add(line);
+
+                    //If we don't already have this word, add it to the list
+                    if(!words.Contains(line))
+                    {
+                        words.Add(line);
+                    }
                 }
             }
             return words.ToArray();
