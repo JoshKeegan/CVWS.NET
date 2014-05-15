@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form, Business Logic
  * By Josh Keegan 09/05/2014
- * Last Edit 14/05/2014
+ * Last Edit 15/05/2014
  */
 
 using System;
@@ -120,6 +120,10 @@ namespace DemoGUI
                     splitContainerRightTop.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_TOP_SPLITTER));
                     splitContainerRightBottom.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_BOTTOM_SPLITTER));
                 }
+                else
+                {
+                    MessageBox.Show("Window Position wasn't valid");
+                }
 
                 //Load Recent Directories
                 for (int i = 0; i < NUM_RECENT_DIRECTORIES; i++)
@@ -153,24 +157,29 @@ namespace DemoGUI
             //Save Window Position, Size & State
             if(this.WindowState != FormWindowState.Minimized) //Don't save the current position if minimised
             {
-                //Don't save the location, width & height if maximised
-                if(this.WindowState != FormWindowState.Maximized)
-                {
-                    Configuration.SetConfigurationOption(CONFIG_X, Location.X.ToString());
-                    Configuration.SetConfigurationOption(CONFIG_Y, Location.Y.ToString());
-                    Configuration.SetConfigurationOption(CONFIG_WIDTH, Width.ToString());
-                    Configuration.SetConfigurationOption(CONFIG_HEIGHT, Height.ToString());
-                }
-
-                //Save the Form state
-                Configuration.SetConfigurationOption(CONFIG_STATE, WindowState.ToString());
-
                 //Save the Splitter Distances
                 Configuration.SetConfigurationOption(CONFIG_MAIN_SPLITTER, splitContainerMain.SplitterDistance.ToString());
                 Configuration.SetConfigurationOption(CONFIG_LEFT_SPLITTER, splitContainerLeft.SplitterDistance.ToString());
                 Configuration.SetConfigurationOption(CONFIG_RIGHT_SPLITTER, splitContainerRight.SplitterDistance.ToString());
                 Configuration.SetConfigurationOption(CONFIG_RIGHT_TOP_SPLITTER, splitContainerRightTop.SplitterDistance.ToString());
                 Configuration.SetConfigurationOption(CONFIG_RIGHT_BOTTOM_SPLITTER, splitContainerRightBottom.SplitterDistance.ToString());
+
+                //Save the Form state
+                Configuration.SetConfigurationOption(CONFIG_STATE, WindowState.ToString());
+
+                //If the window is maximised, un-maximise it so we can save the correct location, width & height properties
+                if(WindowState == FormWindowState.Maximized)
+                {
+                    //TODO: Find some way of hiding the Form from view that won't alter the location or size so that the user
+                    //  doesn't see the window being returned to normal size moments before it actually closes
+
+                    WindowState = FormWindowState.Normal;
+                }
+
+                Configuration.SetConfigurationOption(CONFIG_X, Location.X.ToString());
+                Configuration.SetConfigurationOption(CONFIG_Y, Location.Y.ToString());
+                Configuration.SetConfigurationOption(CONFIG_WIDTH, Width.ToString());
+                Configuration.SetConfigurationOption(CONFIG_HEIGHT, Height.ToString());
             }
 
             //Save Recent Directories
