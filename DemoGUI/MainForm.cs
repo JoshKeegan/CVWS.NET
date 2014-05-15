@@ -120,10 +120,6 @@ namespace DemoGUI
                     splitContainerRightTop.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_TOP_SPLITTER));
                     splitContainerRightBottom.SplitterDistance = int.Parse(Configuration.GetConfigurationOption(CONFIG_RIGHT_BOTTOM_SPLITTER));
                 }
-                else
-                {
-                    MessageBox.Show("Window Position wasn't valid");
-                }
 
                 //Load Recent Directories
                 for (int i = 0; i < NUM_RECENT_DIRECTORIES; i++)
