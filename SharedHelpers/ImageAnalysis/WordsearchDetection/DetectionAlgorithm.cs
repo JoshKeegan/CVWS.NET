@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Detection Algorithm
  * By Josh Keegan 22/04/2014
- * Last Edit 26/04/2014
+ * Last Edit 15/05/2014
  * 
  * Note: This is a static class containing the methods to recognise a wordsearch in an image that is bounded by a rectangle.
  *  This will be used in the final dissertation due to time constraints. If any future work were done in this area, then this
@@ -65,7 +65,7 @@ namespace SharedHelpers.ImageAnalysis.WordsearchDetection
             //Check that there are some quads found to search through for the best wordsearch candidate
             if(quads.Count != 0)
             {
-                double bestScore = double.MinValue;
+                double bestScore = double.NegativeInfinity;
                 List<IntPoint> bestCoords = null;
                 Bitmap bestBitmap = null;
 
@@ -89,6 +89,8 @@ namespace SharedHelpers.ImageAnalysis.WordsearchDetection
                     }
                     catch(InvalidRowsAndColsException)
                     {
+                        //This is slightly better than the default score of Negative Infinity as any candidate
+                        //  (even one with no rows or cols found in it) is better than no candidate whatsoever
                         score = double.MinValue;
                     }
 
