@@ -5,7 +5,7 @@
  *  When you rotate a wordsearch image 90 deg, the rows and cols will swap
  *  This class exists to encapsulate this behaviour
  * By Josh Keegan 25/03/2014
- * Last Edit 29/04/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -82,10 +82,10 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
 
         //Public Methods
 
-        public void Rotate(int angleDeg)
+        public void Rotate(int angleDegClockwise)
         {
             //Validation: Check that we've been asked to rotate through a multiple of 90 deg
-            if(angleDeg % 90 != 0)
+            if(angleDegClockwise % 90 != 0)
             {
                 throw new ArgumentException("angleDeg must be a multiple of 90");
             }
@@ -93,19 +93,19 @@ namespace SharedHelpers.ImageAnalysis.WordsearchRotation
             //Rotate the Bitmap
             //Note: If this is ever to be used to rotate through arbitrary angles (not 90, 180, 270 deg) then it should decide to use
             //  interpolation or nearest neighbour rotation accordingly
-            RotateNearestNeighbor rotate = new RotateNearestNeighbor(angleDeg);
+            RotateNearestNeighbor rotate = new RotateNearestNeighbor(-angleDegClockwise); //Rotate by minus angle, as AForge Rotate objects go anti-clockwise
             Bitmap oldBitmap = Bitmap;
             Bitmap = rotate.Apply(oldBitmap);
 
             //If we're working on a Segmentation object, let it handle the rotation
             if(Segmentation != null)
             {
-                Segmentation.Rotate(angleDeg);
+                Segmentation.Rotate(angleDegClockwise);
             }
             else //Otherwise we're just working on the number of rows & cols
             {
                 //If the angle being rotated through is not a multiple of 180 deg (e.g. 90, 270), then the rows & cols will swap
-                if (angleDeg % 180 != 0)
+                if (angleDegClockwise % 180 != 0)
                 {
                     //Swap rows & cols
                     int newRows = Cols;

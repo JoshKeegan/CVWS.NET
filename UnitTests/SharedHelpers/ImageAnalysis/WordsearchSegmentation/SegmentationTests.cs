@@ -3,7 +3,7 @@
  * Unit Tests
  * SharedHelpers.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
  * By Josh Keegan 02/04/2014
- * Last Edit 13/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -948,6 +948,27 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             CollectionAssert.AreEqual(expectedCols, s.Cols);
             Assert.AreEqual(expectedWidth, s.Width);
             Assert.AreEqual(expectedHeight, s.Height);
+        }
+
+        [TestMethod]
+        public void TestRotate5()
+        {
+            //Test rotating -270deg is the same as rotating +90 deg
+            int[] rows = { 1, 2, 4 };
+            int[] cols = { 2, 7, 11 };
+            int width = 20;
+            int height = 5;
+
+            Segmentation s90 = new Segmentation((int[])rows.Clone(), (int[])cols.Clone(), width, height); //Deep copy the arrays so the segmentations have different copies
+            Segmentation sMinus270 = new Segmentation(rows, cols, width, height);
+
+            s90.Rotate(90);
+            sMinus270.Rotate(-270);
+
+            CollectionAssert.AreEqual(s90.Rows, sMinus270.Rows);
+            CollectionAssert.AreEqual(s90.Cols, sMinus270.Cols);
+            Assert.AreEqual(s90.Width, sMinus270.Width);
+            Assert.AreEqual(s90.Height, sMinus270.Height);
         }
 
         /*

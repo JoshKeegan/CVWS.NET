@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation - class to hold the indices that split rows & cols
  * By Josh Keegan 02/04/2014
- * Last Edit 13/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -379,7 +379,16 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
                 throw new ArgumentException("angleDeg must be a multiple of 90");
             }
 
-            int numRotations = (angleDeg % 360) / 90; //Modulo 360 to prevent unnecessary rotations for angles of more than 360 deg
+            //Convert the angle into the range 0 <= angle < 360
+            int normalisedAngleDeg = angleDeg % 360; //Modulo 360 to prevent unnecessary rotations for angles of more than 360 deg
+            //If the angle is negative (an anti-clockwise rotation), convert this to a clockwise rotation by adding a full rotation to it
+            if(normalisedAngleDeg < 0)
+            {
+                normalisedAngleDeg += 360;
+            }
+
+            //Perform the rotation as a number of 90 degree rotations
+            int numRotations = normalisedAngleDeg / 90; 
             for(int i = 0; i < numRotations; i++)
             {
                 Rotate90();
