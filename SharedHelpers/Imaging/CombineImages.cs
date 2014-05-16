@@ -3,6 +3,7 @@
  * Shared Helpers
  * Combine Images Class - methods for combining multiple images into a single larger image
  * By Josh Keegan 13/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -21,37 +22,69 @@ namespace SharedHelpers.Imaging
     public static class CombineImages
     {
         //Takes a 2D array of Bitmaps and makes them into a single Bitmap by putting them together in a grid pattern
-        //  Note that this method requires all of the images to be the same dimensions
-        public static Bitmap Grid(Bitmap[,] imgs)
+        public static Bitmap Grid(Bitmap[,] charImgs)
         {
             //Validation: Check that there is at least one image
-            if(imgs.Length == 0)
+            if(charImgs.Length == 0)
             {
-                throw new ArgumentException("Collection \"imgs\" must have at least one element");
+                throw new ArgumentException("Collection \"charImgs\" must have at least one element");
             }
 
-            //Validation: Check that all of the images are the same width & height. Also check that they are all in the same PixelFormat
-            int width = imgs[0, 0].Width;
-            int height = imgs[0, 0].Height;
-            PixelFormat pixelFormat = imgs[0, 0].PixelFormat;
-            foreach(Bitmap image in imgs)
+            //Validation: Check that all images are in the same PixelFormat
+            PixelFormat pixelFormat = charImgs[0, 0].PixelFormat;
+            foreach(Bitmap charImg in charImgs)
             {
-                if(image.Width != width || image.Height != height)
-                {
-                    throw new InvalidImageDimensionsException("All images must have the same dimensions in order to form a regular grid");
-                }
-
-                if(image.PixelFormat != pixelFormat)
+                if(charImg.PixelFormat != pixelFormat)
                 {
                     throw new UnexpectedPixelFormatException("All images must have the same PixelFormat");
                 }
             }
 
-            //Determine the number of bytes per pixel 
-            int bytesPerPixel = imgs[0, 0].GetBitsPerPixel() / 8;
+            //Validation: Check that all images in each column have the same width
+            for(int i = 0; i < charImgs.GetLength(0); i++) //Cols
+            {
+                int colWidth = charImgs[i, 0].Width;
 
-            Bitmap img = new Bitmap(width * imgs.GetLength(0), 
-                height * imgs.GetLength(1), imgs[0, 0].PixelFormat);
+                for(int j = 1; j < charImgs.GetLength(1); j++) //Rows
+                {
+                    if(charImgs[i, j].Width != colWidth)
+                    {
+                        throw new InvalidImageDimensionsException("All images in each column must have the same Width in order to form a grid");
+                    }
+                }
+            }
+
+            //Validation: Check that all images in each row have the same height
+            for(int i = 0; i < charImgs.GetLength(1); i++) //Row
+            {
+                int rowHeight = charImgs[0, i].Height;
+
+                for(int j = 1; j < charImgs.GetLength(0); j++) //Col
+                {
+                    if(charImgs[j, i].Height != rowHeight)
+                    {
+                        throw new InvalidImageDimensionsException("All images in each row must have the same Height in order to form a grid");
+                    }
+                }
+            }
+
+            //Determine the number of bytes per pixel
+            int bytesPerPixel = charImgs[0, 0].GetBitsPerPixel() / 8;
+
+            //Calculate the total image Width & Height
+            int imgWidth = 0;
+            for(int i = 0; i < charImgs.GetLength(0); i++) //Cols
+            {
+                imgWidth += charImgs[i, 0].Width;
+            }
+
+            int imgHeight = 0;
+            for(int i = 0; i < charImgs.GetLength(1); i++) //Rows
+            {
+                imgHeight += charImgs[0, i].Height;
+            }
+
+            Bitmap img = new Bitmap(imgWidth, imgHeight, pixelFormat);
 
             //Lock image for write so we can access it with pointers
             BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
@@ -61,34 +94,46 @@ namespace SharedHelpers.Imaging
             {
                 byte* ptrImgData = (byte*)imgData.Scan0;
 
-                for(int col = 0; col < imgs.GetLength(0); col++)
+                //Keep track of how many pixels in from the left we are to the left of this col
+                int colLeftIdx = 0;
+
+                for(int col = 0; col < charImgs.GetLength(0); col++)
                 {
-                    for(int row = 0; row < imgs.GetLength(1); row++)
+                    //Keep track of how many pixels in from the top we are to the top of this row
+                    int rowTopIdx = 0;
+
+                    for(int row = 0; row < charImgs.GetLength(1); row++)
                     {
-                        //Lock this char for read so we can copy it accross to the new image
-                        BitmapData charData = imgs[col, row].LockBits(new Rectangle(0, 0, width, height),
-                            ImageLockMode.ReadOnly, pixelFormat);
+                        //Lock this char for read so we can copy it across to the new image
+                        BitmapData charData = charImgs[col, row].LockBits(new Rectangle(0, 0, 
+                            charImgs[col, row].Width, charImgs[col, row].Height), ImageLockMode.ReadOnly, pixelFormat);
 
                         byte* ptrCharData = (byte*)charData.Scan0;
 
-                        //Loop over each pixel in this char to be extracted
-                        for (int i = 0; i < width; i++)
+                        //Loop over each pixel in this char img to be copied across
+                        for (int i = 0; i < charImgs[col, row].Width; i++) //Cols
                         {
-                            for(int j = 0; j < height; j++)
+                            for(int j = 0; j < charImgs[col, row].Height; j++) //Rows
                             {
-                                int imgOffset = ((row * height) + j) * imgData.Stride + (((col * width) + i) * bytesPerPixel);
-                                int charOffset = (j * charData.Stride) + (i * bytesPerPixel);
+                                int imgOffset = (((rowTopIdx) + j) * imgData.Stride) + ((colLeftIdx + i) * bytesPerPixel);
+                                int charImgOffset = (j * charData.Stride) + (i * bytesPerPixel);
 
                                 //Copy the bytes for this pixel
                                 for(int k = 0; k < bytesPerPixel; k++)
                                 {
-                                    ptrImgData[imgOffset + k] = ptrCharData[charOffset + k];
+                                    ptrImgData[imgOffset + k] = ptrCharData[charImgOffset + k];
                                 }
                             }
                         }
 
-                        imgs[col, row].UnlockBits(charData);
+                        charImgs[col, row].UnlockBits(charData);
+
+                        //Update the rowLeftIdx for the next iter
+                        rowTopIdx += charImgs[col, row].Height;
                     }
+
+                    //Update the colLeftIdx for the next iter
+                    colLeftIdx += charImgs[col, 0].Width;
                 }
             }
 
