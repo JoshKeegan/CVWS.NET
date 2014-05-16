@@ -3,7 +3,7 @@
  * Shared Helpers
  * Draw Solution class
  * By Josh Keegan 14/05/2014
- * Last Edit 15/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using AForge;
 using AForge.Imaging;
 
+using BaseObjectExtensions;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 using SharedHelpers.WordsearchSolver;
 
@@ -31,7 +32,7 @@ namespace SharedHelpers.Imaging
 
         public static Bitmap Solution(Bitmap origImg, Segmentation segmentation, Solution solution, Color colour)
         {
-            Bitmap img = new Bitmap(origImg);
+            Bitmap img = origImg.DeepCopy();
             SolutionInPlace(img, segmentation, solution, colour);
             return img;
         }
@@ -92,7 +93,7 @@ namespace SharedHelpers.Imaging
 
         public static Bitmap WordPosition(Bitmap origImg, Segmentation segmentation, WordPosition wordPosition, Color colour)
         {
-            Bitmap img = new Bitmap(origImg);
+            Bitmap img = origImg.DeepCopy();
             WordPositionInPlace(img, segmentation, wordPosition, colour);
             return img;
         }

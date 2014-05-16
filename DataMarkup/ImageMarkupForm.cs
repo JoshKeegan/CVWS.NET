@@ -3,7 +3,7 @@
  * Data Entry GUI
  * Image Markup Form class
  * By Josh Keegan 26/02/2014
- * Last Edit 06/03/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -529,7 +529,7 @@ namespace DataEntryGUI
 
         private Bitmap drawWordsearchImagesOnCurrentWordsearch()
         {
-            Bitmap img = new Bitmap(currentBitmap.Key);
+            Bitmap img = currentBitmap.Key.DeepCopy();
 
             //Lock image for read write so we can alter it
             BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
@@ -576,7 +576,7 @@ namespace DataEntryGUI
                     }
                     
                     //Draw the bounding box onto the main image
-                    Bitmap drawnOn = new Bitmap(bitmapToShow);
+                    Bitmap drawnOn = bitmapToShow.DeepCopy();
                     DrawShapes.PolygonInPlace(drawnOn, corners, Color.Red);
 
                     //If there is a Bitmap which will become unused in memory, dispose of it

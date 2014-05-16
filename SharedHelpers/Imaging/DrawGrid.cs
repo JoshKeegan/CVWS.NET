@@ -3,7 +3,7 @@
  * Shared Helpers
  * Draw Grid class - various methods to draw grids on images
  * By Josh Keegan 03/03/2014
- * Last Edit 14/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using AForge;
 using AForge.Imaging;
 
+using BaseObjectExtensions;
 using SharedHelpers.Exceptions;
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
 
@@ -36,14 +37,14 @@ namespace SharedHelpers.Imaging
 
         public static Bitmap Grid(Bitmap imgOrig, int rows, int cols, Color colour)
         {
-            Bitmap img = new Bitmap(imgOrig);
+            Bitmap img = imgOrig.DeepCopy();
             GridInPlace(img, rows, cols, colour);
             return img;
         }
 
         public static Bitmap Grid(Bitmap imgOrig, uint rows, uint cols, Color colour)
         {
-            Bitmap img = new Bitmap(imgOrig);
+            Bitmap img = imgOrig.DeepCopy();
             GridInPlace(img, rows, cols, colour);
             return img;
         }
@@ -137,7 +138,7 @@ namespace SharedHelpers.Imaging
 
         public static Bitmap Grid(Bitmap imgOrig, uint[,] rows, uint[,] cols, Color startColour, Color endColour)
         {
-            Bitmap img = new Bitmap(imgOrig);
+            Bitmap img = imgOrig.DeepCopy();
             GridInPlace(img, rows, cols, startColour, endColour);
             return img;
         }
@@ -197,7 +198,7 @@ namespace SharedHelpers.Imaging
 
         public static Bitmap Segmentation(Bitmap imgOrig, Segmentation segmentation, Color colour)
         {
-            Bitmap img = new Bitmap(imgOrig);
+            Bitmap img = imgOrig.DeepCopy();
             SegmentationInPlace(img, segmentation, colour);
             return img;
         }

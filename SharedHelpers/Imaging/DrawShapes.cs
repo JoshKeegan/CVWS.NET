@@ -3,6 +3,7 @@
  * Shared Helpers
  * Draw Shapes class - various methods for drawing shapes (filling in gaps in AForge.NET)
  * By Josh Keegan 04/03/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 using AForge;
 using AForge.Imaging;
 
+using BaseObjectExtensions;
 
 namespace SharedHelpers.Imaging
 {
@@ -28,7 +30,7 @@ namespace SharedHelpers.Imaging
 
         public static Bitmap Polygon(Bitmap origImg, List<IntPoint> points, Color colour)
         {
-            Bitmap img = new Bitmap(origImg);
+            Bitmap img = origImg.DeepCopy();
             PolygonInPlace(img, points, colour);
             return img;
         }

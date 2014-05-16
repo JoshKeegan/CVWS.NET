@@ -3,7 +3,7 @@
  * Shared Helpers
  * Image Loader Class
  * By Josh Keegan 26/02/2014
- * Last Edit 09/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -50,7 +50,7 @@ namespace SharedHelpers
                     //If this file's extension is a recognised Image format that can be loaded by the Bitmap constructor
                     if (BITMAP_FILE_EXTENSIONS.Contains(extension.ToLower()))
                     {
-                        Bitmap bitmap = new Bitmap(new Bitmap(filePath));
+                        Bitmap bitmap = new Bitmap(filePath);
                         bitmap.Tag = filePath; //Store the path the file was loaded from in the Bitmap's Tag field
 
                         toRet.Add(bitmap);
