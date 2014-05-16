@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
  * By Josh Keegan 12/05/2014
- * Last Edit 15/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -137,6 +137,11 @@ namespace DemoGUI
             //Rotation Correction Classifier object (contains both feature extractor & classifier)
             Classifier rotationCorrectionClassifier = getSelectedClassifier(rotationCorrectionFeatureExtractionToolStripMenuItem,
                 rotationCorrectionClassificationToolStripMenuItem);
+
+            //Character Image Extraction: Do we normalise the input (with whitespace) image dimensions before finding the biggest blob?
+            //  Note that this is ignored if there is equal segmentation spacing (where resizing will always be used as this is how 
+            //  the classifier was trained)
+            bool charImageExtractionWithWhitespaceNormaliseDimensions = characterImageExtractionInputDimensionsNormalisedToolStripMenuItem.Checked;
 
             //Classifier object used for actual classification (contains both feature extractor & classifier)
             Classifier classifier = getSelectedClassifier(featureExtractionToolStripMenuItem, classificationToolStripMenuItem);
@@ -274,31 +279,38 @@ namespace DemoGUI
             {
                 rawCharImgs = SplitImage.Segment(rotatedImage, segmentation);
 
-                //Resize the raw char images so that they're all the same dimensions (gives results that are more consistent with how the 
-                //  classifier was trained: with equally spaced segmentation)
-                ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH, Constants.CHAR_WITH_WHITESPACE_HEIGHT);
-
-                for (int i = 0; i < rawCharImgs.GetLength(0); i++)
+                //If we're resizing the raw character images (with whitespace) to consistent dimensions
+                if(charImageExtractionWithWhitespaceNormaliseDimensions)
                 {
-                    for (int j = 0; j < rawCharImgs.GetLength(1); j++)
+                    //Resize the raw char images so that they're all the same dimensions (gives results that are more consistent with how the 
+                    //  classifier was trained: with equally spaced segmentation)
+                    ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH, Constants.CHAR_WITH_WHITESPACE_HEIGHT);
+
+                    for (int i = 0; i < rawCharImgs.GetLength(0); i++)
                     {
-                        //Only do the resize if it isn't already that size
-                        if (rawCharImgs[i, j].Width != Constants.CHAR_WITH_WHITESPACE_WIDTH
-                            || rawCharImgs[i, j].Height != Constants.CHAR_WITH_WHITESPACE_HEIGHT)
+                        for (int j = 0; j < rawCharImgs.GetLength(1); j++)
                         {
-                            Bitmap orig = rawCharImgs[i, j];
+                            //Only do the resize if it isn't already that size
+                            if (rawCharImgs[i, j].Width != Constants.CHAR_WITH_WHITESPACE_WIDTH
+                                || rawCharImgs[i, j].Height != Constants.CHAR_WITH_WHITESPACE_HEIGHT)
+                            {
+                                Bitmap orig = rawCharImgs[i, j];
 
-                            rawCharImgs[i, j] = resize.Apply(orig);
+                                rawCharImgs[i, j] = resize.Apply(orig);
 
-                            //Remove the now unnecessary original/not resized image
-                            orig.Dispose();
+                                //Remove the now unnecessary original/not resized image
+                                orig.Dispose();
+                            }
                         }
                     }
                 }
             }
 
-            //Log the raw character images
-            log(CombineImages.Grid(rawCharImgs), "Raw Character Images (all chars set to equal width & height)");
+            //Log the raw character images (if we've resized them)
+            if(segmentation.IsEquallySpaced || charImageExtractionWithWhitespaceNormaliseDimensions)
+            {
+                log(CombineImages.Grid(rawCharImgs), "Raw Character Images (all chars set to equal width & height)");
+            }
 
             //Get the part of the image that actually contains the character (without any whitespace)
             Bitmap[,] charImgs = CharImgExtractor.ExtractAll(rawCharImgs);

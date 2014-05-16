@@ -78,6 +78,9 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.txtWordsToFind = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.characterImageExtractionInputDimensionsNormalisedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
@@ -170,7 +173,7 @@
             this.autoSizeToolStripMenuItem,
             this.stretchImageToolStripMenuItem});
             this.imageViewToolStripMenuItem.Name = "imageViewToolStripMenuItem";
-            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.imageViewToolStripMenuItem.Text = "Image &View";
             // 
             // zoomToolStripMenuItem
@@ -219,7 +222,7 @@
             this.classificationToolStripMenuItem,
             this.wordsearchSolverToolStripMenuItem});
             this.algorithmsToolStripMenuItem.Name = "algorithmsToolStripMenuItem";
-            this.algorithmsToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.algorithmsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.algorithmsToolStripMenuItem.Text = "&Algorithms";
             // 
             // wordsearchDetectionToolStripMenuItem
@@ -303,6 +306,7 @@
             // characterExtractionToolStripMenuItem
             // 
             this.characterExtractionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem,
             this.biggestBlobToolStripMenuItem});
             this.characterExtractionToolStripMenuItem.Name = "characterExtractionToolStripMenuItem";
             this.characterExtractionToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
@@ -313,7 +317,7 @@
             this.biggestBlobToolStripMenuItem.Checked = true;
             this.biggestBlobToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.biggestBlobToolStripMenuItem.Name = "biggestBlobToolStripMenuItem";
-            this.biggestBlobToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.biggestBlobToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
             this.biggestBlobToolStripMenuItem.Text = "Biggest Blob";
             // 
             // featureExtractionToolStripMenuItem
@@ -599,6 +603,29 @@
             this.txtWordsToFind.Enter += new System.EventHandler(this.txtWordsToFind_Enter);
             this.txtWordsToFind.Leave += new System.EventHandler(this.txtWordToFind_Leave);
             // 
+            // characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem
+            // 
+            this.characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.characterImageExtractionInputDimensionsNormalisedToolStripMenuItem,
+            this.characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem});
+            this.characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem.Name = "characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem";
+            this.characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem.Size = new System.Drawing.Size(260, 22);
+            this.characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem.Text = "Normalise Input Image Dimensions";
+            // 
+            // characterImageExtractionInputDimensionsNormalisedToolStripMenuItem
+            // 
+            this.characterImageExtractionInputDimensionsNormalisedToolStripMenuItem.Name = "characterImageExtractionInputDimensionsNormalisedToolStripMenuItem";
+            this.characterImageExtractionInputDimensionsNormalisedToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.characterImageExtractionInputDimensionsNormalisedToolStripMenuItem.Text = "Normalise Dimensions";
+            // 
+            // characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem
+            // 
+            this.characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem.Checked = true;
+            this.characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem.Name = "characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem";
+            this.characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem.Text = "Leave Varied";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -696,6 +723,9 @@
         private System.Windows.Forms.ToolStripStatusLabel numImagesLabel;
         private System.Windows.Forms.ToolStripStatusLabel processingTimeLabel;
         private System.Windows.Forms.ToolStripStatusLabel imageDimensionsLabel;
+        private System.Windows.Forms.ToolStripMenuItem characterImageExtractionNormaliseInputImageDimensionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterImageExtractionInputDimensionsNormalisedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterImageExtractionInputDimensionsLeaveVariedToolStripMenuItem;
     }
 }
 
