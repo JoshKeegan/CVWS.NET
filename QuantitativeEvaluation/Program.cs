@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 12/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -40,8 +40,8 @@ namespace QuantitativeEvaluation
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
-        private const bool EVALUATE_WORDSEARCH_RECOGNITION = false;
-        private const bool EVALUATE_FULL_SYSTEM = true;
+        private const bool EVALUATE_WORDSEARCH_DETECTION = true;
+        private const bool EVALUATE_FULL_SYSTEM = false;
 
         static void Main(string[] args)
         {
@@ -197,7 +197,7 @@ namespace QuantitativeEvaluation
             }
 
             //If we're evaluating Wordsearch Recognition
-            if(EVALUATE_WORDSEARCH_RECOGNITION)
+            if(EVALUATE_WORDSEARCH_DETECTION)
             {
                 /*
                  * Note that here all Images are used for evaluation (essentially they are all in the evaluation data set)
