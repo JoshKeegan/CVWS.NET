@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form, Business Logic
  * By Josh Keegan 09/05/2014
- * Last Edit 15/05/2014
+ * Last Edit 16/05/2014
  */
 
 using System;
@@ -48,6 +48,7 @@ namespace DemoGUI
         //Private Variables
         private LinkedList<string> recentDirectories = new LinkedList<string>();
         private string currentDirectory = null;
+        private string currentImageFileName = null;
         private Bitmap currentBitmap = null;
         private Dictionary<string, Bitmap> imageLog = null;
         private string defaultTxtWordsToFind;
@@ -216,40 +217,58 @@ namespace DemoGUI
         //Open Directory
         private void openDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Ask the user which directory to use
-            if(folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            //Check that we aren't already in the middle of performing some im,age processing on the current file before changing directory (and therefore file)
+            if(processingTask == null || processingTask.IsCompleted)
             {
-                string dirPath = folderBrowserDialog.SelectedPath;
-
-                //If this directory opens without error
-                if(openDirectory(dirPath))
+                //Ask the user which directory to use
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //Remember this dir having been opened
-                    addRecentDir(dirPath);
-                    //Refresh the recent directory list to include this new directory (and get rid of one removed to make way for it if applicable)
-                    generateRecentDirsList();
+                    string dirPath = folderBrowserDialog.SelectedPath;
+
+                    //If this directory opens without error
+                    if (openDirectory(dirPath))
+                    {
+                        //Remember this dir having been opened
+                        addRecentDir(dirPath);
+                        //Refresh the recent directory list to include this new directory (and get rid of one removed to make way for it if applicable)
+                        generateRecentDirsList();
+                    }
                 }
+            }
+            else //We're doing some processing
+            {
+                MessageBox.Show("Cannot switch directory until processing for the current image has completed", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         //When one of the recent directories gets selected to be opened
         private void recentDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string dirPath = ((ToolStripMenuItem)sender).Text;
-
-            //If this directory opens without error
-            if(openDirectory(dirPath))
+            //Check that we aren't already in the middle of performing some im,age processing on the current file before changing directory (and therefore file)
+            if (processingTask == null || processingTask.IsCompleted)
             {
-                //Move this recent directory to the top of the list
-                addRecentDir(dirPath);
-            }
-            else //Otherwise we couldn't open this directory, remove it from the recent directories list
-            {
-                removeRecentDir(dirPath);
-            }
+                string dirPath = ((ToolStripMenuItem)sender).Text;
 
-            //Refresh the recent directory list shown in the menu
-            generateRecentDirsList();
+                //If this directory opens without error
+                if (openDirectory(dirPath))
+                {
+                    //Move this recent directory to the top of the list
+                    addRecentDir(dirPath);
+                }
+                else //Otherwise we couldn't open this directory, remove it from the recent directories list
+                {
+                    removeRecentDir(dirPath);
+                }
+
+                //Refresh the recent directory list shown in the menu
+                generateRecentDirsList();
+            }
+            else //We're doing some processing
+            {
+                MessageBox.Show("Cannot switch directory until processing for the current image has completed", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         //Exit
@@ -315,7 +334,41 @@ namespace DemoGUI
         //A new file has been selected for processing
         private void listViewFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            openSelectedImageFile();
+            //SelectedIndexChanged will fire when an item is deselected, and when a new one is selected
+            //  Ignore items being deselected
+            if(listViewFiles.SelectedItems.Count != 0)
+            {
+                //Don't do anything if the selected image is the current one
+                if (listViewFiles.SelectedItems[0].Text != currentImageFileName)
+                {
+                    //Check that we aren't already in the middle of performing some image processing on the current file before opening a new one
+                    if (processingTask == null || processingTask.IsCompleted)
+                    {
+                        openSelectedImageFile();
+                    }
+                    else //We're doing some processing
+                    {
+                        //Switch the selected item back to the one we're doing the processing on
+                        //listViewFiles.SelectedItems[0].Selected = false;
+                        for (int i = 0; i < listViewFiles.Items.Count; i++)
+                        {
+                            if(listViewFiles.Items[i].Text == currentImageFileName)
+                            {
+                                listViewFiles.Items[i].Selected = true;
+                                break; ///Found what we were looking for, stop
+                            }
+                        }
+
+                        //Tell the user that they can't switch image before processing has completed
+                        //TODO: Look into this: When you use a MessageBox here, the ListView loses focus and regains it when the
+                        //  MessageBox closes. This then seems to fire the SelectedIndexChanged event changed again, making the 
+                        //  MessageBox show again.
+                        //  This only happens when you click the MessageBox rather than using the Enter key
+                        /*MessageBox.Show("Cannot switch image until processing for the current image has completed", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);*/
+                    }
+                }
+            }
         }
         
         //A new image from the image log has been selected for viewing
@@ -688,6 +741,9 @@ namespace DemoGUI
             //If the Bitmap was loaded successfully
             if(currentBitmap != null)
             {
+                //Set the current image file name
+                currentImageFileName = listViewFiles.SelectedItems[0].Text;
+
                 //Set up the Image Log (with this being the first entry)
                 imageLog = new Dictionary<string, Bitmap>();
                 log(currentBitmap, INPUT_IMAGE_LOG_LABEL);
