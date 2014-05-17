@@ -319,80 +319,85 @@ namespace SharedHelpers.WordsearchSolver
             //If there are collisions
             if(collisions.Any())
             {
-                //Generate the successors to this node
-                List<Tuple<int, Dictionary<string, int>>> successors = new List<Tuple<int, Dictionary<string, int>>>();
-
-                //At each place there is a collision
-                foreach(IntPoint collisionPoint in collisions)
+                //Only generate successors up to the Max Tree Depth, as ones deeper than that will never get executed
+                if(level < MAX_TREE_DEPTH)
                 {
-                    //Try moving each word involved in that collision to every combination of their positions
-                    //  up until one higher than the current position
-                    foreach(string word in collisionTable[collisionPoint.X, collisionPoint.Y].Keys)
+                    //Generate the successors to this node
+                    List<Tuple<int, Dictionary<string, int>>> successors = new List<Tuple<int, Dictionary<string, int>>>();
+
+                    //At each place there is a collision
+                    foreach (IntPoint collisionPoint in collisions)
                     {
-                        //The Word Position index currently being used for this word
-                        int currentPositionIdx = selectedPositions[word];
-
-                        for(int newPositionIdx = 0; newPositionIdx <= currentPositionIdx + 1; newPositionIdx++)
+                        //Try moving each word involved in that collision to every combination of their positions
+                        //  up until one higher than the current position
+                        foreach (string word in collisionTable[collisionPoint.X, collisionPoint.Y].Keys)
                         {
-                            //Don't repeat the current position index. Saves some work for vet successors
-                            if(newPositionIdx != currentPositionIdx)
+                            //The Word Position index currently being used for this word
+                            int currentPositionIdx = selectedPositions[word];
+
+                            for (int newPositionIdx = 0; newPositionIdx <= currentPositionIdx + 1; newPositionIdx++)
                             {
-                                //Clone the node
-                                Dictionary<string, int> nextSelectedPositions = new Dictionary<string, int>(selectedPositions);
+                                //Don't repeat the current position index. Saves some work for vet successors
+                                if (newPositionIdx != currentPositionIdx)
+                                {
+                                    //Clone the node
+                                    Dictionary<string, int> nextSelectedPositions = new Dictionary<string, int>(selectedPositions);
 
-                                //Update the selected position for this word
-                                nextSelectedPositions[word] = newPositionIdx;
+                                    //Update the selected position for this word
+                                    nextSelectedPositions[word] = newPositionIdx;
 
-                                //Add this node to the successors
-                                successors.Add(Tuple.Create(level + 1, nextSelectedPositions));
+                                    //Add this node to the successors
+                                    successors.Add(Tuple.Create(level + 1, nextSelectedPositions));
+                                }
                             }
                         }
                     }
-                }
 
-                //Vet the successors
-                foreach(Tuple<int, Dictionary<string, int>> successorNode in successors)
-                {
-                    Dictionary<string, int> successorSelectedPositions = successorNode.Item2;
-
-                    //If this is already on the list of open or closed nodes, don't add it to open to be processed *again*
-                    bool foundClosed = false;
-                    foreach(Dictionary<string, int> closedNode in closedNodes)
+                    //Vet the successors
+                    foreach (Tuple<int, Dictionary<string, int>> successorNode in successors)
                     {
-                        //Check to see if this node is the one we're vetting
-                        if(areSelectedPositionsEqual(closedNode, successorSelectedPositions))
-                        {
-                            foundClosed = true;
-                            break;
-                        }
-                    }
+                        Dictionary<string, int> successorSelectedPositions = successorNode.Item2;
 
-                    bool foundOpen = false;
-                    //Don't bother searching open if we already found this node on closed
-                    if(!foundClosed)
-                    {
-                        foreach (Tuple<int, Dictionary<string, int>> openNode in openNodes)
+                        //If this is already on the list of open or closed nodes, don't add it to open to be processed *again*
+                        bool foundClosed = false;
+                        foreach (Dictionary<string, int> closedNode in closedNodes)
                         {
-                            Dictionary<string, int> openNodeSelectedPositions = openNode.Item2;
-
                             //Check to see if this node is the one we're vetting
-                            if (areSelectedPositionsEqual(openNodeSelectedPositions, successorSelectedPositions))
+                            if (areSelectedPositionsEqual(closedNode, successorSelectedPositions))
                             {
-                                foundOpen = true;
+                                foundClosed = true;
                                 break;
                             }
                         }
-                    }
-                    
-                    //If we haven't found this node to already be on either open or closed, add it to open
-                    if(!foundOpen && !foundClosed)
-                    {
-                        openNodes.AddLast(successorNode);
+
+                        bool foundOpen = false;
+                        //Don't bother searching open if we already found this node on closed
+                        if (!foundClosed)
+                        {
+                            foreach (Tuple<int, Dictionary<string, int>> openNode in openNodes)
+                            {
+                                Dictionary<string, int> openNodeSelectedPositions = openNode.Item2;
+
+                                //Check to see if this node is the one we're vetting
+                                if (areSelectedPositionsEqual(openNodeSelectedPositions, successorSelectedPositions))
+                                {
+                                    foundOpen = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        //If we haven't found this node to already be on either open or closed, add it to open
+                        if (!foundOpen && !foundClosed)
+                        {
+                            openNodes.AddLast(successorNode);
+                        }
                     }
                 }
 
                 //This node didn't yield a valid solution, report that back
                 return false;
+                
             }
             else //Otherwise there are no collisions
             {
