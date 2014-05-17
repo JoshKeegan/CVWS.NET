@@ -22,6 +22,10 @@ namespace SharedHelpers.WordsearchSolver
         //Constants
         private const int MAX_TREE_DEPTH = 3; //inclusive & zero-indexed
 
+        //Private variables
+        private LinkedList<Tuple<int, Dictionary<string, int>>> openNodes; //Tree Level => Selected Positions
+        private List<Dictionary<string, int>> closedNodes;
+
         protected override Solution doSolve(double[][][] wordsearch, string[] words)
         {
             //Get every possible position for each word to be in
@@ -37,6 +41,10 @@ namespace SharedHelpers.WordsearchSolver
             int numCols = wordsearch.Length;
             int numRows = wordsearch[0].Length;
             Solution solution = findSolution(wordsPositions, numCols, numRows);
+
+            //Clean up (not really necessary but due to the size they can become make sure the objects in them get freed up for GC ASAP)
+            openNodes = null;
+            closedNodes = null;
 
             return solution;
         }
@@ -267,15 +275,6 @@ namespace SharedHelpers.WordsearchSolver
                     double score = scoreSolution(nodePotentialSolution, wordsPositions);
                     validSolutions.Add(Tuple.Create(score, solution));
                 }
-                /*Solution returnedSolution = evaluateNode(node, wordsPositions, numCols, numRows);
-
-                //If the node gave us a Solution, add it to the list of solutions at this level
-                if(returnedSolution != null)
-                {
-                    //Score the Solution & store it
-                    double score = scoreSolution(wordsearch, returnedSolution);
-                    validSolutions.Add(Tuple.Create(score, returnedSolution));
-                }*/
             }
 
             //We ran out of nodes to evaluate without finding a solution 
@@ -284,6 +283,7 @@ namespace SharedHelpers.WordsearchSolver
             return generateSolution(selectedPositions, wordsPositions);
         }
 
+        //Generate a Solution object from some selected word positions
         private static Solution generateSolution(Dictionary<string, int> selectedPositions,
             Dictionary<string, List<Tuple<double, WordPosition>>> wordsPositions)
         {
@@ -416,6 +416,8 @@ namespace SharedHelpers.WordsearchSolver
             return true;
         }
 
+        //Score a (valid) candidate solution (actually done with word positions instead of the Solution as 
+        //  we've already pre-computed the score for each word in each position)
         private static double scoreSolution(Dictionary<string, int> selectedWordPositions, 
             Dictionary<string, List<Tuple<double, WordPosition>>> wordsPositions)
         {
@@ -431,30 +433,8 @@ namespace SharedHelpers.WordsearchSolver
             return score;
         }
 
-        LinkedList<Tuple<int, Dictionary<string, int>>> openNodes; //Tree Level => Selected Positions
-        List<Dictionary<string, int>> closedNodes;
-
-        //Search the sub-tree breadth first for the best solution on the highest level (that has a valid solution)
-        /*private Tuple<double, Solution> findSolution(Dictionary<string, List<Tuple<double, WordPosition>>> possibleWordsPositions, 
-            int cols, int rows)
-        {
-            //Get the word positions that are selected
-            Dictionary<string, WordPosition> wordPositions = new Dictionary<string, WordPosition>(); //TODO: Switch to Solution here??
-            foreach(KeyValuePair<string, int> kvp in selectedPositions)
-            {
-                string word = kvp.Key;
-                int positionIdx = kvp.Value;
-                WordPosition position = possibleWordsPositions[word][positionIdx].Item2;
-
-                wordPositions.Add(word, position);
-            }
-
-            //Generate a collision table for this candidate solution
-            Dictionary<string, char>[,] collisionTable = generateCollisionTable(wordPositions, cols, rows);
-
-            //If there is a collision at this level
-        }*/
-
+        //Generates a collision table (a lookup table for each cell in the wordsearch that shows each word using it and what character
+        //  that word uses it as)
         private static Dictionary<string, char>[,] generateCollisionTable(Dictionary<string, WordPosition> wordPositions, int cols, int rows)
         {
             //Build up a representation of the Wordsearch and what characters each word uses
@@ -487,36 +467,7 @@ namespace SharedHelpers.WordsearchSolver
             return collisionTable;
         }
 
-        /*private static bool isCollision(Dictionary<string, char>[,] collisionTable)
-        {
-            foreach(Dictionary<string, char> words in collisionTable)
-            {
-                //If there is more than one word making use of this character, check that they are all using it as the same character
-                if(words.Count > 1)
-                {
-                    char? firstChar = null;
-                    foreach(char c in words.Values)
-                    {
-                        //If first iter, store char
-                        if(firstChar == null)
-                        {
-                            firstChar = c;
-                        }
-                        else //Otherwise this is a later iteration, check that the char this word is using this position as is the same as previous words
-                        {
-                            //If this word is using this charcter differently to how the first word used it, there's a collision
-                            if(c != firstChar)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            //No Collision detected
-            return false;
-        }*/
-
+        //Find collisions (where two words use the same grid position as two different characters)
         private static List<IntPoint> findCollisions(Dictionary<string, char>[,] collisionTable)
         {
             List<IntPoint> collisions = new List<IntPoint>();
