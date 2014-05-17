@@ -3,7 +3,7 @@
  * Shared Helpers
  * Feature Extraction Principal Components Analysis - return the PCA values given bitmaps
  * By Josh Keegan 11/03/2014
- * Last Edit 12/05/2014
+ * Last Edit 17/05/2014
  */
 
 using System;
@@ -73,7 +73,7 @@ namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
             return components;
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("pca", pca);
             info.AddValue("numDimensions", numDimensions);

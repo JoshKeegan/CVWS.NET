@@ -3,7 +3,7 @@
  * Shared Helpers
  * Trainable Feature Extraction Algorithm - abstract class
  * By Josh Keegan 11/03/2014
- * Last Edit 12/05/2014
+ * Last Edit 17/05/2014
  */
 
 using System;
@@ -92,7 +92,7 @@ namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
 
         protected abstract double[][] DoExtract(Bitmap[] charImgs);
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("trained", trained);
         }
