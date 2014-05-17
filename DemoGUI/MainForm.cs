@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form, Business Logic
  * By Josh Keegan 09/05/2014
- * Last Edit 16/05/2014
+ * Last Edit 17/05/2014
  */
 
 using System;
@@ -312,8 +312,7 @@ namespace DemoGUI
             ToolStripMenuItem menuItemSender = (ToolStripMenuItem)sender;
 
             //Find this Menu Item's siblings
-            ToolStripMenuItem parent = (ToolStripMenuItem)menuItemSender.OwnerItem;
-            ToolStripItemCollection siblings = parent.DropDownItems;
+            ToolStripItemCollection siblings = menuItemSender.Owner.Items;
 
             //If the sender has siblings
             if(siblings.Count > 1)

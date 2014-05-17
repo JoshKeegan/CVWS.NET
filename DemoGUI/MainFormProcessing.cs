@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
  * By Josh Keegan 12/05/2014
- * Last Edit 16/05/2014
+ * Last Edit 17/05/2014
  */
 
 using System;
@@ -430,13 +430,17 @@ namespace DemoGUI
         private Solver getSelectedWordsearchSolver()
         {
             //Check if each menu item is checked in turn
-            if(nonProbabilisticToolStripMenuItem.Checked)
+            if(nonProbabilisticWordsearchSolverToolStripMenuItem.Checked)
             {
                 return new SolverNonProbabilistic();
             }
-            else if(probabilisticClassificationToolStripMenuItem.Checked)
+            else if(probabilisticWordsearchSolverToolStripMenuItem.Checked)
             {
                 return new SolverProbabilistic();
+            }
+            else if(probabilisticPreventCharacterDiscrepanciesToolStripMenuItem.Checked)
+            {
+                return new SolverProbabilisticPreventCharacterDiscrepancies();
             }
             else //Otherwise no Menu Item was checked (or we didn't test for the checked one)
             {
