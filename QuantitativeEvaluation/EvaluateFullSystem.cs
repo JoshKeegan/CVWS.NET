@@ -90,7 +90,7 @@ namespace QuantitativeEvaluation
             
             //Don't resize characters to constant size after segmentation & Probabilistic solver that prevents character discrepancies (when
             //  a position is used as one character in on one word, and another character in another word)
-            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
+            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic Prevent Character Discrepancies",
                 Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, new SolverProbabilisticPreventCharacterDiscrepancies()));
 
             //Deregsiter an interest in all of the images
