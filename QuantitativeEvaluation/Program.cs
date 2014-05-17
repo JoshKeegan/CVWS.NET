@@ -40,8 +40,8 @@ namespace QuantitativeEvaluation
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
-        private const bool EVALUATE_WORDSEARCH_DETECTION = true;
-        private const bool EVALUATE_FULL_SYSTEM = false;
+        private const bool EVALUATE_WORDSEARCH_DETECTION = false;
+        private const bool EVALUATE_FULL_SYSTEM = true;
 
         static void Main(string[] args)
         {

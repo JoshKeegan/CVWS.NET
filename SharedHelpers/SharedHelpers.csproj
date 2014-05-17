@@ -126,6 +126,8 @@
     <Compile Include="WordsearchSolver\Solver.cs" />
     <Compile Include="WordsearchSolver\SolverNonProbabilistic.cs" />
     <Compile Include="WordsearchSolver\SolverProbabilistic.cs" />
+    <Compile Include="WordsearchSolver\SolverProbabilisticPreventCharacterDiscrepancies.cs" />
+    <Compile Include="WordsearchSolver\WordDirection.cs" />
     <Compile Include="WordsearchSolver\WordPosition.cs" />
   </ItemGroup>
   <ItemGroup>

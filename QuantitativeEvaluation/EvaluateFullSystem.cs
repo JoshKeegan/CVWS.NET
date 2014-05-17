@@ -3,7 +3,7 @@
  * Quantitative Evaluate
  * Evaluate Full System
  * By Josh Keegan 26/04/2014
- * Last Edit 16/05/2014
+ * Last Edit 17/05/2014
  */
 
 using System;
@@ -83,10 +83,15 @@ namespace QuantitativeEvaluation
             //Solve the wordsearch using probabilistic solver & varied col width/row height segmentation (resize after character extraction)
             scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (With Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
                 Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthWithResize, classifier, classifier, probabilisticWordsearchSolver));
-
-            //Don't resize character to constant size after segmentation & probablistic solver
+            
+            //Don't resize characters to constant size after segmentation & probablistic solver
             scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
                 Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, probabilisticWordsearchSolver));
+            
+            //Don't resize characters to constant size after segmentation & Probabilistic solver that prevents character discrepancies (when
+            //  a position is used as one character in on one word, and another character in another word)
+            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
+                Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, new SolverProbabilisticPreventCharacterDiscrepancies()));
 
             //Deregsiter an interest in all of the images
             foreach (Image image in images)
