@@ -148,6 +148,28 @@ namespace ImageMarkup
             }
         }
 
+        public static Image GetImageByPath(string relativePath)
+        {
+            //If the dataset has been loaded
+            if (images != null)
+            {
+                //Find the image being searched for
+                foreach (Image image in images.Values)
+                {
+                    if (image.Path == relativePath)
+                    {
+                        return image;
+                    }
+                }
+
+                throw new DataNotFoundException(String.Format("Image at path \"{0}\" not found in database", relativePath));
+            }
+            else //Otherwise the data hasn't been loaded
+            {
+                throw new DatabaseNotInitialisedException();
+            }
+        }
+
         public static bool ContainsImage(string hash)
         {
             //If the dataset has been loaded

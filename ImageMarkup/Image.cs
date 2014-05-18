@@ -3,7 +3,7 @@
  * Image Markup
  * Image class
  * By Josh Keegan 26/02/2014
- * Last Edit 06/03/2014
+ * Last Edit 18/05/2014
  */
 
 using System;
@@ -25,7 +25,7 @@ namespace ImageMarkup
 
         //Public variables
         public string Path { get; private set; }
-        public string Hash { get; private set; }
+        public string Hash;
         public WordsearchImage[] WordsearchImages { get; private set; }
         public Dictionary<string, string> MetaData { get; private set; }
 
