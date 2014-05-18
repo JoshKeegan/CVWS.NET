@@ -3,7 +3,7 @@
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014
- * Last Edit 22/04/2014
+ * Last Edit 18/05/2014
  */
 
 using System;
@@ -507,8 +507,13 @@ namespace ImageMarkup
                 File.Delete(XML_DOC_LOCATION);
             }
 
+            //Pretty-print (indent & new lines) the XML doc
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+            xmlWriterSettings.Indent = true;
+            xmlWriterSettings.NewLineOnAttributes = true;
+
             //Write out the database contents from memory
-            XmlWriter writer = XmlWriter.Create(XML_DOC_LOCATION);
+            XmlWriter writer = XmlWriter.Create(XML_DOC_LOCATION, xmlWriterSettings);
 
             writer.WriteStartDocument();
             writer.WriteStartElement(XML_ROOT_EL);
