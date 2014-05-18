@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantitativeEvaluation", "Q
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoGUI", "DemoGUI\DemoGUI.csproj", "{A2B17C17-9746-4F0C-8A81-98C6DBF5DEBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegenImageHashes", "RegenImageHashes\RegenImageHashes.csproj", "{77CD12A1-7553-4779-BFBA-A6DC33CE76C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{A2B17C17-9746-4F0C-8A81-98C6DBF5DEBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2B17C17-9746-4F0C-8A81-98C6DBF5DEBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2B17C17-9746-4F0C-8A81-98C6DBF5DEBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77CD12A1-7553-4779-BFBA-A6DC33CE76C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77CD12A1-7553-4779-BFBA-A6DC33CE76C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77CD12A1-7553-4779-BFBA-A6DC33CE76C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77CD12A1-7553-4779-BFBA-A6DC33CE76C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
