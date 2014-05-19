@@ -36,12 +36,13 @@ namespace QuantitativeEvaluation
         internal const string FEATURE_EXTRACTORS_FILE_EXTENSION = ".featureExtraction";
         internal const string PCA_ALL_FEATURES_FILE_NAME = "pcaAllFeatures";
         internal const string PCA_TOP_FEATURES_FILE_NAME = "pcaTopFeatures";
+        private const string OLD_IMAGES_PATH = @"images\2014.02.20";
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
         private const bool EVALUATE_WORDSEARCH_DETECTION = false;
-        private const bool EVALUATE_FULL_SYSTEM = true;
-        private const bool EVALUATE_STAGES_SEGMENTATION_TO_SOLVER = false;
+        private const bool EVALUATE_FULL_SYSTEM = false;
+        private const bool EVALUATE_STAGES_SEGMENTATION_TO_SOLVER = true;
 
         static void Main(string[] args)
         {
@@ -90,25 +91,41 @@ namespace QuantitativeEvaluation
             //Split the Wordsearch Images into 3 groups: training, cross-validation & evaluation
             Log.Info("Splitting Wordsearch Image data into Training, Cross-Validation & Evaluation data sets");
             List<WordsearchImage> wordsearchImages = ImageMarkupDatabase.GetWordsearchImages();
-            List<WordsearchImage> trainingWordsearchImages = new List<WordsearchImage>(wordsearchImages.Count / 3);
-            List<WordsearchImage> crossValidationWordsearchImages = new List<WordsearchImage>(wordsearchImages.Count / 3);
-            List<WordsearchImage> evaluationWordsearchImages = new List<WordsearchImage>(wordsearchImages.Count / 3);
 
-            for (int i = 0; i < wordsearchImages.Count; i++)
+            List<WordsearchImage> trainingWordsearchImages = new List<WordsearchImage>();
+            List<WordsearchImage> crossValidationWordsearchImages = new List<WordsearchImage>();
+            List<WordsearchImage> evaluationWordsearchImages = new List<WordsearchImage>();
+
+            //Split the images from 2014.02.20 into the three groups & add all of the 2014.05.18 images to the evaluation data set
+            int oldImagesNum = 0;
+            foreach(WordsearchImage wordsearchImage in wordsearchImages)
             {
-                if (i % 3 == 0)
+                string imgPath = wordsearchImage.FromImage.Path;
+
+                //If this image is in the old image directory (the one being split amongst the 3 data sets)
+                if(imgPath.Substring(0, OLD_IMAGES_PATH.Length) == OLD_IMAGES_PATH)
                 {
-                    trainingWordsearchImages.Add(wordsearchImages[i]);
+                    //Determine which data set to put the image in
+                    if (oldImagesNum % 3 == 0)
+                    {
+                        trainingWordsearchImages.Add(wordsearchImage);
+                    }
+                    else if(oldImagesNum % 3 == 1)
+                    {
+                        crossValidationWordsearchImages.Add(wordsearchImage);
+                    }
+                    else
+                    {
+                        evaluationWordsearchImages.Add(wordsearchImage);
+                    }
+                    oldImagesNum++;
                 }
-                else if (i % 3 == 1)
+                else //Otherwise this image in in the new image directory and should be put in the evaluation data set
                 {
-                    crossValidationWordsearchImages.Add(wordsearchImages[i]);
-                }
-                else
-                {
-                    evaluationWordsearchImages.Add(wordsearchImages[i]);
+                    evaluationWordsearchImages.Add(wordsearchImage);
                 }
             }
+
             Log.Info("Data split into Training, Cross-Validation & Evalutaion data");
 
             //If we're evaluating neural networks
