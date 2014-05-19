@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 16/05/2014
+ * Last Edit 19/05/2014
  */
 
 using System;
@@ -14,7 +14,6 @@ using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;
 using SharedHelpers.ClassifierInterfacing;
 using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
-using System.Drawing;
 
 namespace QuantitativeEvaluation
 {
@@ -219,9 +218,38 @@ namespace QuantitativeEvaluation
             //If we're evaluating the Full System
             if(EVALUATE_FULL_SYSTEM)
             {
+                /*
+                 * This evaluation stage uses Images rather than WordsearchImages, and the Images used must not contain any WordsearchImages 
+                 * from the training or cross-validation data sets
+                 */
+
+                Log.Info("Building the collection of Evaluation Images . . .");
+
+                //Compile a list of the hashes of the Images that contain each WordsearchImage in the training & cross-validation data sets
+                HashSet<string> usedImageHashes = new HashSet<string>();
+                List<WordsearchImage> usedWordsearchImages = new List<WordsearchImage>(trainingWordsearchImages);
+                usedWordsearchImages.AddRange(crossValidationWordsearchImages);
+                foreach(WordsearchImage wordsearchImage in usedWordsearchImages)
+                {
+                    usedImageHashes.Add(wordsearchImage.FromImageHash);
+                }
+
+                //Now build a list of Images whose hash aren't present in the set of used hashes
+                List<Image> allImages = ImageMarkupDatabase.GetImages();
+                List<Image> evaluationImages = new List<Image>();
+                foreach(Image image in allImages)
+                {
+                    if(!usedImageHashes.Contains(image.Hash))
+                    {
+                        evaluationImages.Add(image);
+                    }
+                }
+
+                Log.Info("Collection of Evaluation Images built");
+
                 Log.Info("Starting to Evaluate the Full System");
 
-                Dictionary<string, double> scores = EvaluateFullSystem.Evaluate(ImageMarkupDatabase.GetImages());
+                Dictionary<string, double> scores = EvaluateFullSystem.Evaluate(evaluationImages);
 
                 //Print out scores
                 Log.Info("Scores for Evaluation of the Full System");
