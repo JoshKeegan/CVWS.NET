@@ -3,7 +3,7 @@
  * Data Entry GUI
  * Image Markup Form class
  * By Josh Keegan 26/02/2014
- * Last Edit 16/05/2014
+ * Last Edit 19/05/2014
  */
 
 using System;
@@ -27,6 +27,7 @@ using ImageMarkup.Exceptions;
 using SharedHelpers;
 using SharedHelpers.Imaging;
 using BaseObjectExtensions;
+using System.IO;
 
 namespace DataEntryGUI
 {
@@ -439,7 +440,12 @@ namespace DataEntryGUI
                     string path = currentBitmap.Key.Tag as string;
                     string hash = currentBitmap.Value;
 
-                    ImageMarkup.Image image = new ImageMarkup.Image(path, hash, wordsearchImages.ToArray(), metaData);
+                    //Make the path relative to the Image Markup Data directory
+                    string absolutePath = Path.GetFullPath(path);
+                    string absoluteDataPath = Path.GetFullPath(ImageMarkupDatabase.DATA_DIRECTORY_PATH);
+                    string pathRelToDataDir = Paths.GenerateRelativePath(absoluteDataPath, absolutePath);
+
+                    ImageMarkup.Image image = new ImageMarkup.Image(pathRelToDataDir, hash, wordsearchImages.ToArray(), metaData);
 
                     //If this image is already in the database, remove it
                     if(ImageMarkupDatabase.ContainsImage(hash))
