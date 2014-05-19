@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Detection
  * By Josh Keegan 22/04/2014
- * Last Edit 26/04/2014
+ * Last Edit 19/05/2014
  */
 
 using System;
@@ -26,11 +26,11 @@ namespace QuantitativeEvaluation
 {
     internal static class EvaluateWordsearchDetection
     {
-        //Evaluate the wordsearch recognition system by checking that for each image it returns one of the wordsearches contained within
+        //Evaluate the wordsearch detection system by checking that for each image it returns one of the wordsearches contained within
         //  (as some images may contain more than one wordsearch)
         internal static Dictionary<string, double> EvaluateReturnsWordsearch(List<Image> images)
         {
-            Log.Info("Starting to Evaluate Wordsearch Recognition By Quadrilateral Detection and different methods of Wordsearch Segmentation");
+            Log.Info("Starting to Evaluate Wordsearch Detection By Quadrilateral Detection and different methods of Wordsearch Segmentation");
 
             //Register an interest in the bitmaps of all the images (so that they remain in memory throughout)
             foreach(Image image in images)
@@ -55,14 +55,14 @@ namespace QuantitativeEvaluation
                 image.DeregisterInterestInBitmap();
             }
 
-            Log.Info("Completed evaluation of Wordsearch Recognition by Quadrilateral detection and different methods of Wordsearch Segmentation");
+            Log.Info("Completed evaluation of Wordsearch Detection by Quadrilateral detection and different methods of Wordsearch Segmentation");
 
             return scores;        
         }
 
         private static double EvaluateReturnsWordsearch(List<Image> images, SegmentationAlgorithm segAlgorithm)
         {
-            Log.Info("Evaluating Wordsearch Recognition by best wordsearch returned . . .");
+            Log.Info("Evaluating Wordsearch Detection by best wordsearch returned . . .");
 
             int numCorrect = 0;
 
@@ -100,7 +100,7 @@ namespace QuantitativeEvaluation
             }
 
             Log.Info(String.Format("Found a Wordsearch for {0} / {1} Images correctly", numCorrect, images.Count));
-            Log.Info("Wordsearch Recognition Evaluation Completed");
+            Log.Info("Wordsearch Detection Evaluation Completed");
 
             return (double)numCorrect / images.Count;
         }
