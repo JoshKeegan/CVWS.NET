@@ -58,10 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlgorithmCombination.cs" />
     <Compile Include="CharData.cs" />
     <Compile Include="ConfusionMatrix.cs" />
     <Compile Include="EvaluateFullSystem.cs" />
     <Compile Include="EvaluateNeuralNetworks.cs" />
+    <Compile Include="EvaluateSegmentationToSolver.cs" />
     <Compile Include="EvaluateWordsearchDetection.cs" />
     <Compile Include="EvaluateWordsearchRotationCorrection.cs" />
     <Compile Include="EvaluateWordsearchSegmentation.cs" />

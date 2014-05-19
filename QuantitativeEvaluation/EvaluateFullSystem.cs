@@ -3,7 +3,7 @@
  * Quantitative Evaluate
  * Evaluate Full System
  * By Josh Keegan 26/04/2014
- * Last Edit 17/05/2014
+ * Last Edit 19/05/2014
  */
 
 using System;
@@ -35,13 +35,70 @@ namespace QuantitativeEvaluation
     internal static class EvaluateFullSystem
     {
         //Constants
-        private const string PCA_ALL_FEATURES_NEURAL_NETWORK_CLASSIFIER_PATH = Program.NEURAL_NETWORKS_PATH + "SingleLayer Sigmoid BkPropLearn PCAAllFeatures" + Program.NEURAL_NETWORK_FILE_EXTENSION;
+        internal const string PCA_ALL_FEATURES_NEURAL_NETWORK_CLASSIFIER_PATH = Program.NEURAL_NETWORKS_PATH + "SingleLayer Sigmoid BkPropLearn PCAAllFeatures" + Program.NEURAL_NETWORK_FILE_EXTENSION;
 
-        private enum SegmentationMethod
+        internal enum SegmentationMethod
         {
             FixedWidth,
             VariedWidthNoResize,
             VariedWidthWithResize
+        }
+
+        internal static Dictionary<string, AlgorithmCombination> GetAlgorithmsToEvaluate()
+        {
+            SegmentationAlgorithm detectionSegmentationAlgorithm = new SegmentByHistogramThresholdPercentileRankTwoThresholds();
+            SegmentationAlgorithm segmentationAlgorithm = new SegmentByBlobRecognition();
+
+            //Use same classifier & feature extraction for both
+            FeatureExtractionPCA featureExtraction = (FeatureExtractionPCA)TrainableFeatureExtractionAlgorithm.Load(
+                Program.FEATURE_EXTRACTORS_PATH + Program.PCA_ALL_FEATURES_FILE_NAME + Program.FEATURE_EXTRACTORS_FILE_EXTENSION);
+
+            Classifier classifier = new AForgeActivationNeuralNetClassifier(featureExtraction, PCA_ALL_FEATURES_NEURAL_NETWORK_CLASSIFIER_PATH);
+
+            Solver wordsearchSolver = new SolverNonProbabilistic();
+            Solver probabilisticWordsearchSolver = new SolverProbabilistic();
+
+            Dictionary<string, AlgorithmCombination> algorithmsToEvaluate = new Dictionary<string, AlgorithmCombination>()
+            {
+                //Standard System
+                { 
+                    "Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Fixed Width, Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Non-Probabilistic",
+                    new AlgorithmCombination(detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.FixedWidth, classifier, classifier, wordsearchSolver) 
+                },
+
+                //Don't resize characters to constants size after segmentation
+                {
+                    "Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Non-Probabilistic",
+                    new AlgorithmCombination(detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, wordsearchSolver)
+                },
+
+                //Solve the wordsearch using probabilistic solver
+                {
+                    "Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Fixed Width, Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
+                    new AlgorithmCombination(detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.FixedWidth, classifier, classifier, probabilisticWordsearchSolver)
+                },
+
+                //Solve the wordsearch using probabilistic solver & varied col width/row height segmentation (resize after character extraction)
+                {
+                    "Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (With Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
+                    new AlgorithmCombination(detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthWithResize, classifier, classifier, probabilisticWordsearchSolver)
+                },
+
+                //Don't resize characters to constant size after segmentation & probablistic solver
+                {
+                    "Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
+                    new AlgorithmCombination(detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, probabilisticWordsearchSolver)
+                },
+
+                //Don't resize characters to constant size after segmentation & Probabilistic solver that prevents character discrepancies (when
+                //  a position is used as one character in on one word, and another character in another word)
+                {
+                    "Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic Prevent Character Discrepancies",
+                    new AlgorithmCombination(detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, new SolverProbabilisticPreventCharacterDiscrepancies())
+                }
+            };
+
+            return algorithmsToEvaluate;
         }
 
         internal static Dictionary<string, double> Evaluate(List<Image> images)
@@ -56,42 +113,14 @@ namespace QuantitativeEvaluation
 
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
-            SegmentationAlgorithm detectionSegmentationAlgorithm = new SegmentByHistogramThresholdPercentileRankTwoThresholds();
-            SegmentationAlgorithm segmentationAlgorithm = new SegmentByBlobRecognition();
+            Dictionary<string, AlgorithmCombination> toEvaluate = GetAlgorithmsToEvaluate();
+            foreach(KeyValuePair<string, AlgorithmCombination> kvp in toEvaluate)
+            {
+                string description = kvp.Key;
+                AlgorithmCombination algorithms = kvp.Value;
 
-            //Use same classifier & feature extraction for both
-            FeatureExtractionPCA featureExtraction = (FeatureExtractionPCA)TrainableFeatureExtractionAlgorithm.Load(
-                Program.FEATURE_EXTRACTORS_PATH + Program.PCA_ALL_FEATURES_FILE_NAME + Program.FEATURE_EXTRACTORS_FILE_EXTENSION);
-
-            Classifier classifier = new AForgeActivationNeuralNetClassifier(featureExtraction, PCA_ALL_FEATURES_NEURAL_NETWORK_CLASSIFIER_PATH);
-
-            Solver wordsearchSolver = new SolverNonProbabilistic();
-            Solver probabilisticWordsearchSolver = new SolverProbabilistic();
-
-            //Standard System
-            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Fixed Width, Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Non-Probabilistic", 
-                Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.FixedWidth, classifier, classifier, wordsearchSolver));
-            
-            //Don't resize characters to constants size after segmentation
-            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Non-Probabilistic",
-                Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, wordsearchSolver));
-
-            //Solve the wordsearch using probabilistic solver
-            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Fixed Width, Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
-                Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.FixedWidth, classifier, classifier, probabilisticWordsearchSolver));
-
-            //Solve the wordsearch using probabilistic solver & varied col width/row height segmentation (resize after character extraction)
-            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (With Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
-                Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthWithResize, classifier, classifier, probabilisticWordsearchSolver));
-            
-            //Don't resize characters to constant size after segmentation & probablistic solver
-            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
-                Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, probabilisticWordsearchSolver));
-            
-            //Don't resize characters to constant size after segmentation & Probabilistic solver that prevents character discrepancies (when
-            //  a position is used as one character in on one word, and another character in another word)
-            scores.Add("Detection Segmentation: HistogramThresholdPercentileRankTwoThresholds, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic Prevent Character Discrepancies",
-                Evaluate(images, detectionSegmentationAlgorithm, segmentationAlgorithm, SegmentationMethod.VariedWidthNoResize, classifier, classifier, new SolverProbabilisticPreventCharacterDiscrepancies()));
+                scores.Add(description, Evaluate(images, algorithms));
+            }
 
             //Deregsiter an interest in all of the images
             foreach (Image image in images)
@@ -104,9 +133,16 @@ namespace QuantitativeEvaluation
             return scores;
         }
 
+        private static double Evaluate(List<Image> images, AlgorithmCombination algorithms)
+        {
+            return Evaluate(images, algorithms.DetectionSegmentationAlgorithm, algorithms.SegmentationAlgorithm,
+                algorithms.SegmentationMethod, algorithms.ProbabilisticRotationCorrectionClassifier, algorithms.Classifier,
+                algorithms.WordsearchSolver);
+        }
+
         private static double Evaluate(List<Image> images, SegmentationAlgorithm detectionSegmentationAlgorithm, 
             SegmentationAlgorithm segmentationAlgorithm, SegmentationMethod segmentationMethod, 
-            Classifier probablisticRotationCorrectionClassifier, Classifier classifier, Solver wordsearchSolver)
+            Classifier probabilisticRotationCorrectionClassifier, Classifier classifier, Solver wordsearchSolver)
         {
             Log.Info("Evaluating Full System . . .");
 
@@ -172,124 +208,16 @@ namespace QuantitativeEvaluation
                 Bitmap extractedImage = wordsearchImageTuple.Item2;
 
                 /*
-                 * Wordsearch Segmentation
+                 * Image Segmentation onwards happen in EvaluateWordsearchBitmap
                  */
-                Segmentation segmentation = segmentationAlgorithm.Segment(extractedImage);
+                WordsearchSolutionEvaluator evaluator = EvaluateWordsearchBitmap(extractedImage, wordsToFind, correctSolutions,
+                    detectionSegmentationAlgorithm, segmentationAlgorithm, segmentationMethod, probabilisticRotationCorrectionClassifier,
+                    classifier, wordsearchSolver);
 
-                /*
-                 * Wordsearch Rotation Correction
-                 */
-                WordsearchRotation originalRotation;
+                //Clean up
+                extractedImage.Dispose();
 
-                //If we're using fixed row & col width
-                if(segmentationMethod == SegmentationMethod.FixedWidth)
-                {
-                    originalRotation = new WordsearchRotation(extractedImage, segmentation.NumRows, segmentation.NumCols);
-                }
-                else //Otherwise we're using varied row/col width segmentation, use the Segmentation object
-                {
-                    originalRotation = new WordsearchRotation(extractedImage, segmentation);
-                }
-
-                WordsearchRotation rotatedWordsearch = WordsearchRotationCorrection.CorrectOrientation(originalRotation, probablisticRotationCorrectionClassifier);
-
-                Bitmap rotatedImage = rotatedWordsearch.Bitmap;
-
-                //If the wordsearch has been rotated
-                if(rotatedImage != extractedImage)
-                {
-                    //Update the segmentation
-
-                    //If the wordsearch rotation won't have been passed a segmentation
-                    if(segmentationMethod == SegmentationMethod.FixedWidth)
-                    {
-                        //Make a new fixed width segmentation from the WordsearchRotation
-                        segmentation = new Segmentation(rotatedWordsearch.Rows, rotatedWordsearch.Cols, 
-                            rotatedImage.Width, rotatedImage.Height);
-                    }
-                    else
-                    {
-                        //Use the rotated segmentation 
-                        segmentation = rotatedWordsearch.Segmentation;
-                    }
-
-                    //Clean up the old Bitmap
-                    extractedImage.Dispose();
-                }
-
-                /*
-                 * Classification
-                 */
-
-                //Split image up into individual characters
-                Bitmap[,] rawCharImgs = null;
-
-                //If we're using fixed row & col width
-                if(segmentationMethod == SegmentationMethod.FixedWidth)
-                {
-                    ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH * segmentation.NumCols, 
-                        Constants.CHAR_WITH_WHITESPACE_HEIGHT * segmentation.NumRows);
-                    Bitmap resizedImage = resize.Apply(rotatedImage);
-
-                    rawCharImgs = SplitImage.Grid(resizedImage, segmentation.NumRows, segmentation.NumCols);
-
-                    //Resized image no longer required
-                    resizedImage.Dispose();
-                }
-                else //Otherwise we're using varied row/col width segmentation
-                {
-                    rawCharImgs = SplitImage.Segment(rotatedImage, segmentation);
-
-                    //If the Segmentation Method is to resize the raw char imgs, resize them
-                    if(segmentationMethod == SegmentationMethod.VariedWidthWithResize)
-                    {
-                        ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH, Constants.CHAR_WITH_WHITESPACE_HEIGHT);
-
-                        for (int i = 0; i < rawCharImgs.GetLength(0); i++)
-                        {
-                            for (int j = 0; j < rawCharImgs.GetLength(1); j++)
-                            {
-                                //Only do the resize if it isn't already that size
-                                if(rawCharImgs[i, j].Width != Constants.CHAR_WITH_WHITESPACE_WIDTH
-                                    || rawCharImgs[i, j].Height != Constants.CHAR_WITH_WHITESPACE_HEIGHT)
-                                {
-                                    Bitmap orig = rawCharImgs[i, j];
-
-                                    rawCharImgs[i, j] = resize.Apply(orig);
-
-                                    //Remove the now unnecessary original/not resized image
-                                    orig.Dispose();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                //Full sized rotated image no longer required
-                rotatedImage.Dispose();
-
-                //Get the part of the image that actually contains the character (without any whitespace)
-                Bitmap[,] charImgs = CharImgExtractor.ExtractAll(rawCharImgs);
-
-                //Raw char img's are no longer required
-                rawCharImgs.ToSingleDimension().DisposeAll();
-
-                //Perform the classification on all of the images (returns probabilities for each possible class)
-                double[][][] classifierOutput = classifier.Classify(charImgs);
-
-                //Actual images of the characters are no longer required
-                charImgs.ToSingleDimension().DisposeAll();
-
-                /*
-                 * Solve Wordsearch
-                 */
-                Solution solution = wordsearchSolver.Solve(classifierOutput, wordsToFind);
-
-                /*
-                 * Evaluate the Proposed Solution
-                 */
-                WordsearchSolutionEvaluator evaluator = new WordsearchSolutionEvaluator(solution, correctSolutions);
-
+                //Log Evaluation
                 evaluators.Add(evaluator);
 
                 Log.Info(evaluator.ToString());
@@ -325,11 +253,146 @@ namespace QuantitativeEvaluation
             }
 
             Log.Info(String.Format("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound));
+            Log.Info(String.Format("{0} wordsearch images got discarded before reaching the evaluation stage", numDidntReachEvaluation));
             Log.Info(String.Format("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures));
 
             Log.Info("Full System Evaluation Completed");
 
             return (double)numCorrect / images.Count;
         }
+
+        internal static WordsearchSolutionEvaluator EvaluateWordsearchBitmap(Bitmap wordsearchBitmap, string[] wordsToFind,
+            Dictionary<string, List<WordPosition>> correctSolutions, AlgorithmCombination algorithms)
+        {
+            return EvaluateWordsearchBitmap(wordsearchBitmap, wordsToFind, correctSolutions,
+                algorithms.DetectionSegmentationAlgorithm, algorithms.SegmentationAlgorithm,
+                algorithms.SegmentationMethod, algorithms.ProbabilisticRotationCorrectionClassifier,
+                algorithms.Classifier, algorithms.WordsearchSolver);
+        }
+
+        internal static WordsearchSolutionEvaluator EvaluateWordsearchBitmap(Bitmap wordsearchBitmap, string[] wordsToFind,
+            Dictionary<string, List<WordPosition>> correctSolutions, SegmentationAlgorithm detectionSegmentationAlgorithm,
+            SegmentationAlgorithm segmentationAlgorithm, SegmentationMethod segmentationMethod,
+            Classifier probabilisticRotationCorrectionClassifier, Classifier classifier, Solver wordsearchSolver)
+        {
+            /*
+             * Wordsearch Segmentation
+             */
+            Segmentation segmentation = segmentationAlgorithm.Segment(wordsearchBitmap);
+
+            /*
+             * Wordsearch Rotation Correction
+             */
+            WordsearchRotation originalRotation;
+
+            //If we're using fixed row & col width
+            if (segmentationMethod == SegmentationMethod.FixedWidth)
+            {
+                originalRotation = new WordsearchRotation(wordsearchBitmap, segmentation.NumRows, segmentation.NumCols);
+            }
+            else //Otherwise we're using varied row/col width segmentation, use the Segmentation object
+            {
+                originalRotation = new WordsearchRotation(wordsearchBitmap, segmentation);
+            }
+
+            WordsearchRotation rotatedWordsearch = WordsearchRotationCorrection.CorrectOrientation(originalRotation, probabilisticRotationCorrectionClassifier);
+
+            Bitmap rotatedImage = rotatedWordsearch.Bitmap;
+
+            //If the wordsearch has been rotated
+            if (rotatedImage != wordsearchBitmap)
+            {
+                //Update the segmentation
+
+                //If the wordsearch rotation won't have been passed a segmentation
+                if (segmentationMethod == SegmentationMethod.FixedWidth)
+                {
+                    //Make a new fixed width segmentation from the WordsearchRotation
+                    segmentation = new Segmentation(rotatedWordsearch.Rows, rotatedWordsearch.Cols,
+                        rotatedImage.Width, rotatedImage.Height);
+                }
+                else
+                {
+                    //Use the rotated segmentation 
+                    segmentation = rotatedWordsearch.Segmentation;
+                }
+            }
+
+            /*
+             * Classification
+             */
+
+            //Split image up into individual characters
+            Bitmap[,] rawCharImgs = null;
+
+            //If we're using fixed row & col width
+            if (segmentationMethod == SegmentationMethod.FixedWidth)
+            {
+                ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH * segmentation.NumCols,
+                    Constants.CHAR_WITH_WHITESPACE_HEIGHT * segmentation.NumRows);
+                Bitmap resizedImage = resize.Apply(rotatedImage);
+
+                rawCharImgs = SplitImage.Grid(resizedImage, segmentation.NumRows, segmentation.NumCols);
+
+                //Resized image no longer required
+                resizedImage.Dispose();
+            }
+            else //Otherwise we're using varied row/col width segmentation
+            {
+                rawCharImgs = SplitImage.Segment(rotatedImage, segmentation);
+
+                //If the Segmentation Method is to resize the raw char imgs, resize them
+                if (segmentationMethod == SegmentationMethod.VariedWidthWithResize)
+                {
+                    ResizeBicubic resize = new ResizeBicubic(Constants.CHAR_WITH_WHITESPACE_WIDTH, Constants.CHAR_WITH_WHITESPACE_HEIGHT);
+
+                    for (int i = 0; i < rawCharImgs.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < rawCharImgs.GetLength(1); j++)
+                        {
+                            //Only do the resize if it isn't already that size
+                            if (rawCharImgs[i, j].Width != Constants.CHAR_WITH_WHITESPACE_WIDTH
+                                || rawCharImgs[i, j].Height != Constants.CHAR_WITH_WHITESPACE_HEIGHT)
+                            {
+                                Bitmap orig = rawCharImgs[i, j];
+
+                                rawCharImgs[i, j] = resize.Apply(orig);
+
+                                //Remove the now unnecessary original/not resized image
+                                orig.Dispose();
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Full sized rotated image no longer required
+            rotatedImage.Dispose();
+
+            //Get the part of the image that actually contains the character (without any whitespace)
+            Bitmap[,] charImgs = CharImgExtractor.ExtractAll(rawCharImgs);
+
+            //Raw char img's are no longer required
+            rawCharImgs.ToSingleDimension().DisposeAll();
+
+            //Perform the classification on all of the images (returns probabilities for each possible class)
+            double[][][] classifierOutput = classifier.Classify(charImgs);
+
+            //Actual images of the characters are no longer required
+            charImgs.ToSingleDimension().DisposeAll();
+
+            /*
+             * Solve Wordsearch
+             */
+            Solution solution = wordsearchSolver.Solve(classifierOutput, wordsToFind);
+
+            /*
+             * Evaluate the Proposed Solution
+             */
+            WordsearchSolutionEvaluator evaluator = new WordsearchSolutionEvaluator(solution, correctSolutions);
+
+            return evaluator;
+        }
+
     }
 }

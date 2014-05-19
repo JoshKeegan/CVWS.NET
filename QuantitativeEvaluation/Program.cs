@@ -41,6 +41,7 @@ namespace QuantitativeEvaluation
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
         private const bool EVALUATE_WORDSEARCH_DETECTION = false;
         private const bool EVALUATE_FULL_SYSTEM = true;
+        private const bool EVALUATE_STAGES_SEGMENTATION_TO_SOLVER = false;
 
         static void Main(string[] args)
         {
@@ -256,6 +257,20 @@ namespace QuantitativeEvaluation
                 printScores(scores);
 
                 Log.Info("Full System Evaluation Complete");
+            }
+
+            //If we're evaluating the stages after Wordsearch Detection (Segmentation to Solver)
+            if(EVALUATE_STAGES_SEGMENTATION_TO_SOLVER)
+            {
+                Log.Info("Starting to Evaluate the stages from Segmentation until Solving");
+
+                Dictionary<string, double> scores = EvaluateSegmentationToSolver.Evaluate(evaluationWordsearchImages);
+
+                //Print out scores
+                Log.Info("Scores for Evaluation of the stages Segmentation to Solver");
+                printScores(scores);
+
+                Log.Info("Evaluation of stages Segmentation to Solving complete");
             }
         }
 
