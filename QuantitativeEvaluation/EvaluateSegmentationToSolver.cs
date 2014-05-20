@@ -3,6 +3,7 @@
  * Quantitative Evaluation
  * Evaluate System from Segmentation until Solver (the entire system except Wordsearch Detection)
  * By Josh Keegan 19/05/2014
+ * Last Edit 20/05/2014
  */
 
 using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
@@ -31,6 +32,7 @@ namespace QuantitativeEvaluation
 
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
+            //TODO: Remove any duplicate algorithms caused by this evaluation not using the DetectionSegmentationAlgorithm
             Dictionary<string, AlgorithmCombination> algorithmsToEvaluate = EvaluateFullSystem.GetAlgorithmsToEvaluate();
             foreach(KeyValuePair<string, AlgorithmCombination> kvp in algorithmsToEvaluate)
             {

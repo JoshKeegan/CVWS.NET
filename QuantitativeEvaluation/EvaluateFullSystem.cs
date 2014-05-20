@@ -3,7 +3,7 @@
  * Quantitative Evaluate
  * Evaluate Full System
  * By Josh Keegan 26/04/2014
- * Last Edit 19/05/2014
+ * Last Edit 20/05/2014
  */
 
 using System;
@@ -211,7 +211,7 @@ namespace QuantitativeEvaluation
                  * Image Segmentation onwards happen in EvaluateWordsearchBitmap
                  */
                 WordsearchSolutionEvaluator evaluator = EvaluateWordsearchBitmap(extractedImage, wordsToFind, correctSolutions,
-                    detectionSegmentationAlgorithm, segmentationAlgorithm, segmentationMethod, probabilisticRotationCorrectionClassifier,
+                    segmentationAlgorithm, segmentationMethod, probabilisticRotationCorrectionClassifier,
                     classifier, wordsearchSolver);
 
                 //Clean up
@@ -265,13 +265,13 @@ namespace QuantitativeEvaluation
             Dictionary<string, List<WordPosition>> correctSolutions, AlgorithmCombination algorithms)
         {
             return EvaluateWordsearchBitmap(wordsearchBitmap, wordsToFind, correctSolutions,
-                algorithms.DetectionSegmentationAlgorithm, algorithms.SegmentationAlgorithm,
-                algorithms.SegmentationMethod, algorithms.ProbabilisticRotationCorrectionClassifier,
-                algorithms.Classifier, algorithms.WordsearchSolver);
+                algorithms.SegmentationAlgorithm, algorithms.SegmentationMethod, 
+                algorithms.ProbabilisticRotationCorrectionClassifier, algorithms.Classifier, 
+                algorithms.WordsearchSolver);
         }
 
         internal static WordsearchSolutionEvaluator EvaluateWordsearchBitmap(Bitmap wordsearchBitmap, string[] wordsToFind,
-            Dictionary<string, List<WordPosition>> correctSolutions, SegmentationAlgorithm detectionSegmentationAlgorithm,
+            Dictionary<string, List<WordPosition>> correctSolutions,
             SegmentationAlgorithm segmentationAlgorithm, SegmentationMethod segmentationMethod,
             Classifier probabilisticRotationCorrectionClassifier, Classifier classifier, Solver wordsearchSolver)
         {
