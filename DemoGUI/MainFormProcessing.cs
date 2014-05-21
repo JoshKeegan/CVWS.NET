@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
  * By Josh Keegan 12/05/2014
- * Last Edit 17/05/2014
+ * Last Edit 21/05/2014
  */
 
 using System;
@@ -93,7 +93,7 @@ namespace DemoGUI
             { "Single Layer Neural Network", typeof(AForgeActivationNeuralNetClassifier) }
         };
 
-        private static readonly Type DEFAULT_WORDSEARCH_DETECTION_SEGMENTATION = typeof(SegmentByHistogramThresholdPercentileRankTwoThresholds);
+        private static readonly Type DEFAULT_WORDSEARCH_DETECTION_SEGMENTATION = typeof(SegmentByMeanDarkPixels);
         private static readonly Type DEFAULT_WORDSEARCH_SEGMENTATION = typeof(SegmentByBlobRecognition);
         private const string DEFAULT_ROTATION_CORRECTION_FEATURE_EXTRACTION = "Principal Component Analysis (PCA) All Features"; //Feature Extraction as a stirng because there can be more than one opention per type
         private static readonly Type DEFAULT_ROTATION_CORRECTION_CLASSIFICATION = typeof(AForgeActivationNeuralNetClassifier);

@@ -248,7 +248,7 @@
             this.quadrilateralsToolStripMenuItem.Checked = true;
             this.quadrilateralsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.quadrilateralsToolStripMenuItem.Name = "quadrilateralsToolStripMenuItem";
-            this.quadrilateralsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.quadrilateralsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.quadrilateralsToolStripMenuItem.Text = "Quadrilaterals";
             // 
             // candidateRankingToolStripMenuItem
@@ -374,14 +374,14 @@
             // 
             // probabilisticWordsearchSolverToolStripMenuItem
             // 
-            this.probabilisticWordsearchSolverToolStripMenuItem.Checked = true;
-            this.probabilisticWordsearchSolverToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.probabilisticWordsearchSolverToolStripMenuItem.Name = "probabilisticWordsearchSolverToolStripMenuItem";
             this.probabilisticWordsearchSolverToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.probabilisticWordsearchSolverToolStripMenuItem.Text = "Probabilistic";
             // 
             // probabilisticPreventCharacterDiscrepanciesToolStripMenuItem
             // 
+            this.probabilisticPreventCharacterDiscrepanciesToolStripMenuItem.Checked = true;
+            this.probabilisticPreventCharacterDiscrepanciesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.probabilisticPreventCharacterDiscrepanciesToolStripMenuItem.Name = "probabilisticPreventCharacterDiscrepanciesToolStripMenuItem";
             this.probabilisticPreventCharacterDiscrepanciesToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.probabilisticPreventCharacterDiscrepanciesToolStripMenuItem.Text = "Probabilistic Prevent Character Discrepancies";
