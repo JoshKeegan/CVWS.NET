@@ -243,7 +243,7 @@ namespace QuantitativeEvaluation
 
             //Evaluate the network returned on the cross-validation data so it can be compared to the current best
             NeuralNetworkEvaluator crossValEvaluator = new NeuralNetworkEvaluator(neuralNet);
-            crossValEvaluator.Evaluate(evaluationInput, evaluationDataLabels);
+            crossValEvaluator.Evaluate(crossValidationInput, crossValidationDataLabels);
 
             //See if this network is better than the current best network of it's type
             //Try and load a previous network of this type
