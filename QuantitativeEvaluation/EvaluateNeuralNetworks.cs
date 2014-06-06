@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
- * Last Edit 12/05/2014
+ * Last Edit 06/06/2014
  * 
  * Note that if the data has changed between runs, it won't work with trainiable feature extraction 
  *  techniques as the previous trained system will get overwritten (could be changed in the future 
@@ -374,16 +374,11 @@ namespace QuantitativeEvaluation
                 }
 
                 //Evaluate this network on the cross-validation data
-                //Clear the Memory Stream storing the previous network
-                prevNetworkStream.SetLength(0);
-                //Store this network & the number of characters it misclassified on the cross-validation data
-                neuralNet.Save(prevNetworkStream);
                 NeuralNetworkEvaluator crossValidationEvaluator = new NeuralNetworkEvaluator(neuralNet);
                 crossValidationEvaluator.Evaluate(crossValidationInput, crossValidationDataLabels);
                 uint networkNumMisclassified = crossValidationEvaluator.ConfusionMatrix.NumMisclassifications;
                 Log.Debug(String.Format("Network misclassified {0} / {1} on the cross-validation data set", networkNumMisclassified,
                     crossValidationEvaluator.ConfusionMatrix.TotalClassifications));
-
 
                 //Check if we've overlearned the data and performance on the cross-valiadtion data has dropped off
                 if (networkNumMisclassified > prevNetworksNumMisclassified.Mean()) //Use the mean of the number of misclassification, as the actual number can move around a bit
@@ -394,6 +389,11 @@ namespace QuantitativeEvaluation
                     neuralNet = ActivationNetwork.Load(prevNetworkStream) as ActivationNetwork; //Read in the network
                     break;
                 }
+
+                //Clear the Memory Stream storing the previous network
+                prevNetworkStream.SetLength(0);
+                //Store this network & the number of characters it misclassified on the cross-validation data
+                neuralNet.Save(prevNetworkStream);
 
                 //This is now the previous network, update the number it misclassified
                 prevNetworkNumMisclassified = networkNumMisclassified;

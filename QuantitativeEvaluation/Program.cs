@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 21/05/2014
+ * Last Edit 06/06/2014
  */
 
 using System;
@@ -37,11 +37,11 @@ namespace QuantitativeEvaluation
         internal const string PCA_ALL_FEATURES_FILE_NAME = "pcaAllFeatures";
         internal const string PCA_TOP_FEATURES_FILE_NAME = "pcaTopFeatures";
         private const string OLD_IMAGES_PATH = @"images\2014.02.20";
-        private const bool EVALUATE_NEURAL_NETWORKS = false;
+        private const bool EVALUATE_NEURAL_NETWORKS = true;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
         private const bool EVALUATE_WORDSEARCH_DETECTION = false;
-        private const bool EVALUATE_FULL_SYSTEM = true;
+        private const bool EVALUATE_FULL_SYSTEM = false;
         private const bool EVALUATE_STAGES_SEGMENTATION_TO_SOLVER = false;
 
         static void Main(string[] args)
