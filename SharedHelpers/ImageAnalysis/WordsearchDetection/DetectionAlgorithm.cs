@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Detection Algorithm
  * By Josh Keegan 22/04/2014
- * Last Edit 15/05/2014
+ * Last Edit 10/06/2014
  * 
  * Note: This is a static class containing the methods to recognise a wordsearch in an image that is bounded by a rectangle.
  *  This will be used in the final dissertation due to time constraints. If any future work were done in this area, then this
@@ -52,9 +52,14 @@ namespace SharedHelpers.ImageAnalysis.WordsearchDetection
             }
         }
 
+        public static Tuple<List<IntPoint>, Bitmap> ExtractBestWordsearch(Bitmap image, SegmentationAlgorithm segAlg)
+        {
+            return ExtractBestWordsearch(image, segAlg, false); //Don't remove the erroneously small rows and cols by default
+        }
+
         //Method to extract a Bitmap of the best match for a wordsearch in an image using a specified Wordsearch Segmentation Algorithm
         //returns null if no Wordsearch candidate could be found in the image
-        public static Tuple<List<IntPoint>, Bitmap> ExtractBestWordsearch(Bitmap image, SegmentationAlgorithm segAlg)
+        public static Tuple<List<IntPoint>, Bitmap> ExtractBestWordsearch(Bitmap image, SegmentationAlgorithm segAlg, bool removeSmallRowsAndCols)
         {
             double blobMinDimensionDbl = BLOB_MIN_DIMENSION_PERCENTAGE / 100;
             int minWidth = (int)Math.Ceiling(image.Width * blobMinDimensionDbl); //Round up, so that the integer comaprison minimum will always be correct
@@ -84,6 +89,13 @@ namespace SharedHelpers.ImageAnalysis.WordsearchDetection
                     try
                     {
                         Segmentation segmentation = segAlg.Segment(quadBitmap);
+                        
+                        //If removing erroneously small rows and cols before scoring the segmentation, do so now
+                        if(removeSmallRowsAndCols)
+                        {
+                            segmentation = segmentation.RemoveSmallRowsAndCols();
+                        }
+
                         CandidateScorer scorer = new CandidateScorer(segmentation);
                         score = scorer.WordsearchRecognitionScore;
                     }

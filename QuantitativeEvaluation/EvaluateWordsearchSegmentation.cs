@@ -20,7 +20,7 @@ namespace QuantitativeEvaluation
 {
     internal static class EvaluateWordsearchSegmentation
     {
-        private static readonly Dictionary<String, SegmentationAlgorithm> SEGMENTATION_ALGORITHMS =
+        internal static readonly Dictionary<String, SegmentationAlgorithm> SEGMENTATION_ALGORITHMS =
             new Dictionary<string, SegmentationAlgorithm>()
         {
             { "MeanDarkPixels", new SegmentByMeanDarkPixels() },

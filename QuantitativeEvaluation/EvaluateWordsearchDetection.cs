@@ -51,13 +51,19 @@ namespace QuantitativeEvaluation
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
             //Get the score for each segmentation algorithm (currently only ones that use row/col start & end points are supported, although this is actually all of them ATM)
-            scores.Add("MeanDarkPixels", EvaluateReturnsWordsearch(images, new SegmentByMeanDarkPixels()));
-            scores.Add("MedianDarkPixels", EvaluateReturnsWordsearch(images, new SegmentByMedianDarkPixels()));
-            scores.Add("PercentileTwoThresholds", EvaluateReturnsWordsearch(images, new SegmentByPercentileTwoThresholds()));
-            scores.Add("BlobRecognition", EvaluateReturnsWordsearch(images, new SegmentByBlobRecognition())); //TODO: Bug here prevents running (bug spotted when whole image was always being returned as blob)
-            scores.Add("HistogramThresholdDarkPixels", EvaluateReturnsWordsearch(images, new SegmentByHistogramThresholdDarkPixels()));
-            scores.Add("ThresholdDarkPixels", EvaluateReturnsWordsearch(images, new SegmentByThresholdDarkPixels()));
-            scores.Add("HistogramThresholdPercentileRankTwoThresholds", EvaluateReturnsWordsearch(images, new SegmentByHistogramThresholdPercentileRankTwoThresholds()));
+            foreach(KeyValuePair<string, SegmentationAlgorithm> kvp in EvaluateWordsearchSegmentation.SEGMENTATION_ALGORITHMS)
+            {
+                string name = kvp.Key;
+                SegmentationAlgorithm algorithm = kvp.Value;
+
+                scores.Add(name, EvaluateReturnsWordsearch(images, algorithm, false));
+                
+                //If this segmentation algorithm supports having the small rows and cols removed from the segmentation, evaluate that too
+                if(algorithm is SegmentationAlgorithmByStartEndIndices)
+                {
+                    scores.Add(name + " (RemoveSmallRowsAndCols)", EvaluateReturnsWordsearch(images, algorithm, true));
+                }
+            }
 
             //Deregsiter an interest in all of the images
             foreach(Image image in images)
@@ -70,7 +76,7 @@ namespace QuantitativeEvaluation
             return scores;        
         }
 
-        private static double EvaluateReturnsWordsearch(List<Image> images, SegmentationAlgorithm segAlgorithm)
+        private static double EvaluateReturnsWordsearch(List<Image> images, SegmentationAlgorithm segAlgorithm, bool removeSmallRowsAndCols)
         {
             Log.Info("Evaluating Wordsearch Detection by best wordsearch returned . . .");
 
@@ -82,7 +88,7 @@ namespace QuantitativeEvaluation
                 //Register an interest in the Bitmap of the Image
                 image.RegisterInterestInBitmap();
 
-                Tuple<List<IntPoint>, Bitmap> bestCandidate = DetectionAlgorithm.ExtractBestWordsearch(image.Bitmap, segAlgorithm);
+                Tuple<List<IntPoint>, Bitmap> bestCandidate = DetectionAlgorithm.ExtractBestWordsearch(image.Bitmap, segAlgorithm, removeSmallRowsAndCols);
                 
                 //If we found a valid best candidate
                 if (bestCandidate != null)
