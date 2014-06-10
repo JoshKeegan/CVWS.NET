@@ -294,6 +294,12 @@ namespace QuantitativeEvaluation
              */
             Segmentation segmentation = segmentationAlgorithm.Segment(wordsearchBitmap);
 
+            //Remove erroneously small rows and columns from the segmentation if that option is specified
+            if(segmentationRemoveSmallRowsAndCols)
+            {
+                segmentation = segmentation.RemoveSmallRowsAndCols();
+            }
+
             /*
              * Wordsearch Rotation Correction
              */
