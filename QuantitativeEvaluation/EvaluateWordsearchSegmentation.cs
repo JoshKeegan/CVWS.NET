@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Segmentation
  * By Josh Keegan 03/04/2014
- * Last Edit 05/04/2014
+ * Last Edit 10/06/2014
  */
 
 using System;
@@ -20,6 +20,18 @@ namespace QuantitativeEvaluation
 {
     internal static class EvaluateWordsearchSegmentation
     {
+        private static readonly Dictionary<String, SegmentationAlgorithm> SEGMENTATION_ALGORITHMS =
+            new Dictionary<string, SegmentationAlgorithm>()
+        {
+            { "MeanDarkPixels", new SegmentByMeanDarkPixels() },
+            { "MedianDarkPixels", new SegmentByMedianDarkPixels() },
+            { "PercentileTwoThresholds", new SegmentByPercentileTwoThresholds() },
+            { "BlobRecognition", new SegmentByBlobRecognition() },
+            { "HistogramThresholdDarkPixels", new SegmentByHistogramThresholdDarkPixels() },
+            { "ThresholdDarkPixels", new SegmentByThresholdDarkPixels() },
+            { "HistogramThresholdPercentileRankTwoThresholds", new SegmentByHistogramThresholdPercentileRankTwoThresholds() }
+        };
+
         internal static Dictionary<string, double> EvaluateByNumRowsAndCols(List<WordsearchImage> wordsearchImages)
         {
             Log.Info("Starting to Evaluate all Wordsearch Image Segmentation Algorithms based on the number of rows & cols they return");
@@ -27,24 +39,33 @@ namespace QuantitativeEvaluation
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
             //Get the score for each segmentation algorithm
-            scores.Add("MeanDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByMeanDarkPixels()));
-            scores.Add("MedianDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByMedianDarkPixels()));
-            scores.Add("PercentileTwoThresholds", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByPercentileTwoThresholds()));
-            scores.Add("BlobRecognition", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByBlobRecognition()));
-            scores.Add("HistogramThresholdDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByHistogramThresholdDarkPixels()));
-            scores.Add("ThresholdDarkPixels", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByThresholdDarkPixels()));
-            scores.Add("HistogramThresholdPercentileRankTwoThresholds", EvaluateByNumRowsAndCols(wordsearchImages, new SegmentByHistogramThresholdPercentileRankTwoThresholds()));
+            foreach(KeyValuePair<string, SegmentationAlgorithm> kvp in SEGMENTATION_ALGORITHMS)
+            {
+                string name = kvp.Key;
+                SegmentationAlgorithm algorithm = kvp.Value;
+
+                Tuple<double, double?> algorithmScores = EvaluateByNumRowsAndCols(wordsearchImages, algorithm);
+                scores.Add(name, algorithmScores.Item1);
+                
+                //If a score was returned for having removed small rows and cols, log that too
+                if(algorithmScores.Item2 != null)
+                {
+                    scores.Add(name + " (RemoveSmallRowsAndCols)", algorithmScores.Item2.GetValueOrDefault());
+                }
+            }
 
             Log.Info("Completed evaluation of all Wordsearch Image Segmentation Algorithms based on the number of rows and cols they return");
 
             return scores;
         }
 
-        private static double EvaluateByNumRowsAndCols(List<WordsearchImage> wordsearchImages, SegmentationAlgorithm segAlgorithm)
+        //returns score & score after removing erroenously small rows and cols (null if segmentation algorithm doesn't support this)
+        private static Tuple<double, double?> EvaluateByNumRowsAndCols(List<WordsearchImage> wordsearchImages, SegmentationAlgorithm segAlgorithm)
         {
             Log.Info("Evaluating Wordsearch Image Segmentation by number of rows and cols returned . . .");
 
             int numCorrect = 0;
+            int numCorrectRemoveSmallRowsAndCols = 0;
 
             //Test the algorithm on each Wordsearch Image
             foreach(WordsearchImage wordsearchImage in wordsearchImages)
@@ -61,14 +82,37 @@ namespace QuantitativeEvaluation
                     numCorrect++;
                 }
 
+                //If this segmentation algorithm performs its segmentation with start & end character indices & can therefore have
+                //  small rows and cols removed, do it
+                if(segAlgorithm is SegmentationAlgorithmByStartEndIndices)
+                {
+                    Segmentation segRemoveSmallRowsAndCols = proposedSegmentation.RemoveSmallRowsAndCols();
+
+                    if(segRemoveSmallRowsAndCols.NumRows == wordsearchImage.Rows &&
+                        segRemoveSmallRowsAndCols.NumCols == wordsearchImage.Cols)
+                    {
+                        numCorrectRemoveSmallRowsAndCols++;
+                    }
+                }
+
                 //Clean Up
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
             Log.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly", numCorrect, wordsearchImages.Count));
+
+            double score = (double)numCorrect / wordsearchImages.Count;
+            double? scoreRemoveSmallRowsAndCols = null;
+            if(segAlgorithm is SegmentationAlgorithmByStartEndIndices)
+            {
+                scoreRemoveSmallRowsAndCols = (double)numCorrectRemoveSmallRowsAndCols / wordsearchImages.Count;
+                Log.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly after removing small rows and cols", 
+                    numCorrectRemoveSmallRowsAndCols, wordsearchImages.Count));
+            }
+
             Log.Info("Wordsearch Image Segmentation Evaluation Completed");
 
-            return (double)numCorrect / wordsearchImages.Count;
+            return Tuple.Create(score, scoreRemoveSmallRowsAndCols);
         }
     }
 }
