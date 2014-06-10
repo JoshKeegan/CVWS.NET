@@ -105,7 +105,7 @@ namespace QuantitativeEvaluation
 
                 //Remove small rows and cols after segmentation
                 {
-                    "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic Prevent Character Discrepancies",
+                    "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition (RemoveSmallRowsAndCols), Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic Prevent Character Discrepancies",
                     new AlgorithmCombination(new SegmentByMeanDarkPixels(), false, segmentationAlgorithm, true, SegmentationMethod.VariedWidthNoResize, classifier, classifier, new SolverProbabilisticPreventCharacterDiscrepancies())
                 }
             };
