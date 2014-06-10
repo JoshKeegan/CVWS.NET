@@ -3,7 +3,7 @@
  * Shared Helpers
  * Wordsearch Segmentation - class to hold the indices that split rows & cols
  * By Josh Keegan 02/04/2014
- * Last Edit 16/05/2014
+ * Last Edit 10/06/2014
  */
 
 using System;
@@ -18,6 +18,9 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
 {
     public class Segmentation
     {
+        //Constants
+        private const double REMOVE_SMALL_COLS_THRESHOLD_MEAN_MULTIPLIER = 0.5;
+
         //Protected vars (used for Wordsearch Recognition candidate scoring)
         protected int? numCols = null;
         protected int? numRows = null;
@@ -324,7 +327,25 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
             this.Cols = colSplits;
         }
 
-        //Public Methods
+        /*
+         * Public Methods
+         */
+
+        //Remove rows and columns considerably smaller than the mean size
+        public Segmentation RemoveSmallRowsAndCols()
+        {
+            //Validation: Only works when we have the row/col start & end indices
+            if (rowStartEnds == null || colStartEnds == null)
+            {
+                throw new InvalidRowsAndColsException("Can only perform operation on Segmentation object that was instantiated with the row/col start & end indices");
+            }
+
+            int[,] cleanRows = removeSmallCols(rowStartEnds);
+            int[,] cleanCols = removeSmallCols(colStartEnds);
+
+            return new Segmentation(cleanRows, cleanCols, Width, Height);
+        }
+
         public void Rotate90()
         {
             //When rotating 90 deg, the col order is maintained, but row order gets reversed:
@@ -415,6 +436,45 @@ namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
            
 
             return copy;
+        }
+
+        /*
+         * Private Methods
+         */
+        private static int[,] removeSmallCols(int[,] colStartEnds) //Also for rows
+        {
+            List<int> keepIndices = new List<int>();
+            double threshold = meanColWidth(colStartEnds) * REMOVE_SMALL_COLS_THRESHOLD_MEAN_MULTIPLIER;
+
+            //Determine which cols to keep
+            for (int i = 0; i < colStartEnds.GetLength(0); i++)
+            {
+                int width = colStartEnds[i, 1] - colStartEnds[i, 0];
+
+                if (width > threshold)
+                {
+                    keepIndices.Add(i);
+                }
+            }
+
+            //Store the indexes we decided to keep
+            int[,] toRet = new int[keepIndices.Count, 2];
+            for (int i = 0; i < toRet.GetLength(0); i++)
+            {
+                toRet[i, 0] = colStartEnds[keepIndices[i], 0];
+                toRet[i, 1] = colStartEnds[keepIndices[i], 1];
+            }
+            return toRet;
+        }
+
+        private static double meanColWidth(int[,] colStartEnds) //Also for rows
+        {
+            int sum = 0;
+            for (int i = 0; i < colStartEnds.GetLength(0); i++)
+            {
+                sum += (colStartEnds[i, 1] - colStartEnds[i, 0]);
+            }
+            return (double)sum / colStartEnds.GetLength(0);
         }
     }
 }

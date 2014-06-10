@@ -3,7 +3,7 @@
  * Unit Tests
  * SharedHelpers.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
  * By Josh Keegan 02/04/2014
- * Last Edit 16/05/2014
+ * Last Edit 10/06/2014
  */
 
 using System;
@@ -1009,6 +1009,74 @@ namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
             CollectionAssert.AreEqual(new int[] { 89, 5, 4 }, clone.Cols);
             Assert.AreEqual(width, clone.Width);
             Assert.AreEqual(height, clone.Height);
+        }
+
+        /*
+         * Test RemoveSmallRowsAndCols
+         */
+        [TestMethod]
+        public void TestRemoveSmallRowsAndCols1()
+        {
+            //Basic test
+            int[,] rows = new int[,] { { 1, 2 }, { 3, 7 }, { 10, 14 } };
+            int[,] cols = new int[,] { { 1, 2 }, { 3, 4 }, { 5, 6 } };
+            int width = 10;
+            int height = 20;
+            Segmentation orig = new Segmentation(rows, cols, width, height);
+            Segmentation cleaned = orig.RemoveSmallRowsAndCols();
+
+            int[,] expectedRows = new int[,] { { 3, 7 }, { 10, 14 } }; //Removes { 1, 2 } from rows
+            int[,] expectedCols = new int[,] { { 1, 2 }, { 3, 4 }, { 5, 6 } }; //Removes nothing from cols
+            Segmentation expected = new Segmentation(expectedRows, expectedCols, width, height);
+
+            CollectionAssert.AreEqual(expected.Rows, cleaned.Rows);
+            CollectionAssert.AreEqual(expected.Cols, cleaned.Cols);
+            Assert.AreEqual(width, cleaned.Width);
+            Assert.AreEqual(height, cleaned.Height);
+        }
+
+        [TestMethod]
+        public void TestRemoveSmallRowsAndCols2()
+        {
+            //Test throws exception when constructed with numRows and numCols
+            Segmentation s = new Segmentation(1, 1, 10, 10);
+
+            try
+            {
+                s.RemoveSmallRowsAndCols();
+                Assert.Fail(); //No Exception
+            }
+            catch(InvalidRowsAndColsException)
+            {
+                //Correct Exception
+            }
+            catch(Exception)
+            {
+                Assert.Fail(); //Wrong type of exception
+            }
+        }
+
+        [TestMethod]
+        public void TestRemoveSmallRowsAndCols3()
+        {
+            //Test throws exception when constructed with segmentation indices rather than char start & end indices
+            int[] rows = { 1, 2 };
+            int[] cols = { 1, 2, 3 };
+            Segmentation s = new Segmentation(rows, cols, 10, 10);
+
+            try
+            {
+                s.RemoveSmallRowsAndCols();
+                Assert.Fail(); //No Exception
+            }
+            catch (InvalidRowsAndColsException)
+            {
+                //Correct Exception
+            }
+            catch (Exception)
+            {
+                Assert.Fail(); //Wrong type of exception
+            }
         }
     }
 }
