@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Detection
  * By Josh Keegan 22/04/2014
- * Last Edit 19/05/2014
+ * Last Edit 10/06/2014
  */
 
 using System;
@@ -28,9 +28,19 @@ namespace QuantitativeEvaluation
     {
         //Evaluate the wordsearch detection system by checking that for each image it returns one of the wordsearches contained within
         //  (as some images may contain more than one wordsearch)
-        internal static Dictionary<string, double> EvaluateReturnsWordsearch(List<Image> images)
+        internal static Dictionary<string, double> EvaluateReturnsWordsearch(List<Image> imagesIn)
         {
             Log.Info("Starting to Evaluate Wordsearch Detection By Quadrilateral Detection and different methods of Wordsearch Segmentation");
+
+            //Remove any images that contain more than one wordsearch (in order to prevent their from being an unfair increased chance of finding one of them for that image)
+            List<Image> images = new List<Image>();
+            foreach(Image image in imagesIn)
+            {
+                if(image.WordsearchImages.Length == 1)
+                {
+                    images.Add(image);
+                }
+            }
 
             //Register an interest in the bitmaps of all the images (so that they remain in memory throughout)
             foreach(Image image in images)
