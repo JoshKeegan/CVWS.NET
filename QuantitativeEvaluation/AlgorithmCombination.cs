@@ -3,6 +3,7 @@
  * Quantitative Evaluation
  * Algorithm Combination class
  * By Josh Keegan 19/05/2014
+ * Last Edit 10/06/2014
  */
 
 using System;
@@ -30,7 +31,9 @@ namespace QuantitativeEvaluation
     {
         //Public variables
         public SegmentationAlgorithm DetectionSegmentationAlgorithm { get; private set; }
+        public bool DetectionSegmentationRemoveSmallRowsAndCols { get; private set; }
         public SegmentationAlgorithm SegmentationAlgorithm { get; private set; }
+        public bool SegmentationRemoveSmallRowsAndCols { get; private set; }
         public EvaluateFullSystem.SegmentationMethod SegmentationMethod { get; private set; }
         public Classifier ProbabilisticRotationCorrectionClassifier { get; private set; }
         public Classifier Classifier { get; private set; }
@@ -38,12 +41,15 @@ namespace QuantitativeEvaluation
 
         //Constructors
         public AlgorithmCombination(SegmentationAlgorithm detectionSegmentationAlgorithm,
-            SegmentationAlgorithm segmentationAlgorithm, EvaluateFullSystem.SegmentationMethod segmentationMethod,
+            bool detectionSegmentationRemoveSmallRowsAndCols, SegmentationAlgorithm segmentationAlgorithm, 
+            bool segmentationRemoveSmallRowsAndCols, EvaluateFullSystem.SegmentationMethod segmentationMethod,
             Classifier probabilisticRotationCorrectionClassifier, Classifier classifier,
             Solver wordsearchSolver)
         {
             this.DetectionSegmentationAlgorithm = detectionSegmentationAlgorithm;
+            this.DetectionSegmentationRemoveSmallRowsAndCols = detectionSegmentationRemoveSmallRowsAndCols;
             this.SegmentationAlgorithm = segmentationAlgorithm;
+            this.SegmentationRemoveSmallRowsAndCols = segmentationRemoveSmallRowsAndCols;
             this.SegmentationMethod = segmentationMethod;
             this.ProbabilisticRotationCorrectionClassifier = probabilisticRotationCorrectionClassifier;
             this.Classifier = classifier;

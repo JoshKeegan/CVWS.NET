@@ -32,7 +32,7 @@ namespace QuantitativeEvaluation
 
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
-            //TODO: Remove any duplicate algorithms caused by this evaluation not using the DetectionSegmentationAlgorithm
+            //TODO: Remove any duplicate algorithms caused by this evaluation not using the DetectionSegmentationAlgorithm (or DetectionSegmentationRemoveSmallRowsAndCols)
             Dictionary<string, AlgorithmCombination> algorithmsToEvaluate = EvaluateFullSystem.GetAlgorithmsToEvaluate();
             foreach(KeyValuePair<string, AlgorithmCombination> kvp in algorithmsToEvaluate)
             {
