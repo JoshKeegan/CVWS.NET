@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Confusion Matrix - a summary of the performance of a classification algorithm
  * By Josh Keegan 08/03/2014
- * Last Edit 10/03/2014
+ * Last Edit 11/06/2014
  */
 
 using System;
@@ -121,7 +121,7 @@ namespace QuantitativeEvaluation
                 //Now write out this row from the matrix
                 for(int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    writer.Write(matrix[i, j]);
+                    writer.Write(matrix[j, i]); //It is the convention to display CM's with Predicted class as columns and Actual class as rows
 
                     //If this isn't the last thing on the line, write a comma
                     if (j != matrix.GetLength(1) - 1)

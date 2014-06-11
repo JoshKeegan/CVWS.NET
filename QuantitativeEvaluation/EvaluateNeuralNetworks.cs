@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
- * Last Edit 06/06/2014
+ * Last Edit 11/06/2014
  * 
  * Note that if the data has changed between runs, it won't work with trainiable feature extraction 
  *  techniques as the previous trained system will get overwritten (could be changed in the future 
@@ -248,7 +248,7 @@ namespace QuantitativeEvaluation
             //See if this network is better than the current best network of it's type
             //Try and load a previous network of this type
             string previousNetworkPath = Program.NEURAL_NETWORKS_PATH + networkName + Program.NEURAL_NETWORK_FILE_EXTENSION;
-            string previousNetworkCMPath = Program.NEURAL_NETWORKS_PATH + networkName + ".csv";
+            string networkCMPath = Program.NEURAL_NETWORKS_PATH + networkName + ".csv";
             bool newBest = false;
             ActivationNetwork bestNetwork = neuralNet;
             if(File.Exists(previousNetworkPath))
@@ -267,7 +267,7 @@ namespace QuantitativeEvaluation
 
                     //Delete the old files
                     File.Delete(previousNetworkPath);
-                    File.Delete(previousNetworkCMPath);
+                    File.Delete(networkCMPath);
 
                     newBest = true;
                 }
@@ -285,18 +285,21 @@ namespace QuantitativeEvaluation
                 newBest = true;
             }
 
+            //Evaluate the best system on the evaluation data
+            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(bestNetwork);
+            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
+
             //If there is a new best to write out
             if(newBest)
             {
                 Log.Info(String.Format("Writing out net best network of type\"{0}\"", networkName));
                 neuralNet.Save(previousNetworkPath);
-                crossValEvaluator.ConfusionMatrix.WriteToCsv(previousNetworkCMPath);
+
+                //Write out the Confusion Matrix for the evaluation data, not cross-validation
+                evaluator.ConfusionMatrix.WriteToCsv(networkCMPath);
                 Log.Info(String.Format("Finished writing out network \"{0}\"", networkName));
             }
 
-            //Evaluate the best system on the evaluation data
-            NeuralNetworkEvaluator evaluator = new NeuralNetworkEvaluator(bestNetwork);
-            evaluator.Evaluate(evaluationInput, evaluationDataLabels);
             return evaluator;
         }
 
