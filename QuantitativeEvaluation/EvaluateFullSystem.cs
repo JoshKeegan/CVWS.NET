@@ -66,40 +66,34 @@ namespace QuantitativeEvaluation
                     new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, false, SegmentationMethod.FixedWidth, classifier, classifier, wordsearchSolver) 
                 },
 
-                //Don't resize characters to constants size after segmentation
+                //Varied width segmentation, Don't resize characters to constants size after segmentation
                 {
                     "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Non-Probabilistic",
                     new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, false, SegmentationMethod.VariedWidthNoResize, classifier, classifier, wordsearchSolver)
                 },
 
-                //Solve the wordsearch using probabilistic solver
+                //Varied width segmentation, resize characters to constant size after segmentation
                 {
-                    "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition, Segmentation Method: Fixed Width, Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
-                    new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, false, SegmentationMethod.FixedWidth, classifier, classifier, probabilisticWordsearchSolver)
+                    "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition, Segmentation Method: Varied Width (With Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Non-Probabilistic",
+                    new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, false, SegmentationMethod.VariedWidthWithResize, classifier, classifier, wordsearchSolver)
                 },
 
-                //Solve the wordsearch using probabilistic solver & varied col width/row height segmentation (resize after character extraction)
-                {
-                    "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition, Segmentation Method: Varied Width (With Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
-                    new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, false, SegmentationMethod.VariedWidthWithResize, classifier, classifier, probabilisticWordsearchSolver)
-                },
-
-                //Don't resize characters to constant size after segmentation & probablistic solver
+                //Varied width segmentation (no resize) & probablistic solver
                 {
                     "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic",
                     new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, false, SegmentationMethod.VariedWidthNoResize, classifier, classifier, probabilisticWordsearchSolver)
                 },
 
-                //Don't resize characters to constant size after segmentation & Probabilistic solver that prevents character discrepancies (when
+                //Varied width segmentation (no resize) & Probabilistic solver that prevents character discrepancies (when
                 //  a position is used as one character in on one word, and another character in another word)
                 {
                     "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition, Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic Prevent Character Discrepancies",
                     new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, false, SegmentationMethod.VariedWidthNoResize, classifier, classifier, new SolverProbabilisticPreventCharacterDiscrepancies())
                 },
 
-                //Remove small rows and cols after segmentation, don't resize characters to constant size after 
-                //  segmentation & Probabilistic solver that prevents character discrepancies (when
-                //  a position is used as one character in on one word, and another character in another word)
+                //Remove small rows and cols after segmentation, Varied width segmentation (no resize)
+                //  & Probabilistic solver that prevents character discrepancies (when a position is used 
+                //  as one character in on one word, and another character in another word)
                 {
                     "Detection Segmentation: MeanDarkPixels, Segmentation: BlobRecognition (RemoveSmallRowsAndCols), Segmentation Method: Varied Width (No Resize), Rotation Correction Classifier: Neural net with PCA (All Features), Classifier: Neural net with PCA (All Features), Wordsearch Solver: Probabilistic Prevent Character Discrepancies",
                     new AlgorithmCombination(detectionSegmentationAlgorithm, false, segmentationAlgorithm, true, SegmentationMethod.VariedWidthNoResize, classifier, classifier, new SolverProbabilisticPreventCharacterDiscrepancies())
