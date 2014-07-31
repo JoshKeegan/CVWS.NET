@@ -1,5 +1,5 @@
 ﻿/**
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Quantitative Evaluation
  * Evaluate Wordsearch Rotation Correction
  * By Josh Keegan 25/03/2014

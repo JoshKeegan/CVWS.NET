@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Percentile class
  * By Josh Keegan 05/04/2014

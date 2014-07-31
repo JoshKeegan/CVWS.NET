@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Quantitative Evaluation
  * Algorithm Combination class
  * By Josh Keegan 19/05/2014

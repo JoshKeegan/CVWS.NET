@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Unit Tests
  * SharedHelpers.Maths.Statistics.Percentile Tests
  * By Josh Keegan 05/04/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Draw Shapes class - various methods for drawing shapes (filling in gaps in AForge.NET)
  * By Josh Keegan 04/03/2014

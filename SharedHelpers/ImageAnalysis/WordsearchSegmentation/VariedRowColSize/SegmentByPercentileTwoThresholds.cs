@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting using separate start & end thresholds based on percentile values of dark pixels per row/col
  * By Josh Keegan 03/04/2014

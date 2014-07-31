@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Split Image class - methods for splitting an image up into a collection of smaller images
  * By Josh Keegan 06/03/2014

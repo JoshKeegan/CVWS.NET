@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Demo GUI
  * Invalid Words Exception
  * By Josh Keegan 13/05/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Demo GUI
  * Configuration
  * By Josh Keegan 09/05/2014

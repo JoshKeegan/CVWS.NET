@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting based on a preselected threshold 
  *  (from looking at a histogram of the no. of dark pixels per row and col)

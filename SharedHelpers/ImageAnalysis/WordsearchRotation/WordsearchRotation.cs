@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Rotation class - holds a Bitmap of a wordsearch and it's number of rows & cols
  *  When you rotate a wordsearch image 90 deg, the rows and cols will swap

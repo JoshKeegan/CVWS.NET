@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Bitmap Extensions Tests
  * By Josh Keegan 03/04/2014
  * Last Edit 14/05/2014

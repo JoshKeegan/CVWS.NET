@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Solver Algorithm (Non-Probabilistic)
  * By Josh Keegan 26/04/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Base Object Extensions
  * partial Collection Extensions class - functions working on uints
  * By Josh Keegan 10/03/2014

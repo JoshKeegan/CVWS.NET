@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Unit Tests
  * BaseObjectExtensions.CollectionExtensions Tests for the Uint operators
  * By Josh Keegan 26/03/2014

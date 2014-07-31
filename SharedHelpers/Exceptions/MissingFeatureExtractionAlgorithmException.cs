@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers Exceptions
  * MissingFeatureExtractionAlgorithmException
  * By Josh Keegan 25/03/2014

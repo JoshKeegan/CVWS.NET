@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared helpers
  * Neural Network Helpers - functions to help interface with the AForge.NET Neural Networks
  * By Josh Keegan 08/03/2014

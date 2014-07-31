@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Trainable Feature Extraction Algorithm - abstract class
  * By Josh Keegan 11/03/2014

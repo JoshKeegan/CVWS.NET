@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Segmentation Algorithm Returning Start And End Indices - abstract class
  * By Josh Keegan 02/04/2014

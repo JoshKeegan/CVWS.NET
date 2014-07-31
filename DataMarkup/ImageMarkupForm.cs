@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Data Entry GUI
  * Image Markup Form class
  * By Josh Keegan 26/02/2014

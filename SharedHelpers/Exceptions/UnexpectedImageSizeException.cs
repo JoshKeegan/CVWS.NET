@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers Exceptions
  * UnexpectedImageSizeException
  * By Josh Keegan 06/03/2014

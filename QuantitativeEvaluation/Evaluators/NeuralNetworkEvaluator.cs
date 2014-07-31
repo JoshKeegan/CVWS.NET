@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation Cv Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Quantitative Evaluation
  * Neural Network Evaluator
  * By Josh Keegan 08/03/2014

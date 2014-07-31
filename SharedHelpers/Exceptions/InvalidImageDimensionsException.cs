@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers Exceptions
  * InvalidImageDimensionsException
  * By Josh Keegan 03/04/2014

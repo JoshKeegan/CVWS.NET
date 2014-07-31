@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Combine Images Class - methods for combining multiple images into a single larger image
  * By Josh Keegan 13/05/2014

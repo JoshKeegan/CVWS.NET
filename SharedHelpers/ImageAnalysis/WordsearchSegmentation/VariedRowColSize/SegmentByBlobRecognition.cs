@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shasred Helpers
  * Wordsearch Segmentation Algorithm splitting by extracting character sized blobs from an Image of a wordsearch
  *  and then estimating row & col positions from the blob positions & sizes

@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers Exceptions
  * UnexpectedClassifierOutputException
  * By Josh Keegan 08/03/2014

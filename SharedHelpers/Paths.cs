@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Paths class - Helpers working on file/directory paths
  * By Josh Keegan 18/05/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Draw Defaults class - default values used by Draw classes
  * By Josh Keegan 04/03/2014

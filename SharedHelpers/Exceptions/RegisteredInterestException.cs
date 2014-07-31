@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers Exceptions
  * RegisteredInterestException class
  * By Josh Keegan 05/03/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Data Entry GUI
  * Main Form Class - Main GUI Window
  * By Josh Keegan 05/03/2013

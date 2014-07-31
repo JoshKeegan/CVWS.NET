@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Rotation Correction class - takes an image containing just a Wordsearch and returns it in it's correct orientation
  * By Josh Keegan 25/03/2014

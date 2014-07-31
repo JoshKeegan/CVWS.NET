@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Image Markup
  * Database Not Initialised Exception class
  * By Josh Keegan 26/02/2014

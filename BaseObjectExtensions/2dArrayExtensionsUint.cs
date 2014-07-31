@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Base Object Extensions
  * partial 2D Array Extensions for Uint
  * By Josh Keegan 03/04/2014

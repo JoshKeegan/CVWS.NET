@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Base Object Extensions
  * Image Extensions
  * By Josh Keegan 14/05/2014

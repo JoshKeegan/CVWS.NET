@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Base Object Extensions
  * partial Collection Extensions class - functions working on IDisposable
  * By Josh Keegan 11/03/2014

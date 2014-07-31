@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Feature Extraction Pixel Values - return the pixel value given binarised bitmaps
  * By Josh Keegan 08/03/2014

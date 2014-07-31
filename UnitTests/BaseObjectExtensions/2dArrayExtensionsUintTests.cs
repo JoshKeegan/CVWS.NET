@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * 2D Array Extensions Uint Tests
  * By Josh Keegan 03/04/2014
  */

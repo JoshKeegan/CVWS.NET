@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting based on Median no. of dark pixels per row/col
  * By Josh Keegan 03/04/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Image Markup
  * Data Not Found Exception Class
  * By Josh Keegan 26/02/2014

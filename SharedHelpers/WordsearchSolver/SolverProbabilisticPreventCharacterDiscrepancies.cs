@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Solver Algorithm (using the probabilities for each character, and prevent a single
  *  character from being used in two words as two different letters)

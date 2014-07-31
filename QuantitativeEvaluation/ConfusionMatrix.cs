@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Quantitative Evaluation
  * Confusion Matrix - a summary of the performance of a classification algorithm
  * By Josh Keegan 08/03/2014

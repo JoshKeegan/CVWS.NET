@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Quantitative Evaluation
  * Evaluate System from Segmentation until Solver (the entire system except Wordsearch Detection)
  * By Josh Keegan 19/05/2014

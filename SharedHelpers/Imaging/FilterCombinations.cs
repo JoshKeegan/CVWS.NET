@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Filter Combinations class - commonly used combinations of Image Filters 
  *  applied one after the other routinely

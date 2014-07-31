@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Quatitative Evaluation
  * Char Data class - static methods for handling character image data
  * By Josh Keegan 11/03/2014

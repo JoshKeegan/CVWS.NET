@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation Cv Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Feature Extraction Multiclass (>2) Linear Discriminant Analysis
  * By Josh Keegan 12/03/2014

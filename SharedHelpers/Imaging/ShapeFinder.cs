@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Shape Finder class - methods to find the positions of shapes in an image
  * By Josh Keegan 22/04/2014

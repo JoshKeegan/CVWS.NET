@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Classifer class - abstract class for encapsulating classifiers (allowing for methods to use generic 
  *  classifiers rather than ones specific to a particular framework or of a specific type)

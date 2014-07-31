@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Feature Extraction Discrete Cosine Transform - return the DCT values given bitmaps
  * By Josh Keegan 11/03/2014

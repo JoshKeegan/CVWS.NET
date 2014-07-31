@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Base Object Extensions
  * partial 2D Array Extensions for Generics
  * By Josh Keegan 11/03/2014

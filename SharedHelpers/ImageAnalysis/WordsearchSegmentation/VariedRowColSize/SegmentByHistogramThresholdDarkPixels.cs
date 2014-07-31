@@ -1,5 +1,5 @@
 ﻿/*
- * Dissertation CV Wordsearch Solver
+ * Computer Vision Wordsearch Solver
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting based on a threshold determined by
  *  assuming the dark pixels per row/col will form a Bimodal Histogram (as they 
