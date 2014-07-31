@@ -155,5 +155,5 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 
-# Ignore the data directory ysed for training & evaluation system
+# Ignore the data directory used for training & evaluation system
 data/
