@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Percentile class
  * By Josh Keegan 05/04/2014

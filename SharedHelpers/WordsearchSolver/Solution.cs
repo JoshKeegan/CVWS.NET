@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Wordsearch Solution class
  * By Josh Keegan 26/04/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Demo GUI
  * Configuration
  * By Josh Keegan 09/05/2014

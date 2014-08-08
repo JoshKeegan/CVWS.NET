@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Image Markup
  * Image Markup Database - Class representing the entire dataset of marked up word searches
  * By Josh Keegan 26/02/2014

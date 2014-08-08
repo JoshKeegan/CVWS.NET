@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers Exceptions
  * InvalidRowsAndColsException
  * By Josh Keegan 05/03/2014

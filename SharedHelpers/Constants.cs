@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Constants Class - for storing constants that will be used in many places in the program and have no obvious place to be stored
  * By Josh Keegan 25/03/2014

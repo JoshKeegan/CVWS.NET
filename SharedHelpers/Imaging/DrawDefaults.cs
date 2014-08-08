@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Draw Defaults class - default values used by Draw classes
  * By Josh Keegan 04/03/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Data Entry GUI
  * Image Markup Form class
  * By Josh Keegan 26/02/2014

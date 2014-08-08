@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
  * By Josh Keegan 12/05/2014

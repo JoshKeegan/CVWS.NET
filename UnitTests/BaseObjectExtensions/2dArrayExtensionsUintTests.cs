@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * 2D Array Extensions Uint Tests
  * By Josh Keegan 03/04/2014
  */

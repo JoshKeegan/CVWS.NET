@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Demo GUI
  * Invalid Menu Item Selection Exception
  * By Josh Keegan 13/05/2014

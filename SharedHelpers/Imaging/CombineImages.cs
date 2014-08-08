@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Combine Images Class - methods for combining multiple images into a single larger image
  * By Josh Keegan 13/05/2014

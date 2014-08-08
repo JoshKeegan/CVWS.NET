@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Shape Finder class - methods to find the positions of shapes in an image
  * By Josh Keegan 22/04/2014

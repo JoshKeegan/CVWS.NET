@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers Exceptions
  * Invalid Shape Exception class
  * By Josh Keegan 05/03/2014

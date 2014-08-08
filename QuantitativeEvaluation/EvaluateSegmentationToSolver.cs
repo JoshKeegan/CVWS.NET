@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Quantitative Evaluation
  * Evaluate System from Segmentation until Solver (the entire system except Wordsearch Detection)
  * By Josh Keegan 19/05/2014

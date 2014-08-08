@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers Exceptions
  * InvalidImageDimensionsException
  * By Josh Keegan 03/04/2014

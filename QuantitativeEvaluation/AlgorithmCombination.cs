@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Quantitative Evaluation
  * Algorithm Combination class
  * By Josh Keegan 19/05/2014

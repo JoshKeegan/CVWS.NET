@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
  * SharedHelpers.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
  * By Josh Keegan 02/04/2014

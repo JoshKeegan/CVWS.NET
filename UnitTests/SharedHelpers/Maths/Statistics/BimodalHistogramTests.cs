@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
  * SharedHelpers.Maths.Statistics.BimodalHistogram Tests
  * By Josh Keegan 04/04/2014

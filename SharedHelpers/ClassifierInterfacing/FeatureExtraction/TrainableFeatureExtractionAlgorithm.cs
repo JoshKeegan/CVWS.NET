@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Trainable Feature Extraction Algorithm - abstract class
  * By Josh Keegan 11/03/2014

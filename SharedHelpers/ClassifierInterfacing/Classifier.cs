@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Classifer class - abstract class for encapsulating classifiers (allowing for methods to use generic 
  *  classifiers rather than ones specific to a particular framework or of a specific type)

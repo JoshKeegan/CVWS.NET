@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Feature Extraction Pixel Values - return the pixel value given binarised bitmaps
  * By Josh Keegan 08/03/2014

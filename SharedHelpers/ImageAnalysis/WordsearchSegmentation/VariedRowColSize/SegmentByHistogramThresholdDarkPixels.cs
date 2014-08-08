@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting based on a threshold determined by
  *  assuming the dark pixels per row/col will form a Bimodal Histogram (as they 

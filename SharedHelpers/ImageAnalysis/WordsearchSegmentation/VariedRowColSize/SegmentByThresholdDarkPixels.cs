@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting based on a preselected threshold 
  *  (from looking at a histogram of the no. of dark pixels per row and col)

@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Wordsearch Segmentation Algorithm Returning Start And End Indices - abstract class
  * By Josh Keegan 02/04/2014

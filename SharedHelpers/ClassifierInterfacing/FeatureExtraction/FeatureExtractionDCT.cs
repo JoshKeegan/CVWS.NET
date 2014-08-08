@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Feature Extraction Discrete Cosine Transform - return the DCT values given bitmaps
  * By Josh Keegan 11/03/2014

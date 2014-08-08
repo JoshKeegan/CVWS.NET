@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers Exceptions
  * UnexpectedClassifierOutputException
  * By Josh Keegan 08/03/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
  * BaseObjectExtensions.CollectionExtensions Tests for the Uint operators
  * By Josh Keegan 26/03/2014

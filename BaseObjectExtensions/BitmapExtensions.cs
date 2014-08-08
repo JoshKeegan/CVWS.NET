@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Base Object Extensions
  * Bitmap Extensions
  * By Josh Keegan 27/02/2014

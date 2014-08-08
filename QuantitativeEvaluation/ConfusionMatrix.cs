@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Quantitative Evaluation
  * Confusion Matrix - a summary of the performance of a classification algorithm
  * By Josh Keegan 08/03/2014

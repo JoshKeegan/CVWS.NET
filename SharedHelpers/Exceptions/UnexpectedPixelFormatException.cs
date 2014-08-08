@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers Exceptions
  * UnexpectedPixelFormatException
  * By Josh Keegan 06/03/2014

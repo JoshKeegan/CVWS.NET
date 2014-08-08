@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Draw Shapes class - various methods for drawing shapes (filling in gaps in AForge.NET)
  * By Josh Keegan 04/03/2014

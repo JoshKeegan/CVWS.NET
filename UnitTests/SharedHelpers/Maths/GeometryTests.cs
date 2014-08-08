@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
  * SharedHelpers.Maths.Geometry Tests
  * By Josh Keegan 05/03/2014

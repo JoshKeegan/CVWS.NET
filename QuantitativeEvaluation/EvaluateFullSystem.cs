@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Quantitative Evaluate
  * Evaluate Full System
  * By Josh Keegan 26/04/2014

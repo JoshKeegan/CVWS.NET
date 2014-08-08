@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Wordsearch Segmentation Algorithm Interface for Algorithms that operate on bool[,] instead of Bitmaps
  * By Josh Keegan 03/04/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Base Object Extensions
  * partial Collection Extensions class - functions working on IDisposable
  * By Josh Keegan 11/03/2014

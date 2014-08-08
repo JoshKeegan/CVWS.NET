@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Candidate Scorer class - for scoring a wordsearch candidate so that they can be ranked
  * By Josh Keegan 22/04/2014

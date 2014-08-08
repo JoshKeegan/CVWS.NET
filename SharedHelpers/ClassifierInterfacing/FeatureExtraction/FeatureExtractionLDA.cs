@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Feature Extraction Multiclass (>2) Linear Discriminant Analysis
  * By Josh Keegan 12/03/2014

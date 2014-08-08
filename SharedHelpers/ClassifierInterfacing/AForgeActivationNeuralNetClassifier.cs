@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * AForge Activation Neural Network Classifier Encapsulation class
  * By Josh Keegan 25/03/2014

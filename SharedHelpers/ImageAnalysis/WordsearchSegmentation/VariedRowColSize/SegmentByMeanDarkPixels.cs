@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Shared Helpers
  * Wordsearch Segmentation Algorithm splitting based on mean no. of dark pixels per row/col
  * By Josh Keegan 03/04/2014

@@ -1,5 +1,5 @@
 ﻿/*
- * Computer Vision Wordsearch Solver
+ * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Quatitative Evaluation
  * Char Data class - static methods for handling character image data
  * By Josh Keegan 11/03/2014
