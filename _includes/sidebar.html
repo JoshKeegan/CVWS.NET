@@ -1,6 +1,6 @@
 <aside id="sidebar">
-  {% include sideBarDownload.html href="https://github.com/{{ site.githubUser }}/{{ site.githubRepo }}/zipball/master" text=".zip file" %}
-  {% include sideBarDownload.html href="https://github.com/{{ site.githubUser }}/{{ site.githubRepo }}/tarball/master" text=".tar.gz file" %}
+  {% include sideBarDownload.html onGithub="true" href="zipball/master" text=".zip file" %}
+  {% include sideBarDownload.html onGithub="true" href="tarball/master" text=".tar.gz file" %}
 
   <p class="repo-owner"><a href="https://github.com/{{ site.githubUser }}/{{ site.githubRepo }}">{{ site.githubRepo }}</a> is maintained by <a href="https://github.com/{{ site.githubUser }}">{{ site.githubUser }}</a>.</p>
 

@@ -1,4 +1,4 @@
-<a href="{{ include.href }}" class="button">
+<a href="{% if include.onGithub == "true" %}https://github.com/{{ site.githubUser }}/{{ site.githubRepo }}/{% endif %}{{ include.href }}" class="button">
 	<small>Download</small>
 	{{ include.text }}
 </a>
