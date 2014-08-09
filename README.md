@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with CVWS.NET.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Status ##
-The system is in fully working order, with the library ready to be released as version 1. Work on a website and (very) basic documentation in in the early stages.
+The system is in fully working order, with the library ready to be released as version 1. Work on a website and (very) basic documentation is in the early stages.
 Until they are completed there are two resources that may be useful to anyone getting started with the library:
 
 * The Design & Implementation chapters of the [Dissertation Report](https://bitbucket.org/JoshKeegan/cvws.net/downloads/Dissertation%20Report.pdf) will help with understanding the roles of the various components and some of the algorithms used.
