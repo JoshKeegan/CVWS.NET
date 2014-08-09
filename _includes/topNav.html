@@ -1,0 +1,9 @@
+<nav id="topNav">
+	<ul>
+		{% for item in site.data.topNav %}
+			<li>
+				<a href="{{ item.href }}">{{ item.name }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+</nav>

@@ -1,13 +1,14 @@
+# Site Settings
 name: CVWS.NET
 tagLine: A Computer Vision Wordsearch Solver written in C#
 
-
+# Github
 githubUser: JoshKeegan
 githubRepo: CVWS.NET
 
-
+# Analytics
 analyticsKey: UA-53659461-2
 
-
+# Jekyll Settings
 markdown: redcarpet
 pygments: true
