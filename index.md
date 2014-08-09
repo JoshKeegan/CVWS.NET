@@ -1,6 +1,6 @@
 ---
 layout: default
-title: CVWS.NET by JoshKeegan
+title: CVWS.NET
 ---
 
 # CVWS.NET: Computer Vision Wordsearch Solver .NET #
