@@ -23,6 +23,8 @@ along with CVWS.NET.  If not, see <http://www.gnu.org/licenses/>.
 ## Status ##
 The system is in fully working order, with the library ready to be released as version 1. Work on a website and (very) basic documentation in in the early stages.
 Until they are completed there are two resources that may be useful to anyone getting started with the library:
+
 * The Design & Implementation chapters of the [Dissertation Report](https://bitbucket.org/JoshKeegan/cvws.net/downloads/Dissertation%20Report.pdf) will help with understanding the roles of the various components and some of the algorithms used.
 * The DemoGUI Project is a working GUI for the library. The code is well commented and can be used as a reference. Anyone wanting to use the library in their own software should read through DemoGUI.MainForm.doProcessing() (in MainFormProcessing.cs).
+
 Until there is any documentation or a forum, I'll happily answer any queries via PM.
