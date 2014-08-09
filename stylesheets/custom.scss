@@ -6,8 +6,14 @@
  */
 
 /* Links that shouldn't be styled as links */
-.noLinkStyle
+a.noLinkStyle
 {
 	color: inherit;
 	text-decoration: none;
+
+	&:hover, &:visited, &:active
+	{
+		color: inherit;
+		text-decoration: none;
+	}
 }
