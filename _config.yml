@@ -1,0 +1,13 @@
+name: CVWS.NET
+tagLine: A Computer Vision Wordsearch Solver written in C#
+
+
+githubUser: JoshKeegan
+githubRepo: CVWS.NET
+
+
+analyticsKey: UA-53659461-1
+
+
+markdown: redcarpet
+pygments: true
