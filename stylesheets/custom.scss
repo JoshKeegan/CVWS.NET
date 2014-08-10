@@ -6,6 +6,8 @@
  */
 
 $themeColour: #2e7bcf;
+$themeShadeDark: #122F4F;
+$themeShadeLight: #3183DC;
 $themeContrastColour: #fff;
 
 @mixin rounded($radius: 0.5em) 
@@ -59,6 +61,12 @@ $topNavHeight: 40px;
 				padding: 10px 12px;
 				vertical-align: middle;
 				line-height: $topNavHeight;
+			}
+
+			&:hover, &.current
+			{
+				background-color: $themeShadeDark;
+				color: $themeShadeLight;
 			}
 		}
 	}
