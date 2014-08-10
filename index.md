@@ -3,33 +3,17 @@ layout: default
 title: CVWS.NET
 ---
 
-# CVWS.NET: Computer Vision Wordsearch Solver .NET #
-A Computer Vision system capable of detecting word searches and using Atificial Intelligence techniques to solve them. It is open source (GPLv3 license), written in C# .NET and uses the [AForge.NET](http://www.aforgenet.com/) and [Accord.NET](http://accord-framework.net/) frameworks.
+**CVWS.NET** is an open source Computer Vision system capable of finding and solving word searches in images from smartphones. 
 
-The project is released as libraries containing all of the code necessary to integrate a word search solver into your own software, and also as a fully functional desktop application which was built for demonstration. These can be found on the Downloads page.
+The overall project is comprised of:
 
-## License ##
-Copyright (c) 2013-2014 Josh Keegan
+ * **libCVWS** - the library providing the core functionality and is intended for use by developers of other applications
+ * **DemoGUI** - a desktop application designed to showcase the project. Allows you to select the processing method for each stage from detecing the word search right through to solving it
+ * **QuantitativeEvaluation** - crunches the numbers to determine just how good the overall system is, as well as comparing the performance of different implementations of each stage
+ * **ImageMarkup** - database-less storage of data about images containing word searches. Used for training, cross-validation and evaluation of the feature extractors and classifiers that lie at the heart of this project
+ * **DataEntryGUI** - a desktop application for entering data about images containing word searches
+ * **UnitTests** - self-explanatory. Ensures that the more complicated low-level methods of the project (that could produce deep bugs) are doing what they should be. Tests are re-run before builds to keep things that way!
 
-This file is part of CVWS.NET (Computer Vision Wordsearch Solver .NET).
-
-CVWS.NET is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License version 3 as published by
-the Free Software Foundation.
-
-CVWS.NET is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with CVWS.NET.  If not, see <http://www.gnu.org/licenses/>.
-
-## Status ##
-The system is in fully working order, with the library ready to be released as version 1. Work on a website and (very) basic documentation is in the early stages.
-Until they are completed there are two resources that may be useful to anyone getting started with the library:
-
-* The Design & Implementation chapters of the [Dissertation Report](https://bitbucket.org/JoshKeegan/cvws.net/downloads/Dissertation%20Report.pdf) will help with understanding the roles of the various components and some of the algorithms used.
-* The DemoGUI Project is a working GUI for the library. The code is well commented and can be used as a reference. Anyone wanting to use the library in their own software should read through DemoGUI.MainForm.doProcessing() (in MainFormProcessing.cs).
-
-Until there is any documentation or a forum, I'll happily answer any queries via PM.
+## libCVWS ##
+At the core of the project is **libCVWS**, a library containing all of the methods necessary to go from an image containing a wordsearch along with a list of word, to a solution. This means that everything needed to build your own word search solving application can be found in this library.
+**libCVWS** exposes as much of what's going on "under the hood" as possible to give developers choice about how each processing stage is handled (e.g. would you rather specify a location for a word search rather than finding it, which method should be used to segment a word search image up into its rows & columns). By exposing this functionality, **libCVWS** is also of use in other applications that have nothing to do with word searches (e.g. use libCVWS.Imaging to efficiently combine images into a single larger one, or easily set up a Neural Network with common feature extraction techniques by using libCVWS.ClassifierInterfacing).
