@@ -8,6 +8,13 @@
 $themeColour: #2e7bcf;
 $themeContrastColour: #fff;
 
+@mixin rounded($radius: 0.5em) 
+{
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	border-radius: $radius;
+}
+
 /* Links that shouldn't be styled as links */
 a.noLinkStyle
 {
@@ -26,6 +33,7 @@ $topNavHeight: 40px;
 #topNav
 {
 	height: $topNavHeight;
+	margin: 10px 0;
 
 	ul
 	{
@@ -42,6 +50,7 @@ $topNavHeight: 40px;
 			padding: 0;
 			background-color: $themeColour;
 			color: $themeContrastColour;
+			@include rounded();
 
 			a
 			{
