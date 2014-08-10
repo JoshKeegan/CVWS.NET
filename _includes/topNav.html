@@ -1,8 +1,13 @@
 <nav id="topNav">
 	<ul>
 		{% for item in site.data.topNav %}
+			{% for page in site.pages %}
+				{% if page.path == item.path %}
+					{% assign pageHref = page.url %}
+				{% endif %}
+			{% endfor %}
 			<li>
-				<a href="{{ item.href }}">{{ item.name }}</a>
+				<a href="{{ pageHref }}">{{ item.name }}</a>
 			</li>
 		{% endfor %}
 	</ul>

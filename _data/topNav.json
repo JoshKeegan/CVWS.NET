@@ -1,10 +1,10 @@
 [
 	{
-		"href": "/",
+		"path": "index.md",
 		"name": "Home"
 	},
 	{
-		"href": "about.html",
+		"path": "about.md",
 		"name": "About"
 	}
 ]
