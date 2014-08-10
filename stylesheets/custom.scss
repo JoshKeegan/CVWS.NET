@@ -18,6 +18,12 @@ $themeContrastColour: #fff;
 	border-radius: $radius;
 }
 
+/* General */
+strong
+{
+	font-weight: bold;
+}
+
 /* Links that shouldn't be styled as links */
 a.noLinkStyle
 {
