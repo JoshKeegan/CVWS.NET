@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Feature Extraction Pixel Values - return the pixel value given binarised bitmaps
  * By Josh Keegan 08/03/2014
  * Last Edit 11/03/2014
@@ -13,9 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.Imaging;
+using libCVWS.Imaging;
 
-namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
+namespace libCVWS.ClassifierInterfacing.FeatureExtraction
 {
     public class FeatureExtractionPixelValues : FeatureExtractionAlgorithm
     {

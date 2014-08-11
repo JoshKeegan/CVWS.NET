@@ -17,10 +17,10 @@ using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash 
 using AForge;
 
 using ImageMarkup;
-using SharedHelpers.ImageAnalysis.WordsearchDetection;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
-using SharedHelpers.Maths;
+using libCVWS.ImageAnalysis.WordsearchDetection;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
+using libCVWS.Maths;
 
 namespace QuantitativeEvaluation
 {

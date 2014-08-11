@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ImageMarkup.Exceptions;
-using SharedHelpers.WordsearchSolver;
+using libCVWS.WordsearchSolver;
 
 namespace ImageMarkup
 {

@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Percentile class
  * By Josh Keegan 05/04/2014
  */
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.Maths.Statistics
+namespace libCVWS.Maths.Statistics
 {
     public class Percentile
     {

@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.WordsearchSolver;
+using libCVWS.WordsearchSolver;
 
 namespace QuantitativeEvaluation.Evaluators
 {

@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Solution class
  * By Josh Keegan 26/04/2014
  */
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.WordsearchSolver
+namespace libCVWS.WordsearchSolver
 {
     public class Solution : Dictionary<string, WordPosition>
     {

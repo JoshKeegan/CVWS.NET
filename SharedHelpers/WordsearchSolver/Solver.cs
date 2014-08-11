@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Solver Algorithm - abstract class
  * By Josh Keegan 26/04/2014
  * Last Edit 12/05/2014
@@ -12,9 +12,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.Exceptions;
+using libCVWS.Exceptions;
 
-namespace SharedHelpers.WordsearchSolver
+namespace libCVWS.WordsearchSolver
 {
     public abstract class Solver
     {

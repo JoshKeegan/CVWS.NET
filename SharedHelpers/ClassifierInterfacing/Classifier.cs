@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Classifer class - abstract class for encapsulating classifiers (allowing for methods to use generic 
  *  classifiers rather than ones specific to a particular framework or of a specific type)
  * By Josh Keegan 25/03/2014
@@ -14,10 +14,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
-using SharedHelpers.Exceptions;
+using libCVWS.ClassifierInterfacing.FeatureExtraction;
+using libCVWS.Exceptions;
 
-namespace SharedHelpers.ClassifierInterfacing
+namespace libCVWS.ClassifierInterfacing
 {
     public abstract class Classifier
     {

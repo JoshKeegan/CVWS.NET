@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Feature Extraction Principal Components Analysis - return the PCA values given bitmaps
  * By Josh Keegan 11/03/2014
  * Last Edit 17/05/2014
@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 using Accord.Statistics;
 using Accord.Statistics.Analysis;
 
-using SharedHelpers.Imaging;
+using libCVWS.Imaging;
 
-namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
+namespace libCVWS.ClassifierInterfacing.FeatureExtraction
 {
     [Serializable]
     public class FeatureExtractionPCA : TrainableFeatureExtractionAlgorithm, ISerializable

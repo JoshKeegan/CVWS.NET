@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Detection Algorithm
  * By Josh Keegan 22/04/2014
  * Last Edit 10/06/2014
@@ -21,12 +21,12 @@ using System.Threading.Tasks;
 using AForge;
 using AForge.Imaging.Filters;
 
-using SharedHelpers.Exceptions;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
-using SharedHelpers.Imaging;
+using libCVWS.Exceptions;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
+using libCVWS.Imaging;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchDetection
+namespace libCVWS.ImageAnalysis.WordsearchDetection
 {
     public static class DetectionAlgorithm
     {

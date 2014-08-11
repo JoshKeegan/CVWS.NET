@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers Exceptions
+ * libCVWS Exceptions
  * RegisteredInterestException class
  * By Josh Keegan 05/03/2014
  */
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.Exceptions
+namespace libCVWS.Exceptions
 {
     public class RegisteredInterestException : Exception
     {

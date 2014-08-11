@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Segmentation - class to hold the indices that split rows & cols
  * By Josh Keegan 02/04/2014
  * Last Edit 10/06/2014
@@ -12,9 +12,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.Exceptions;
+using libCVWS.Exceptions;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
+namespace libCVWS.ImageAnalysis.WordsearchSegmentation
 {
     public class Segmentation
     {

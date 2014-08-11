@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Draw Grid class - various methods to draw grids on images
  * By Josh Keegan 03/03/2014
  * Last Edit 16/05/2014
@@ -18,10 +18,10 @@ using AForge;
 using AForge.Imaging;
 
 using BaseObjectExtensions;
-using SharedHelpers.Exceptions;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Exceptions;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class DrawGrid
     {

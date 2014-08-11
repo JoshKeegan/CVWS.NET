@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Draw Solution class
  * By Josh Keegan 14/05/2014
  * Last Edit 16/05/2014
@@ -18,10 +18,10 @@ using AForge;
 using AForge.Imaging;
 
 using BaseObjectExtensions;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.WordsearchSolver;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.WordsearchSolver;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class DrawSolution
     {

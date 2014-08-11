@@ -17,8 +17,8 @@ using AForge.Imaging.Filters;
 
 using BaseObjectExtensions;
 using ImageMarkup;
-using SharedHelpers.ClassifierInterfacing;
-using SharedHelpers.ImageAnalysis.WordsearchRotation;
+using libCVWS.ClassifierInterfacing;
+using libCVWS.ImageAnalysis.WordsearchRotation;
 
 namespace QuantitativeEvaluation
 {

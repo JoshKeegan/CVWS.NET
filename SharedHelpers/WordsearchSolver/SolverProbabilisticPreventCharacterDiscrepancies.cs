@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Solver Algorithm (using the probabilities for each character, and prevent a single
  *  character from being used in two words as two different letters)
  * By Josh Keegan 16/05/2014
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 using AForge;
 
-namespace SharedHelpers.WordsearchSolver
+namespace libCVWS.WordsearchSolver
 {
     public class SolverProbabilisticPreventCharacterDiscrepancies : Solver
     {

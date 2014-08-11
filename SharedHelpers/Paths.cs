@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Paths class - Helpers working on file/directory paths
  * By Josh Keegan 18/05/2014
  */
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers
+namespace libCVWS
 {
     public static class Paths
     {

@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Constants Class - for storing constants that will be used in many places in the program and have no obvious place to be stored
  * By Josh Keegan 25/03/2014
  */
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers
+namespace libCVWS
 {
     public static class Constants
     {

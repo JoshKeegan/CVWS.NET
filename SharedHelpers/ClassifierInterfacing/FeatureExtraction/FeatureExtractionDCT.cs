@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Feature Extraction Discrete Cosine Transform - return the DCT values given bitmaps
  * By Josh Keegan 11/03/2014
  */
@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 using Accord.Math;
 
 using BaseObjectExtensions;
-using SharedHelpers.Imaging;
+using libCVWS.Imaging;
 
-namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
+namespace libCVWS.ClassifierInterfacing.FeatureExtraction
 {
     public class FeatureExtractionDCT : FeatureExtractionAlgorithm
     {

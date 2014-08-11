@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Char Img Extractor class - extract just the character from an image (removing whitespace)
  * By Josh Keegan 11/03/2014
  * Last Edit 26/04/2014
@@ -17,7 +17,7 @@ using AForge;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class CharImgExtractor
     {

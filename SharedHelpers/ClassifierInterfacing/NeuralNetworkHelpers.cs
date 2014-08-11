@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared helpers
+ * libCVWS
  * Neural Network Helpers - functions to help interface with the AForge.NET Neural Networks
  * By Josh Keegan 08/03/2014
  * Last Edit 26/04/2014
@@ -12,9 +12,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.Exceptions;
+using libCVWS.Exceptions;
 
-namespace SharedHelpers.ClassifierInterfacing
+namespace libCVWS.ClassifierInterfacing
 {
     public static class NeuralNetworkHelpers
     {

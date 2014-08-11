@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Converters class - convert Images to other formats
  * By Josh Keegan 06/03/2014
  * Last Edit 04/04/2014
@@ -16,9 +16,9 @@ using System.Threading.Tasks;
 
 using AForge.Imaging.Filters;
 
-using SharedHelpers.Exceptions;
+using libCVWS.Exceptions;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class Converters
     {

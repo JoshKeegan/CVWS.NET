@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using SharedHelpers.Maths.Statistics;
+using libCVWS.Maths.Statistics;
 
 namespace UnitTests.SharedHelpers.Maths.Statistics
 {

@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Feature Extraction Algorithm - abstract class 
  * By Josh Keegan 08/03/2014
  * Last Edit 25/03/2014
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
+namespace libCVWS.ClassifierInterfacing.FeatureExtraction
 {
     public abstract class FeatureExtractionAlgorithm
     {

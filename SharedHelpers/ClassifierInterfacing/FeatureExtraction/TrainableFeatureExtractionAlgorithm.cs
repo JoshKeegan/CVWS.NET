@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Trainable Feature Extraction Algorithm - abstract class
  * By Josh Keegan 11/03/2014
  * Last Edit 17/05/2014
@@ -16,10 +16,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.Exceptions;
+using libCVWS.Exceptions;
 
 
-namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
+namespace libCVWS.ClassifierInterfacing.FeatureExtraction
 {
     [Serializable]
     public abstract class TrainableFeatureExtractionAlgorithm : FeatureExtractionAlgorithm, ISerializable

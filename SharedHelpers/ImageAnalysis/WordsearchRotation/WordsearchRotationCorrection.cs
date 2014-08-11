@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Rotation Correction class - takes an image containing just a Wordsearch and returns it in it's correct orientation
  * By Josh Keegan 25/03/2014
  * Last Edit 29/04/2014
@@ -16,10 +16,10 @@ using System.Threading.Tasks;
 using AForge.Imaging.Filters;
 
 using BaseObjectExtensions;
-using SharedHelpers.ClassifierInterfacing;
-using SharedHelpers.Imaging;
+using libCVWS.ClassifierInterfacing;
+using libCVWS.Imaging;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchRotation
+namespace libCVWS.ImageAnalysis.WordsearchRotation
 {
     public static class WordsearchRotationCorrection
     {

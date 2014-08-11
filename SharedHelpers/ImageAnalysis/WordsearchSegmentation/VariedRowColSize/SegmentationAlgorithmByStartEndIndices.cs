@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Segmentation Algorithm Returning Start And End Indices - abstract class
  * By Josh Keegan 02/04/2014
  * Last Edit 03/04/2014
@@ -13,9 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
+namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
     public abstract class SegmentationAlgorithmByStartEndIndices : SegmentationAlgorithm
     {

@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Segmentation Algorithm splitting based on a threshold determined by
  *  assuming the dark pixels per row/col will form a Bimodal Histogram (as they 
  *  should due to the monospaced fonts used, and line spacing equal to the font width)
@@ -16,12 +16,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.Imaging;
-using SharedHelpers.Maths.Statistics;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Imaging;
+using libCVWS.Maths.Statistics;
 using BaseObjectExtensions;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
+namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
     public class SegmentByHistogramThresholdDarkPixels : SegmentationAlgorithmByStartEndIndices, ISegmentationAlgorithmOnBoolArr
     {

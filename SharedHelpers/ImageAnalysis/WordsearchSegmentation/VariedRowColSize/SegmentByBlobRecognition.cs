@@ -14,13 +14,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.Imaging;
+using libCVWS.Imaging;
 using BaseObjectExtensions;
 
 using AForge.Imaging;
 using AForge.Imaging.Filters;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
+namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
     public class SegmentByBlobRecognition : SegmentationAlgorithmByStartEndIndices
     {

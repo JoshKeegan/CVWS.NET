@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Image Loader Class
  * By Josh Keegan 26/02/2014
  * Last Edit 18/05/2014
@@ -17,7 +17,7 @@ using System.IO;
 
 using BaseObjectExtensions;
 
-namespace SharedHelpers
+namespace libCVWS
 {
     public class ImageLoader
     {

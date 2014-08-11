@@ -21,9 +21,9 @@ using AForge.Imaging;
 
 using ImageMarkup;
 using ImageMarkup.Exceptions;
-using SharedHelpers;
-using SharedHelpers.Imaging;
-using SharedHelpers.Exceptions;
+using libCVWS;
+using libCVWS.Imaging;
+using libCVWS.Exceptions;
 
 namespace DataEntryGUI
 {

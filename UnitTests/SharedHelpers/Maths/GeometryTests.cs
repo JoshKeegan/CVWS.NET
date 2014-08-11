@@ -12,8 +12,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using AForge;
 
-using SharedHelpers.Maths;
-using SharedHelpers.Exceptions;
+using libCVWS.Maths;
+using libCVWS.Exceptions;
 
 namespace UnitTests.SharedHelpers.Maths
 {

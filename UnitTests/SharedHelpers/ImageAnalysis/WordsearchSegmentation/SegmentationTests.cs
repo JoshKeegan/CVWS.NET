@@ -9,8 +9,8 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.Exceptions;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Exceptions;
 
 namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
 {

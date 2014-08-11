@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataEntryGUI", "DataMarkup\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageMarkup", "ImageMarkup\ImageMarkup.csproj", "{2EA98AF3-88FD-4B06-B1D6-DC9068263BEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedHelpers", "SharedHelpers\SharedHelpers.csproj", "{44618447-37EB-494F-BFD0-8DB453543E80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libCVWS", "SharedHelpers\libCVWS.csproj", "{44618447-37EB-494F-BFD0-8DB453543E80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseObjectExtensions", "BaseObjectExtensions\BaseObjectExtensions.csproj", "{6FC68F2C-22B6-4909-895A-4C845B761422}"
 EndProject

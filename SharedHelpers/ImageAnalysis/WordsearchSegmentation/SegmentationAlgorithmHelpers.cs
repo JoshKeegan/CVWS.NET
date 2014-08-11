@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Segmentation Algorithm Helpers
  * By Josh Keegan 03/04/2014
  */
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation
+namespace libCVWS.ImageAnalysis.WordsearchSegmentation
 {
     internal static class SegmentationAlgorithmHelpers
     {

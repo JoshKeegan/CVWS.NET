@@ -22,15 +22,15 @@ using AForge;
 using AForge.Imaging.Filters;
 
 using BaseObjectExtensions;
-using SharedHelpers;
-using SharedHelpers.ClassifierInterfacing;
-using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
-using SharedHelpers.ImageAnalysis.WordsearchDetection;
-using SharedHelpers.ImageAnalysis.WordsearchRotation;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
-using SharedHelpers.Imaging;
-using SharedHelpers.WordsearchSolver;
+using libCVWS;
+using libCVWS.ClassifierInterfacing;
+using libCVWS.ClassifierInterfacing.FeatureExtraction;
+using libCVWS.ImageAnalysis.WordsearchDetection;
+using libCVWS.ImageAnalysis.WordsearchRotation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
+using libCVWS.Imaging;
+using libCVWS.WordsearchSolver;
 
 using DemoGUI.Exceptions;
 

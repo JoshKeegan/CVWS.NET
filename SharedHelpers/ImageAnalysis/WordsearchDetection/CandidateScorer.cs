@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Candidate Scorer class - for scoring a wordsearch candidate so that they can be ranked
  * By Josh Keegan 22/04/2014
  * Last Edit 28/04/2014
@@ -12,10 +12,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.Maths.Statistics;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Maths.Statistics;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchDetection
+namespace libCVWS.ImageAnalysis.WordsearchDetection
 {
     internal class CandidateScorer : Segmentation
     {

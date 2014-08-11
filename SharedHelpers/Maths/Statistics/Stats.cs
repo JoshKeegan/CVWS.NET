@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Stats class
  * By Josh Keegan 22/04/2014
  */
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 using BaseObjectExtensions;
 
-namespace SharedHelpers.Maths.Statistics
+namespace libCVWS.Maths.Statistics
 {
     public static class Stats
     {

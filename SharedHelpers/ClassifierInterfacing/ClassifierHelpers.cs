@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Classifier Helpers
  * By Josh Keegan 08/03/2014
  * Last Edit 10/03/2014
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.ClassifierInterfacing
+namespace libCVWS.ClassifierInterfacing
 {
     public static class ClassifierHelpers
     {

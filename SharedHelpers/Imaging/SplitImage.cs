@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Split Image class - methods for splitting an image up into a collection of smaller images
  * By Josh Keegan 06/03/2014
  * Last Edit 28/04/2014
@@ -17,10 +17,10 @@ using System.Threading.Tasks;
 using AForge.Imaging;
 
 using BaseObjectExtensions;
-using SharedHelpers.Exceptions;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Exceptions;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class SplitImage
     {

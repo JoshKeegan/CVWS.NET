@@ -7,7 +7,7 @@
     <ProjectGuid>{44618447-37EB-494F-BFD0-8DB453543E80}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharedHelpers</RootNamespace>
+    <RootNamespace>libCVWS</RootNamespace>
     <AssemblyName>SharedHelpers</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

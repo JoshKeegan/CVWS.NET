@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Feature Extraction Multiclass (>2) Linear Discriminant Analysis
  * By Josh Keegan 12/03/2014
  */
@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 using Accord.Statistics;
 using Accord.Statistics.Analysis;
 
-using SharedHelpers.Imaging;
+using libCVWS.Imaging;
 
-namespace SharedHelpers.ClassifierInterfacing.FeatureExtraction
+namespace libCVWS.ClassifierInterfacing.FeatureExtraction
 {
     public class FeatureExtractionLDA : SupervisedTrainableFeatureExtractionAlgorithm
     {

@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using BaseObjectExtensions;
-using SharedHelpers;
+using libCVWS;
 
 using DemoGUI.Exceptions;
 

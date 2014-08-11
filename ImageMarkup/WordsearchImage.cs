@@ -17,10 +17,10 @@ using AForge;
 using AForge.Imaging.Filters;
 
 using ImageMarkup.Exceptions;
-using SharedHelpers;
-using SharedHelpers.Maths;
-using SharedHelpers.Exceptions;
-using SharedHelpers.Imaging;
+using libCVWS;
+using libCVWS.Maths;
+using libCVWS.Exceptions;
+using libCVWS.Imaging;
 
 namespace ImageMarkup
 {

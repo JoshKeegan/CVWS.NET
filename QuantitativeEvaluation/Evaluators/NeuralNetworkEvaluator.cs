@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using AForge.Neuro;
 using AForge.Neuro.Learning;
 
-using SharedHelpers.ClassifierInterfacing;
+using libCVWS.ClassifierInterfacing;
 
 namespace QuantitativeEvaluation.Evaluators
 {

@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Combine Images Class - methods for combining multiple images into a single larger image
  * By Josh Keegan 13/05/2014
  * Last Edit 16/05/2014
@@ -15,9 +15,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using BaseObjectExtensions;
-using SharedHelpers.Exceptions;
+using libCVWS.Exceptions;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class CombineImages
     {

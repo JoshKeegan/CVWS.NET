@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Draw Shapes class - various methods for drawing shapes (filling in gaps in AForge.NET)
  * By Josh Keegan 04/03/2014
  * Last Edit 16/05/2014
@@ -19,7 +19,7 @@ using AForge.Imaging;
 
 using BaseObjectExtensions;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class DrawShapes
     {

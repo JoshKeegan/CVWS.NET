@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Histogram class
  * By Josh Keegan 04/04/2014
  * 
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.Maths.Statistics
+namespace libCVWS.Maths.Statistics
 {
     public class Histogram
     {

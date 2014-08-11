@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Shape Finder class - methods to find the positions of shapes in an image
  * By Josh Keegan 22/04/2014
  */
@@ -16,7 +16,7 @@ using AForge;
 using AForge.Imaging;
 using AForge.Math.Geometry;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class ShapeFinder
     {

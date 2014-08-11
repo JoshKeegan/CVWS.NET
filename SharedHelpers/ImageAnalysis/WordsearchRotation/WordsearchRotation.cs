@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Rotation class - holds a Bitmap of a wordsearch and it's number of rows & cols
  *  When you rotate a wordsearch image 90 deg, the rows and cols will swap
  *  This class exists to encapsulate this behaviour
@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 using AForge.Imaging.Filters;
 
 using BaseObjectExtensions;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchRotation
+namespace libCVWS.ImageAnalysis.WordsearchRotation
 {
     public class WordsearchRotation
     {

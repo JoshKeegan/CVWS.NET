@@ -11,8 +11,8 @@ using System.Drawing.Imaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using BaseObjectExtensions;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.Imaging;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Imaging;
 
 namespace UnitTests.SharedHelpers.Imaging
 {

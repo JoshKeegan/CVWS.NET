@@ -13,8 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ImageMarkup;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
 
 namespace QuantitativeEvaluation
 {

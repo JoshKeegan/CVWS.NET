@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Draw Defaults class - default values used by Draw classes
  * By Josh Keegan 04/03/2014
  */
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     static class DrawDefaults
     {

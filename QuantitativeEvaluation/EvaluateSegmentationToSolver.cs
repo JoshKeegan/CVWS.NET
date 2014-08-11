@@ -6,7 +6,7 @@
  * Last Edit 20/05/2014
  */
 
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

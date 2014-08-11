@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Solver Algorithm (using the probabilities for each character)
  * By Josh Keegan 12/05/2014
  */
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedHelpers.WordsearchSolver
+namespace libCVWS.WordsearchSolver
 {
     public class SolverProbabilistic : Solver
     {

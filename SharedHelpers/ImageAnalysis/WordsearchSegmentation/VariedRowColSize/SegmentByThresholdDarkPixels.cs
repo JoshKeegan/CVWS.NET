@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Segmentation Algorithm splitting based on a preselected threshold 
  *  (from looking at a histogram of the no. of dark pixels per row and col)
  * By Josh Keegan 05/04/2014
@@ -13,11 +13,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.Imaging;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Imaging;
 using BaseObjectExtensions;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
+namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
     public class SegmentByThresholdDarkPixels : SegmentationAlgorithmByStartEndIndices, ISegmentationAlgorithmOnBoolArr
     {

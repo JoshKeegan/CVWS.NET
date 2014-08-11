@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * AForge Activation Neural Network Classifier Encapsulation class
  * By Josh Keegan 25/03/2014
  */
@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 using AForge.Neuro;
 
-using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
+using libCVWS.ClassifierInterfacing.FeatureExtraction;
 
-namespace SharedHelpers.ClassifierInterfacing
+namespace libCVWS.ClassifierInterfacing
 {
     public class AForgeActivationNeuralNetClassifier : Classifier
     {

@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Filter Combinations class - commonly used combinations of Image Filters 
  *  applied one after the other routinely
  * By Josh Keegan 04/04/2014
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 using AForge.Imaging.Filters;
 
-namespace SharedHelpers.Imaging
+namespace libCVWS.Imaging
 {
     public static class FilterCombinations
     {

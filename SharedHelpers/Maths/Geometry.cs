@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Maths.Geometry class
  * By Josh Keegan 05/03/2014
  * Last Edit 08/03/2014
@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 
 using AForge;
 
-using SharedHelpers.Exceptions;
+using libCVWS.Exceptions;
 
-namespace SharedHelpers.Maths
+namespace libCVWS.Maths
 {
     public static class Geometry
     {

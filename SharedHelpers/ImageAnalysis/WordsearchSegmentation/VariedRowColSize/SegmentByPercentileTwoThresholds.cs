@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Shared Helpers
+ * libCVWS
  * Wordsearch Segmentation Algorithm splitting using separate start & end thresholds based on percentile values of dark pixels per row/col
  * By Josh Keegan 03/04/2014
  * Last Edit 05/04/2014
@@ -12,12 +12,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SharedHelpers.Imaging;
-using SharedHelpers.ImageAnalysis.WordsearchSegmentation;
-using SharedHelpers.Maths.Statistics;
+using libCVWS.Imaging;
+using libCVWS.ImageAnalysis.WordsearchSegmentation;
+using libCVWS.Maths.Statistics;
 using BaseObjectExtensions;
 
-namespace SharedHelpers.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
+namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {
     public class SegmentByPercentileTwoThresholds : SegmentationAlgorithmByStartEndIndices, ISegmentationAlgorithmOnBoolArr
     {

@@ -14,9 +14,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ImageMarkup;
-using SharedHelpers.Imaging;
-using SharedHelpers.Exceptions;
-using SharedHelpers.ClassifierInterfacing;
+using libCVWS.Imaging;
+using libCVWS.Exceptions;
+using libCVWS.ClassifierInterfacing;
 
 namespace QuantitativeEvaluation
 {
