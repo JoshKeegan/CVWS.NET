@@ -57,9 +57,9 @@
     <Compile Include="Image.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharedHelpers\SharedHelpers.csproj">
+    <ProjectReference Include="..\libCVWS\libCVWS.csproj">
       <Project>{44618447-37eb-494f-bfd0-8db453543e80}</Project>
-      <Name>SharedHelpers</Name>
+      <Name>libCVWS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

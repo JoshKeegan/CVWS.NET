@@ -24,8 +24,8 @@ using AForge.Imaging.Filters;
 
 using ImageMarkup;
 using ImageMarkup.Exceptions;
-using SharedHelpers;
-using SharedHelpers.Imaging;
+using libCVWS;
+using libCVWS.Imaging;
 using BaseObjectExtensions;
 using System.IO;
 

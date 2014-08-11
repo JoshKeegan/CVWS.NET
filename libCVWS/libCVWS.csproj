@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{44618447-37EB-494F-BFD0-8DB453543E80}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>libCVWS</RootNamespace>
+    <AssemblyName>libCVWS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accord">
+      <HintPath>..\lib\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Math">
+      <HintPath>..\lib\Accord.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Statistics">
+      <HintPath>..\lib\Accord.Statistics.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Imaging, Version=2.2.5.0, Culture=neutral, PublicKeyToken=ba8ddea9676ca48b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AForge.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math, Version=2.2.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AForge.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Neuro, Version=2.2.5.0, Culture=neutral, PublicKeyToken=2094f4ea39731d4f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\AForge.Neuro.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exceptions\InvalidImageDimensionsException.cs" />
+    <Compile Include="Exceptions\UnexpectedArrayDimensionsException.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\CandidateScorer.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\DetectionAlgorithm.cs" />
+    <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotation.cs" />
+    <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotationCorrection.cs" />
+    <Compile Include="ClassifierInterfacing\AForgeActivationNeuralNetClassifier.cs" />
+    <Compile Include="ClassifierInterfacing\Classifier.cs" />
+    <Compile Include="ClassifierInterfacing\ClassifierHelpers.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionAlgorithm.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionDCT.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionLDA.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPCA.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\FeatureExtractionPixelValues.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\SupervisedTrainableFeatureExtractionAlgorithm.cs" />
+    <Compile Include="ClassifierInterfacing\FeatureExtraction\TrainableFeatureExtractionAlgorithm.cs" />
+    <Compile Include="ClassifierInterfacing\NeuralNetworkHelpers.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Exceptions\InvalidRowsAndColsException.cs" />
+    <Compile Include="Exceptions\MissingFeatureExtractionAlgorithmException.cs" />
+    <Compile Include="Exceptions\RegisteredInterestException.cs" />
+    <Compile Include="Exceptions\UnexpectedClassifierOutputException.cs" />
+    <Compile Include="Exceptions\UnexpectedImageSizeException.cs" />
+    <Compile Include="Exceptions\UntrainedFeatureExtractionAlgorithmException.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByBlobRecognition.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByHistogramThresholdDarkPixels.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByHistogramThresholdPercentileRankTwoThresholds.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByMeanDarkPixels.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\Segmentation.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithm.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\SegmentationAlgorithmHelpers.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\ISegmentationAlgorithmOnBoolArr.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentationAlgorithmByStartEndIndices.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByMedianDarkPixels.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByPercentileTwoThresholds.cs" />
+    <Compile Include="ImageAnalysis\WordsearchSegmentation\VariedRowColSize\SegmentByThresholdDarkPixels.cs" />
+    <Compile Include="ImageLoader.cs" />
+    <Compile Include="Imaging\CharImgExtractor.cs" />
+    <Compile Include="Imaging\CombineImages.cs" />
+    <Compile Include="Imaging\Converters.cs" />
+    <Compile Include="Imaging\DrawDefaults.cs" />
+    <Compile Include="Imaging\DrawGrid.cs" />
+    <Compile Include="Imaging\DrawShapes.cs" />
+    <Compile Include="Exceptions\UnexpectedPixelFormatException.cs" />
+    <Compile Include="Imaging\DrawSolution.cs" />
+    <Compile Include="Imaging\FilterCombinations.cs" />
+    <Compile Include="Imaging\ShapeFinder.cs" />
+    <Compile Include="Imaging\SplitImage.cs" />
+    <Compile Include="Exceptions\InvalidShapeException.cs" />
+    <Compile Include="Maths\Geometry.cs" />
+    <Compile Include="Maths\Statistics\BimodalHistogram.cs" />
+    <Compile Include="Maths\Statistics\Histogram.cs" />
+    <Compile Include="Maths\Statistics\Percentile.cs" />
+    <Compile Include="Maths\Statistics\Stats.cs" />
+    <Compile Include="Paths.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WordsearchSolver\Solution.cs" />
+    <Compile Include="WordsearchSolver\Solver.cs" />
+    <Compile Include="WordsearchSolver\SolverNonProbabilistic.cs" />
+    <Compile Include="WordsearchSolver\SolverProbabilistic.cs" />
+    <Compile Include="WordsearchSolver\SolverProbabilisticPreventCharacterDiscrepancies.cs" />
+    <Compile Include="WordsearchSolver\WordDirection.cs" />
+    <Compile Include="WordsearchSolver\WordPosition.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseObjectExtensions\BaseObjectExtensions.csproj">
+      <Project>{6fc68f2c-22b6-4909-895a-4c845b761422}</Project>
+      <Name>BaseObjectExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

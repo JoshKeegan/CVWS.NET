@@ -25,11 +25,11 @@ using AForge.Neuro;
 using AForge.Neuro.Learning;
 
 using ImageMarkup;
-using SharedHelpers;
-using SharedHelpers.ClassifierInterfacing;
-using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
-using SharedHelpers.Exceptions;
-using SharedHelpers.Imaging;
+using libCVWS;
+using libCVWS.ClassifierInterfacing;
+using libCVWS.ClassifierInterfacing.FeatureExtraction;
+using libCVWS.Exceptions;
+using libCVWS.Imaging;
 using QuantitativeEvaluation.Evaluators;
 using BaseObjectExtensions;
 

@@ -12,8 +12,8 @@ using System.IO;
 
 using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;
-using SharedHelpers.ClassifierInterfacing;
-using SharedHelpers.ClassifierInterfacing.FeatureExtraction;
+using libCVWS.ClassifierInterfacing;
+using libCVWS.ClassifierInterfacing.FeatureExtraction;
 
 namespace QuantitativeEvaluation
 {
