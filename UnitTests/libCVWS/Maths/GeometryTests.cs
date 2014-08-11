@@ -1,7 +1,7 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
- * SharedHelpers.Maths.Geometry Tests
+ * libCVWS.Maths.Geometry Tests
  * By Josh Keegan 05/03/2014
  * Last Edit 30/04/2014
  */
@@ -15,7 +15,7 @@ using AForge;
 using libCVWS.Maths;
 using libCVWS.Exceptions;
 
-namespace UnitTests.SharedHelpers.Maths
+namespace UnitTests.libCVWS.Maths
 {
     [TestClass]
     public class GeometryTests

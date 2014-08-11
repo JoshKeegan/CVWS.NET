@@ -1,7 +1,7 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
- * SharedHelpers.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
+ * libCVWS.ImageAnalysis.WordsearchSegmentation.Segmentation Tests
  * By Josh Keegan 02/04/2014
  * Last Edit 10/06/2014
  */
@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.Exceptions;
 
-namespace UnitTests.SharedHelpers.ImageAnalysis.WordsearchSegmentation
+namespace UnitTests.libCVWS.ImageAnalysis.WordsearchSegmentation
 {
     [TestClass]
     public class SegmentationTests

@@ -1,7 +1,7 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
- * SharedHelpers.Maths.Statistics.BimodalHistogram Tests
+ * libCVWS.Maths.Statistics.BimodalHistogram Tests
  * By Josh Keegan 04/04/2014
  */
 
@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using libCVWS.Maths.Statistics;
 
-namespace UnitTests.SharedHelpers.Maths.Statistics
+namespace UnitTests.libCVWS.Maths.Statistics
 {
     [TestClass]
     public class BimodalHistogramTests

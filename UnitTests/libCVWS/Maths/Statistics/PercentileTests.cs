@@ -1,7 +1,7 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
- * SharedHelpers.Maths.Statistics.Percentile Tests
+ * libCVWS.Maths.Statistics.Percentile Tests
  * By Josh Keegan 05/04/2014
  */
 
@@ -13,7 +13,7 @@ using libCVWS.Maths.Statistics;
 
 using BaseObjectExtensions;
 
-namespace UnitTests.SharedHelpers.Maths.Statistics
+namespace UnitTests.libCVWS.Maths.Statistics
 {
     [TestClass]
     public class PercentileTests

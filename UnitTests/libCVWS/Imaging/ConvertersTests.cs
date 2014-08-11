@@ -1,7 +1,7 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
- * SharedHelpers.Imaging.Converters Tests
+ * libCVWS.Imaging.Converters Tests
  * By Josh Keegan 06/03/2014
  * Last Edit 08/03/2014
  */
@@ -15,7 +15,7 @@ using libCVWS.Imaging;
 
 using AForge.Imaging.Filters;
 
-namespace UnitTests.SharedHelpers.Imaging
+namespace UnitTests.libCVWS.Imaging
 {
     [TestClass]
     public class ConvertersTests

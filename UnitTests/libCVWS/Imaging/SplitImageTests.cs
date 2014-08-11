@@ -1,7 +1,7 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Unit Tests
- * SharedHelpers.Imaging.SplitImage Tests
+ * libCVWS.Imaging.SplitImage Tests
  * By Josh Keegan 28/04/2014
  */
 
@@ -14,7 +14,7 @@ using BaseObjectExtensions;
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.Imaging;
 
-namespace UnitTests.SharedHelpers.Imaging
+namespace UnitTests.libCVWS.Imaging
 {
     [TestClass]
     public class SplitImageTests
