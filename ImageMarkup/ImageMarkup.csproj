@@ -57,7 +57,7 @@
     <Compile Include="Image.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharedHelpers\libCVWS.csproj">
+    <ProjectReference Include="..\libCVWS\libCVWS.csproj">
       <Project>{44618447-37eb-494f-bfd0-8db453543e80}</Project>
       <Name>libCVWS</Name>
     </ProjectReference>

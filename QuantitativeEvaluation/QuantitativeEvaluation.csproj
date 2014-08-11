@@ -86,7 +86,7 @@
       <Project>{2ea98af3-88fd-4b06-b1d6-dc9068263bea}</Project>
       <Name>ImageMarkup</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharedHelpers\libCVWS.csproj">
+    <ProjectReference Include="..\libCVWS\libCVWS.csproj">
       <Project>{44618447-37eb-494f-bfd0-8db453543e80}</Project>
       <Name>libCVWS</Name>
     </ProjectReference>
