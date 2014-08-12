@@ -59,9 +59,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BaseObjectExtensions\BitmapExtensionsTests.cs" />
-    <Compile Include="BaseObjectExtensions\2dArrayExtensionsUintTests.cs" />
-    <Compile Include="BaseObjectExtensions\ImageExtensionsTests.cs" />
+    <Compile Include="libCVWS\BaseObjectExtensions\BitmapExtensionsTests.cs" />
+    <Compile Include="libCVWS\BaseObjectExtensions\2dArrayExtensionsUintTests.cs" />
+    <Compile Include="libCVWS\BaseObjectExtensions\ImageExtensionsTests.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="libCVWS\Maths\Statistics\StatsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

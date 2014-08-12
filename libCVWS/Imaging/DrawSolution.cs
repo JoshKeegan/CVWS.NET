@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 using AForge;
 using AForge.Imaging;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.WordsearchSolver;
 

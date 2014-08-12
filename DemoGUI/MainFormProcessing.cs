@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using AForge;
 using AForge.Imaging.Filters;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 using libCVWS;
 using libCVWS.ClassifierInterfacing;
 using libCVWS.ClassifierInterfacing.FeatureExtraction;

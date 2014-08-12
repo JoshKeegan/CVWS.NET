@@ -7,9 +7,9 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 
-namespace UnitTests.BaseObjectExtensions
+namespace UnitTests.libCVWS.BaseObjectExtensions
 {
     [TestClass]
     public class _2dArrayExtensionsUnitTests

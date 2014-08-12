@@ -26,7 +26,7 @@ using ImageMarkup;
 using ImageMarkup.Exceptions;
 using libCVWS;
 using libCVWS.Imaging;
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 using System.IO;
 
 namespace DataEntryGUI

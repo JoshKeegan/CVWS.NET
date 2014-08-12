@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseObjectExtensions
+namespace libCVWS.BaseObjectExtensions
 {
     public static partial class _2dArrayExtensions
     {

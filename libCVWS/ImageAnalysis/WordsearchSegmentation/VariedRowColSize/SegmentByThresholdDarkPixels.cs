@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.Imaging;
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 
 namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 {

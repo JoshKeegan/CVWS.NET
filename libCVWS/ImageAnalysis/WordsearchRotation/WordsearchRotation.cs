@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 using AForge.Imaging.Filters;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 
 namespace libCVWS.ImageAnalysis.WordsearchRotation

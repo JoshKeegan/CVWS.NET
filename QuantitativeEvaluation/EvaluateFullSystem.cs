@@ -17,7 +17,7 @@ using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash 
 using AForge;
 using AForge.Imaging.Filters;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;
 using libCVWS;

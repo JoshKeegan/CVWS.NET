@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 using Accord.Math;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 using libCVWS.Imaging;
 
 namespace libCVWS.ClassifierInterfacing.FeatureExtraction

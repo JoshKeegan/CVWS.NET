@@ -12,9 +12,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using AForge.Imaging.Filters;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 
-namespace UnitTests.BaseObjectExtensions
+namespace UnitTests.libCVWS.BaseObjectExtensions
 {
     [TestClass]
     public class BitmapExtensionsTests

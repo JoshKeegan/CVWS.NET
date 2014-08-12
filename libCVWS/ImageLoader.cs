@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 
 namespace libCVWS
 {

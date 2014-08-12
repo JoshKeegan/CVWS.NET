@@ -32,7 +32,7 @@ using libCVWS.Exceptions;
 using libCVWS.Maths.Statistics;
 using libCVWS.Imaging;
 using QuantitativeEvaluation.Evaluators;
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 
 namespace QuantitativeEvaluation
 {

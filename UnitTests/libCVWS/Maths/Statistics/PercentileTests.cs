@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using libCVWS.Maths.Statistics;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 
 namespace UnitTests.libCVWS.Maths.Statistics
 {

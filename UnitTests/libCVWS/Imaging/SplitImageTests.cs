@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using BaseObjectExtensions;
+using libCVWS.BaseObjectExtensions;
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.Imaging;
 

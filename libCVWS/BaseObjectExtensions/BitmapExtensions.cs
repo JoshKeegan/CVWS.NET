@@ -16,7 +16,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
-namespace BaseObjectExtensions
+namespace libCVWS.BaseObjectExtensions
 {
     public static class BitmapExtensions
     {
