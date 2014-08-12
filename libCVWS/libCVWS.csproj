@@ -68,6 +68,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseObjectExtensions\2dArrayExtensions.cs" />
+    <Compile Include="BaseObjectExtensions\2dArrayExtensionsUint.cs" />
+    <Compile Include="BaseObjectExtensions\BitmapExtensions.cs" />
+    <Compile Include="BaseObjectExtensions\CollectionExtensionsIDisposable.cs" />
+    <Compile Include="BaseObjectExtensions\CollectionExtensionsInt.cs" />
+    <Compile Include="BaseObjectExtensions\CollectionExtensionsUint.cs" />
+    <Compile Include="BaseObjectExtensions\ImageExtensions.cs" />
     <Compile Include="Exceptions\InvalidImageDimensionsException.cs" />
     <Compile Include="Exceptions\UnexpectedArrayDimensionsException.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\CandidateScorer.cs" />
@@ -132,12 +139,6 @@
     <Compile Include="WordsearchSolver\SolverProbabilisticPreventCharacterDiscrepancies.cs" />
     <Compile Include="WordsearchSolver\WordDirection.cs" />
     <Compile Include="WordsearchSolver\WordPosition.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BaseObjectExtensions\BaseObjectExtensions.csproj">
-      <Project>{6fc68f2c-22b6-4909-895a-4c845b761422}</Project>
-      <Name>BaseObjectExtensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
