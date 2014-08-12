@@ -3,7 +3,7 @@
  * libCVWS
  * Trainable Feature Extraction Algorithm - abstract class
  * By Josh Keegan 11/03/2014
- * Last Edit 17/05/2014
+ * Last Edit 12/08/2014
  */
 
 using System;
@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using libCVWS.Exceptions;
+using libCVWS.SerializationHelpers;
 
 
 namespace libCVWS.ClassifierInterfacing.FeatureExtraction
@@ -54,6 +55,9 @@ namespace libCVWS.ClassifierInterfacing.FeatureExtraction
 
             Stream stream = File.Open(filePath, FileMode.Open);
             BinaryFormatter formatter = new BinaryFormatter();
+
+            //Use the custom binder for this namespace in order to handle the loading of data serialized by an older assembly
+            formatter.Binder = new AssemblySerializationBinder();
 
             trained = (TrainableFeatureExtractionAlgorithm)formatter.Deserialize(stream);
             

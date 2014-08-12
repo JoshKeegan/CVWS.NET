@@ -124,6 +124,7 @@
     <Compile Include="Maths\Statistics\Stats.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationHelpers\AssemblySerializationBinder.cs" />
     <Compile Include="WordsearchSolver\Solution.cs" />
     <Compile Include="WordsearchSolver\Solver.cs" />
     <Compile Include="WordsearchSolver\SolverNonProbabilistic.cs" />
