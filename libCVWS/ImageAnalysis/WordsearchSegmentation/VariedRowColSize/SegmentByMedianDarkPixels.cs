@@ -3,6 +3,7 @@
  * libCVWS
  * Wordsearch Segmentation Algorithm splitting based on Median no. of dark pixels per row/col
  * By Josh Keegan 03/04/2014
+ * Last Edit 12/08/2014
  */
 
 using System;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.Imaging;
+using libCVWS.Maths.Statistics;
 using BaseObjectExtensions;
 
 namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
@@ -32,8 +34,8 @@ namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
             uint[] rowDarkPixelCounts = SegmentationAlgorithmHelpers.CountNumDarkPixelsPerRow(image);
 
             //Determine the start & end indices of all the rows & cols, using the mean as the threshold to determine entry & exit
-            uint[,] colChars = SegmentationAlgorithmHelpers.FindCharIndices(colDarkPixelCounts, colDarkPixelCounts.Median());
-            uint[,] rowChars = SegmentationAlgorithmHelpers.FindCharIndices(rowDarkPixelCounts, rowDarkPixelCounts.Median());
+            uint[,] colChars = SegmentationAlgorithmHelpers.FindCharIndices(colDarkPixelCounts, Stats.Median(colDarkPixelCounts));
+            uint[,] rowChars = SegmentationAlgorithmHelpers.FindCharIndices(rowDarkPixelCounts, Stats.Median(rowDarkPixelCounts));
 
             rows = rowChars.ToIntArr();
             cols = colChars.ToIntArr();

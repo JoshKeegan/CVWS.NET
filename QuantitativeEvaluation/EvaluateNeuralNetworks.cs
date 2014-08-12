@@ -29,6 +29,7 @@ using libCVWS;
 using libCVWS.ClassifierInterfacing;
 using libCVWS.ClassifierInterfacing.FeatureExtraction;
 using libCVWS.Exceptions;
+using libCVWS.Maths.Statistics;
 using libCVWS.Imaging;
 using QuantitativeEvaluation.Evaluators;
 using BaseObjectExtensions;
@@ -384,7 +385,7 @@ namespace QuantitativeEvaluation
                     crossValidationEvaluator.ConfusionMatrix.TotalClassifications));
 
                 //Check if we've overlearned the data and performance on the cross-valiadtion data has dropped off
-                if (networkNumMisclassified > prevNetworksNumMisclassified.Mean()) //Use the mean of the number of misclassification, as the actual number can move around a bit
+                if (networkNumMisclassified > Stats.Mean(prevNetworksNumMisclassified)) //Use the mean of the number of misclassification, as the actual number can move around a bit
                 {
                     //Cross-Validation performance has dropped, reinstate the previous network & break
                     Log.Debug(String.Format("Network has started to overlearn the training data on iteration {0}. Using previous classifier.", iterNum));

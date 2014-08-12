@@ -4,7 +4,7 @@
  * Wordsearch Segmentation Algorithm splitting by extracting character sized blobs from an Image of a wordsearch
  *  and then estimating row & col positions from the blob positions & sizes
  * By Josh Keegan 04/04/2014
- * Last Edit 22/04/2014
+ * Last Edit 12/08/2014
  */
 
 using System;
@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using libCVWS.Imaging;
-using BaseObjectExtensions;
+using libCVWS.Maths.Statistics;
 
 using AForge.Imaging;
 using AForge.Imaging.Filters;
@@ -85,10 +85,10 @@ namespace libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize
 
             //Filter out blobs that are too big or too small
             //Only remove blobs that are too big or too small in both dimensions, to allow for thin chars like I's
-            double meanWidth = widths.Mean();
+            double meanWidth = Stats.Mean(widths);
             double minWidth = meanWidth * BLOB_FILTER_MEAN_MULTIPLIER_MINIMUM;
             double maxWidth = meanWidth * BLOB_FILTER_MEAN_MULTIPLIER_MAXIMUM;
-            double meanHeight = heights.Mean();
+            double meanHeight = Stats.Mean(heights);
             double minHeight = meanHeight * BLOB_FILTER_MEAN_MULTIPLIER_MINIMUM;
             double maxHeight = meanHeight * BLOB_FILTER_MEAN_MULTIPLIER_MAXIMUM;
 
