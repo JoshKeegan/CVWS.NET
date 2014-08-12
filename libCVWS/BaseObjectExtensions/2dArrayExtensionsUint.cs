@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Base Object Extensions
+ * libCVWS Base Object Extensions
  * partial 2D Array Extensions for Uint
  * By Josh Keegan 03/04/2014
  */

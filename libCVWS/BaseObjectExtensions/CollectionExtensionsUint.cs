@@ -1,6 +1,6 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
- * Base Object Extensions
+ * libCVWS Base Object Extensions
  * partial Collection Extensions class - functions working on uints
  * By Josh Keegan 10/03/2014
  * Last Edit 12/08/2014
