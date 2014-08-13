@@ -157,3 +157,7 @@ $RECYCLE.BIN/
 
 # Ignore the data directory used for training & evaluation system
 data/
+
+# NuGet
+packages/*
+!packages/repositories.config
