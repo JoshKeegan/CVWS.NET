@@ -3,12 +3,13 @@
  * libCVWS
  * Char Img Extractor class - extract just the character from an image (removing whitespace)
  * By Josh Keegan 11/03/2014
- * Last Edit 26/04/2014
+ * Last Edit 28/08/2014
  */
 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ using System.Threading.Tasks;
 using AForge;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
+
+using libCVWS.BaseObjectExtensions;
 
 namespace libCVWS.Imaging
 {
@@ -55,8 +58,16 @@ namespace libCVWS.Imaging
         //Actual Methods that can be used for extraction
         public static Bitmap ExtractBiggestBlob(Bitmap charIn)
         {
-            //Greyscale
-            Bitmap greyImg = Grayscale.CommonAlgorithms.BT709.Apply(charIn); //Use the BT709 (HDTV spec) for RGB weights
+            //Greyscale (if not already)
+            Bitmap greyImg = null;
+            if(charIn.PixelFormat != PixelFormat.Format8bppIndexed)
+            {
+                greyImg = Grayscale.CommonAlgorithms.BT709.Apply(charIn); //Use the BT709 (HDTV spec) for RGB weights
+            }
+            else
+            {
+                greyImg = charIn.DeepCopy();
+            }
 
             //Adaptive threshold
             bradleyLocalThreshold.ApplyInPlace(greyImg);
