@@ -3,7 +3,7 @@
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
  * By Josh Keegan 12/05/2014
- * Last Edit 21/05/2014
+ * Last Edit 28/08/2014
  */
 
 using System;
@@ -42,6 +42,7 @@ namespace DemoGUI
         {
             WordsearchDetection,
             WordsearchSegmentation,
+            SegmentationPostProcessing,
             RotationCorrection,
             CharacterImageExtraction,
             FeatureExtractionAndClassification,
@@ -49,17 +50,30 @@ namespace DemoGUI
             All
         };
 
+        private enum SegmentationPostProcessing
+        {
+            None,
+            RemoveSmallRowsAndCols
+        };
+
         //Constants
         private static readonly Dictionary<ProcessingStage, string> PROCESSING_STAGE_NAMES = new Dictionary<ProcessingStage, string>()
         {
             //These names should be exactly the same as the ones in checkListProcessingStages
             { ProcessingStage.WordsearchDetection, "Wordsearch Detection" },
+            { ProcessingStage.SegmentationPostProcessing, "Segmentation Post-Processing" },
             { ProcessingStage.WordsearchSegmentation, "Wordsearch Segmentation" },
             { ProcessingStage.RotationCorrection, "Rotation Correction" },
             { ProcessingStage.CharacterImageExtraction, "Character Image Extraction" },
             { ProcessingStage.FeatureExtractionAndClassification, "Feature Extraction & Classification" },
             { ProcessingStage.WordsearchSolver, "Wordsearch Solver" },
             { ProcessingStage.All, "All Processing Stages" }
+        };
+
+        private static readonly Dictionary<string, SegmentationPostProcessing> SEGMENTATION_POST_PROCESSING_ALGORITHMS = new Dictionary<string, SegmentationPostProcessing>()
+        {
+            { "None", SegmentationPostProcessing.None },
+            { "Remove Erroneously Small Rows & Cols", SegmentationPostProcessing.RemoveSmallRowsAndCols }
         };
 
         private const string TRAINED_ALGORITHMS_PATH = "TrainedAlgorithms/";
@@ -95,6 +109,7 @@ namespace DemoGUI
 
         private static readonly Type DEFAULT_WORDSEARCH_DETECTION_SEGMENTATION = typeof(SegmentByMeanDarkPixels);
         private static readonly Type DEFAULT_WORDSEARCH_SEGMENTATION = typeof(SegmentByBlobRecognition);
+        private const SegmentationPostProcessing DEFAULT_SEGMENTATION_POST_PROCESSING = SegmentationPostProcessing.None;
         private const string DEFAULT_ROTATION_CORRECTION_FEATURE_EXTRACTION = "Principal Component Analysis (PCA) All Features"; //Feature Extraction as a stirng because there can be more than one opention per type
         private static readonly Type DEFAULT_ROTATION_CORRECTION_CLASSIFICATION = typeof(AForgeActivationNeuralNetClassifier);
         private const string DEFAULT_FEATURE_EXTRACTION = "Principal Component Analysis (PCA) All Features";
@@ -133,6 +148,9 @@ namespace DemoGUI
             //Wordsearch Segmentation Algorithm
             SegmentationAlgorithm wordsearchSegmentationAlgorithm =
                 getSelectedSegmentationAlgorithm(wordsearchSegmentationToolStripMenuItem);
+
+            //Segmentation Post Processor
+            SegmentationPostProcessing segmentationPostProcessor = getSelectedSegmentationPostProcessor();
 
             //Rotation Correction Classifier object (contains both feature extractor & classifier)
             Classifier rotationCorrectionClassifier = getSelectedClassifier(rotationCorrectionFeatureExtractionToolStripMenuItem,
@@ -201,6 +219,29 @@ namespace DemoGUI
 
             //Mark Wordsearch Segmentation as completed
             setProcessingStageState(ProcessingStage.WordsearchSegmentation, CheckState.Checked);
+
+            /*
+             * Wordsearch Segmentation Post-Processing
+             */
+
+            //Show that we're starting Segmentation Post-Processing
+            setProcessingStageState(ProcessingStage.SegmentationPostProcessing, CheckState.Indeterminate);
+
+            switch(segmentationPostProcessor)
+            {
+                case SegmentationPostProcessing.RemoveSmallRowsAndCols:
+                    segmentation = segmentation.RemoveSmallRowsAndCols();
+                    break;
+            }
+
+            //If any post-processing was done, log the segmentation (visually)
+            if(segmentationPostProcessor != SegmentationPostProcessing.None)
+            {
+                log(DrawGrid.Segmentation(wordsearchImage, segmentation, DRAW_SEGMENTATION_COLOUR), "Post-Processed Segmentation");
+            }
+
+            //Mark Segmentation Post-Processing as complete
+            setProcessingStageState(ProcessingStage.SegmentationPostProcessing, CheckState.Checked);
 
             /*
              * Wordsearch Rotation Correction
@@ -448,6 +489,23 @@ namespace DemoGUI
             }
         }
 
+        //Get the selected Segmentation Post-Processing method
+        private SegmentationPostProcessing getSelectedSegmentationPostProcessor()
+        {
+            //Get the name of the Segmentation Post Processing Algorithm
+            string segmentationPostProcessorName = null;
+            foreach(ToolStripMenuItem menuItem in segmentationPostProcessingToolStripMenuItem.DropDownItems)
+            {
+                if(menuItem.Checked)
+                {
+                    segmentationPostProcessorName = menuItem.Text;
+                    break;
+                }
+            }
+
+            return SEGMENTATION_POST_PROCESSING_ALGORITHMS[segmentationPostProcessorName];
+        }
+
         //Get the Classifier object. This encapsulates the classifier itself & the Feature Extractor,
         //  so we pass two parent menu items, one for each
         private Classifier getSelectedClassifier(ToolStripMenuItem parentFeatureExtractor, ToolStripMenuItem parentClassifier)
@@ -565,6 +623,21 @@ namespace DemoGUI
             }
 
             /*
+             * Populate Segmentation Post-Processing
+             */
+            IEnumerable<ToolStripMenuItem> segmentationPostProcessingMenuItems = baseMenuItems.Where(
+                menuItem => menuItem.Text == "Segmentation Post-Processing");
+            //Add the Segmentation Post-Processing options to the Menu Item
+            foreach(ToolStripMenuItem menuItem in segmentationPostProcessingMenuItems)
+            {
+                foreach(string txt in SEGMENTATION_POST_PROCESSING_ALGORITHMS.Keys)
+                {
+                    //Make the tool strip item
+                    menuItem.DropDownItems.Add(txt);
+                }
+            }
+
+            /*
              * Populate Feature Extraction
              */
             IEnumerable<ToolStripMenuItem> featureExtractionMenuItems = baseMenuItems.Where(
@@ -619,6 +692,20 @@ namespace DemoGUI
 
                 //If this menu item represents the type that is set as the default, check this menu item
                 if (menuItemType.Equals(DEFAULT_WORDSEARCH_SEGMENTATION))
+                {
+                    menuItem.Checked = true;
+                    break; //Found what we were looking for, look no further
+                }
+            }
+
+            //Segmentation Post-Processing
+            foreach(ToolStripMenuItem menuItem in segmentationPostProcessingToolStripMenuItem.DropDownItems)
+            {
+                //Get the Segmentation Post-Processing method that this menu item represents
+                SegmentationPostProcessing menuItemSegmentationPostProcessing = SEGMENTATION_POST_PROCESSING_ALGORITHMS[menuItem.Text];
+
+                //If this menu item represents the segmentation post-processing methods that is set as the default, check this menu item
+                if(menuItemSegmentationPostProcessing == DEFAULT_SEGMENTATION_POST_PROCESSING)
                 {
                     menuItem.Checked = true;
                     break; //Found what we were looking for, look no further
