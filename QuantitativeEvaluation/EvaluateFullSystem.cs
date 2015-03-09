@@ -3,7 +3,7 @@
  * Quantitative Evaluate
  * Evaluate Full System
  * By Josh Keegan 26/04/2014
- * Last Edit 11/06/2014
+ * Last Edit 09/03/2015
  */
 
 using System;
@@ -16,6 +16,7 @@ using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash 
 
 using AForge;
 using AForge.Imaging.Filters;
+using KLogNet;
 
 using libCVWS.BaseObjectExtensions;
 using ImageMarkup;
@@ -105,7 +106,7 @@ namespace QuantitativeEvaluation
 
         internal static Dictionary<string, double> Evaluate(List<Image> images)
         {
-            Log.Info("Starting to Evaluate Full System with different combinations of algorithms . . .");
+            DefaultLog.Info("Starting to Evaluate Full System with different combinations of algorithms . . .");
 
             //Register an interest in the bitmaps of all the images (so that they remain in memory throughout)
             foreach (Image image in images)
@@ -130,7 +131,7 @@ namespace QuantitativeEvaluation
                 image.DeregisterInterestInBitmap();
             }
 
-            Log.Info("Completed evaluation of Full System with different combinations of algorithms");
+            DefaultLog.Info("Completed evaluation of Full System with different combinations of algorithms");
 
             return scores;
         }
@@ -148,7 +149,7 @@ namespace QuantitativeEvaluation
             bool segmentationRemoveSmallRowsAndCols, SegmentationMethod segmentationMethod, 
             Classifier probabilisticRotationCorrectionClassifier, Classifier classifier, Solver wordsearchSolver)
         {
-            Log.Info("Evaluating Full System . . .");
+            DefaultLog.Info("Evaluating Full System . . .");
 
             int numCorrect = 0;
             List<WordsearchSolutionEvaluator> evaluators = new List<WordsearchSolutionEvaluator>();
@@ -224,7 +225,7 @@ namespace QuantitativeEvaluation
                 //Log Evaluation
                 evaluators.Add(evaluator);
 
-                Log.Info(evaluator.ToString());
+                DefaultLog.Info(evaluator.ToString());
 
                 if(evaluator.Correct)
                 {
@@ -232,7 +233,7 @@ namespace QuantitativeEvaluation
                 }
             }
 
-            Log.Info(String.Format("System found all words correctly for {0} / {1} Images correctly", numCorrect, images.Count));
+            DefaultLog.Info(String.Format("System found all words correctly for {0} / {1} Images correctly", numCorrect, images.Count));
 
             //Calculate some extra statistics
             int numWordsearchesNoWordsFound = 0;
@@ -256,11 +257,11 @@ namespace QuantitativeEvaluation
                 }
             }
 
-            Log.Info(String.Format("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound));
-            Log.Info(String.Format("{0} wordsearch images got discarded before reaching the evaluation stage", numDidntReachEvaluation));
-            Log.Info(String.Format("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures));
+            DefaultLog.Info(String.Format("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound));
+            DefaultLog.Info(String.Format("{0} wordsearch images got discarded before reaching the evaluation stage", numDidntReachEvaluation));
+            DefaultLog.Info(String.Format("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures));
 
-            Log.Info("Full System Evaluation Completed");
+            DefaultLog.Info("Full System Evaluation Completed");
 
             return (double)numCorrect / images.Count;
         }

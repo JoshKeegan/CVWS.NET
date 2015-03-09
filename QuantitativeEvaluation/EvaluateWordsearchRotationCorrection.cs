@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Rotation Correction
  * By Josh Keegan 25/03/2014
- * Last Edit 02/04/2014
+ * Last Edit 09/03/2015
  */
 
 using System;
@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AForge.Imaging.Filters;
+using KLogNet;
 
 using libCVWS.BaseObjectExtensions;
 using ImageMarkup;
@@ -26,7 +27,7 @@ namespace QuantitativeEvaluation
     {
         internal static double Evaluate(List<WordsearchImage> wordsearchImages, Classifier classifier)
         {
-            Log.Info("Evaluating Wordsearch Image Rotation Correction . . .");
+            DefaultLog.Info("Evaluating Wordsearch Image Rotation Correction . . .");
 
             int numCorrect = 0;
             int numTotal = 0;
@@ -68,9 +69,9 @@ namespace QuantitativeEvaluation
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
-            Log.Info(String.Format("Returned {0}/{1} Wordsearch Rotations Correctly", numCorrect, numTotal));
+            DefaultLog.Info(String.Format("Returned {0}/{1} Wordsearch Rotations Correctly", numCorrect, numTotal));
 
-            Log.Info("Wordsearch Image Rotation Evaluation Completed");
+            DefaultLog.Info("Wordsearch Image Rotation Evaluation Completed");
 
             return (double)numCorrect / numTotal;
         }

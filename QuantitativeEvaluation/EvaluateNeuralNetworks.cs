@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
- * Last Edit 11/06/2014
+ * Last Edit 09/03/2015
  * 
  * Note that if the data has changed between runs, it won't work with trainiable feature extraction 
  *  techniques as the previous trained system will get overwritten (could be changed in the future 
@@ -23,6 +23,7 @@ using System.IO;
 using AForge.Imaging.Filters;
 using AForge.Neuro;
 using AForge.Neuro.Learning;
+using KLogNet;
 
 using ImageMarkup;
 using libCVWS;
@@ -61,12 +62,12 @@ namespace QuantitativeEvaluation
              */
 
             //Get the training data for the Neural Network
-            Log.Info("Loading & processing the character training data");
+            DefaultLog.Info("Loading & processing the character training data");
             Dictionary<char, List<Bitmap>> trainingData = CharData.GetCharData(trainingWordsearchImages);
-            Log.Info("Loaded training character data");
+            DefaultLog.Info("Loaded training character data");
 
             //Convert the training data into a format the Neural network accepts
-            Log.Info("Converting data to format for Neural Network . . .");
+            DefaultLog.Info("Converting data to format for Neural Network . . .");
             Bitmap[] trainingCharImgs;
             double[][] output;
             CharData.GetNeuralNetworkBitmapsAndOutput(trainingData, out trainingCharImgs, out output);
@@ -80,33 +81,33 @@ namespace QuantitativeEvaluation
             pcaFeatureExtractionTopFeatures.Train(trainingCharImgs);
 
             //Export the trained Feature Extraction Algorithms
-            Log.Info("Saving Data for Trainable Feature Extraction Algorithms");
+            DefaultLog.Info("Saving Data for Trainable Feature Extraction Algorithms");
 
             //If the Trainable Feature Extraction Algorithms directory doesn't exist, create it . . .
             if(!Directory.Exists(Program.FEATURE_EXTRACTORS_PATH))
             {
-                Log.Info("Feature Extractors Path didn't exist, creating . . .");
+                DefaultLog.Info("Feature Extractors Path didn't exist, creating . . .");
                 Directory.CreateDirectory(Program.FEATURE_EXTRACTORS_PATH);
             }
 
             pcaFeatureExtractionAllFeatures.Save(Program.FEATURE_EXTRACTORS_PATH + Program.PCA_ALL_FEATURES_FILE_NAME + Program.FEATURE_EXTRACTORS_FILE_EXTENSION);
             pcaFeatureExtractionTopFeatures.Save(Program.FEATURE_EXTRACTORS_PATH + Program.PCA_TOP_FEATURES_FILE_NAME + Program.FEATURE_EXTRACTORS_FILE_EXTENSION);
-            Log.Info("Data for Trainable Feature Extraction Algorithms saved");
+            DefaultLog.Info("Data for Trainable Feature Extraction Algorithms saved");
 
             double[][] pcaAllFeaturesInput = pcaFeatureExtractionAllFeatures.Extract(trainingCharImgs);
             double[][] pcaTopFeaturesInput = pcaFeatureExtractionTopFeatures.Extract(trainingCharImgs);
 
             trainingCharImgs.DisposeAll(); //Dispose of all the training Bitmaps, freeing up memory
-            Log.Info("Conversion Complete");
-            Log.Info(String.Format("There are {0} training input character samples", rawPixelValuesInput.Length));
+            DefaultLog.Info("Conversion Complete");
+            DefaultLog.Info(String.Format("There are {0} training input character samples", rawPixelValuesInput.Length));
 
             //Load the cross-validation data for the neural network
-            Log.Info("Loading & processing the character data (cross-validation)");
+            DefaultLog.Info("Loading & processing the character data (cross-validation)");
             Dictionary<char, List<Bitmap>> crossValidationData = CharData.GetCharData(crossValidationWordsearchImages);
-            Log.Info("Loaded cross-validation character data");
+            DefaultLog.Info("Loaded cross-validation character data");
 
             //Convert the evaluation data into a format the Neural network accepts
-            Log.Info("Converting data to format for Neural Network . . .");
+            DefaultLog.Info("Converting data to format for Neural Network . . .");
             Bitmap[] crossValCharImgs;
             double[][] crossValOutput;
             CharData.GetNeuralNetworkBitmapsAndOutput(crossValidationData, out crossValCharImgs, out crossValOutput);
@@ -115,17 +116,17 @@ namespace QuantitativeEvaluation
             double[][] pcaAllFeaturesCrossValInput = pcaFeatureExtractionAllFeatures.Extract(crossValCharImgs);
             double[][] pcaTopFeaturesCrossValInput = pcaFeatureExtractionTopFeatures.Extract(crossValCharImgs);
             crossValCharImgs.DisposeAll(); //Dispose of all the cross-validation Bitmaps, freeing up memory
-            Log.Info("Conversion Complete");
-            Log.Info(String.Format("There are {0} cross-validation input character samples", rawPixelValuesCossValInput.Length));
+            DefaultLog.Info("Conversion Complete");
+            DefaultLog.Info(String.Format("There are {0} cross-validation input character samples", rawPixelValuesCossValInput.Length));
             char[] crossValidationDataLabels = CharData.GetCharLabels(crossValidationData);
 
             //Load the evaluation data for the neural network
-            Log.Info("Loading & processing the character data (evaluation)");
+            DefaultLog.Info("Loading & processing the character data (evaluation)");
             Dictionary<char, List<Bitmap>> evaluationData = CharData.GetCharData(evaluationWordsearchImages);
-            Log.Info("Loaded evaluation character data");
+            DefaultLog.Info("Loaded evaluation character data");
 
             //Convert the evaluation data into a format the Neural network accepts
-            Log.Info("Converting data to format for Neural Network . . .");
+            DefaultLog.Info("Converting data to format for Neural Network . . .");
             Bitmap[] evalCharImgs;
             double[][] evalOutput;
             CharData.GetNeuralNetworkBitmapsAndOutput(evaluationData, out evalCharImgs, out evalOutput);
@@ -134,8 +135,8 @@ namespace QuantitativeEvaluation
             double[][] pcaAllFeaturesEvaluationInput = pcaFeatureExtractionAllFeatures.Extract(evalCharImgs);
             double[][] pcaTopFeaturesEvaluationInput = pcaFeatureExtractionTopFeatures.Extract(evalCharImgs);
             evalCharImgs.DisposeAll(); //Dispose of all the bitmaps, freeing up memory
-            Log.Info("Conversion Complete");
-            Log.Info(String.Format("There are {0} evaluation input character samples", rawPixelValuesEvalInput.Length));
+            DefaultLog.Info("Conversion Complete");
+            DefaultLog.Info(String.Format("There are {0} evaluation input character samples", rawPixelValuesEvalInput.Length));
             char[] evaluationDataLabels = CharData.GetCharLabels(evaluationData);
 
             /*
@@ -148,7 +149,7 @@ namespace QuantitativeEvaluation
 
             ManualResetEvent[] doneEvents = new ManualResetEvent[4]; //Update to the number of algorithms to run in parallel
 
-            Log.Info("Starting worker threads");
+            DefaultLog.Info("Starting worker threads");
 
             doneEvents[0] = new ManualResetEvent(false);
             Task.Factory.StartNew(() =>
@@ -216,7 +217,7 @@ namespace QuantitativeEvaluation
 
             //Wait for all threads to complete
             WaitHandle.WaitAll(doneEvents);
-            Log.Info("All worker threads have completed");
+            DefaultLog.Info("All worker threads have completed");
 
             return concurrentEvaluationResults;
         }
@@ -262,7 +263,7 @@ namespace QuantitativeEvaluation
                 //If this network is better than the previous best, write it out as the new best
                 if(prevCrossValEval.ConfusionMatrix.NumMisclassifications > crossValEvaluator.ConfusionMatrix.NumMisclassifications)
                 {
-                    Log.Info(String.Format("New best cross-validation score for network \"{0}\". Previous was {1}/{2}, new best is {3}/{2}",
+                    DefaultLog.Info(String.Format("New best cross-validation score for network \"{0}\". Previous was {1}/{2}, new best is {3}/{2}",
                         networkName, prevCrossValEval.ConfusionMatrix.NumMisclassifications, prevCrossValEval.ConfusionMatrix.TotalClassifications,
                         crossValEvaluator.ConfusionMatrix.NumMisclassifications));
 
@@ -274,7 +275,7 @@ namespace QuantitativeEvaluation
                 }
                 else //The previous network is still the best
                 {
-                    Log.Info(String.Format("Existing \"{0}\" network performed better than new one. New network scored {1}/{2}, existing scored {3}/{2}",
+                    DefaultLog.Info(String.Format("Existing \"{0}\" network performed better than new one. New network scored {1}/{2}, existing scored {3}/{2}",
                         networkName, crossValEvaluator.ConfusionMatrix.NumMisclassifications, crossValEvaluator.ConfusionMatrix.TotalClassifications,
                         prevCrossValEval.ConfusionMatrix.NumMisclassifications));
                     bestNetwork = previous;
@@ -282,7 +283,7 @@ namespace QuantitativeEvaluation
             }
             else //Otherwise there isn't a previous best
             {
-                Log.Info(String.Format("No previous best record for network \"{0}\" . . .", networkName));
+                DefaultLog.Info(String.Format("No previous best record for network \"{0}\" . . .", networkName));
                 newBest = true;
             }
 
@@ -293,12 +294,12 @@ namespace QuantitativeEvaluation
             //If there is a new best to write out
             if(newBest)
             {
-                Log.Info(String.Format("Writing out net best network of type\"{0}\"", networkName));
+                DefaultLog.Info(String.Format("Writing out net best network of type\"{0}\"", networkName));
                 neuralNet.Save(previousNetworkPath);
 
                 //Write out the Confusion Matrix for the evaluation data, not cross-validation
                 evaluator.ConfusionMatrix.WriteToCsv(networkCMPath);
-                Log.Info(String.Format("Finished writing out network \"{0}\"", networkName));
+                DefaultLog.Info(String.Format("Finished writing out network \"{0}\"", networkName));
             }
 
             return evaluator;
@@ -308,7 +309,7 @@ namespace QuantitativeEvaluation
         private static ActivationNetwork trainNetworksCompeteOnCrossValidation(ActivationNetwork neuralNet, ISupervisedLearning teacher,
             double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels)
         {
-            Log.Info(String.Format("Training {0} neural networks & picking the one that performs best on the cross-validation data . . .",
+            DefaultLog.Info(String.Format("Training {0} neural networks & picking the one that performs best on the cross-validation data . . .",
                 NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION));
 
             MemoryStream bestNetworkStream = new MemoryStream();
@@ -316,7 +317,7 @@ namespace QuantitativeEvaluation
 
             for (int i = 0; i < NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION; i++)
             {
-                Log.Info(String.Format("Training network {0}/{1}", (i + 1), NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION));
+                DefaultLog.Info(String.Format("Training network {0}/{1}", (i + 1), NUM_NETWORKS_TO_TRAIN_FOR_CROSS_VALIDATION_COMPETITION));
                 //Train a new network
                 neuralNet.Randomize(); //Reset the weights to random values
                 trainNetwork(neuralNet, teacher, input, output, crossValidationInput, crossValidationDataLabels);
@@ -338,7 +339,7 @@ namespace QuantitativeEvaluation
                 }
             }
 
-            Log.Info("Trained all networks and selected the best one");
+            DefaultLog.Info("Trained all networks and selected the best one");
 
             //Load up the network that performed best
             bestNetworkStream.Position = 0; //Read from the start of the stream
@@ -350,7 +351,7 @@ namespace QuantitativeEvaluation
             double[][] input, double[][] output, double[][] crossValidationInput, char[] crossValidationDataLabels)
         {
             //Make the network learn the data
-            Log.Info("Training the neural network . . .");
+            DefaultLog.Info("Training the neural network . . .");
             double error;
 
             //TODO: Store the previous NUM_ITERATIONS_EQUAL_IMPLIES_PLATEAU networks so in the event of over-learning, we can return to the best one
@@ -374,21 +375,21 @@ namespace QuantitativeEvaluation
                 //Progress update
                 if (iterNum % ITERATIONS_PER_PROGRESS_UPDATE == 0)
                 {
-                    Log.Debug(String.Format("Learned for {0} iterations. Error: {1}", iterNum, error));
+                    DefaultLog.Debug(String.Format("Learned for {0} iterations. Error: {1}", iterNum, error));
                 }
 
                 //Evaluate this network on the cross-validation data
                 NeuralNetworkEvaluator crossValidationEvaluator = new NeuralNetworkEvaluator(neuralNet);
                 crossValidationEvaluator.Evaluate(crossValidationInput, crossValidationDataLabels);
                 uint networkNumMisclassified = crossValidationEvaluator.ConfusionMatrix.NumMisclassifications;
-                Log.Debug(String.Format("Network misclassified {0} / {1} on the cross-validation data set", networkNumMisclassified,
+                DefaultLog.Debug(String.Format("Network misclassified {0} / {1} on the cross-validation data set", networkNumMisclassified,
                     crossValidationEvaluator.ConfusionMatrix.TotalClassifications));
 
                 //Check if we've overlearned the data and performance on the cross-valiadtion data has dropped off
                 if (networkNumMisclassified > Stats.Mean(prevNetworksNumMisclassified)) //Use the mean of the number of misclassification, as the actual number can move around a bit
                 {
                     //Cross-Validation performance has dropped, reinstate the previous network & break
-                    Log.Debug(String.Format("Network has started to overlearn the training data on iteration {0}. Using previous classifier.", iterNum));
+                    DefaultLog.Debug(String.Format("Network has started to overlearn the training data on iteration {0}. Using previous classifier.", iterNum));
                     prevNetworkStream.Position = 0; //Set head to start of stream
                     neuralNet = ActivationNetwork.Load(prevNetworkStream) as ActivationNetwork; //Read in the network
                     break;
@@ -408,21 +409,21 @@ namespace QuantitativeEvaluation
                 if (prevNetworksNumMisclassified.Distinct().Count() == 1) //Allow for slight movement in performance here??
                 {
                     //Cross-Validation performance has plateaued, use this network as the final one & break
-                    Log.Debug(String.Format("Network performance on cross-validation data has plateaued on iteration {0}.", iterNum));
+                    DefaultLog.Debug(String.Format("Network performance on cross-validation data has plateaued on iteration {0}.", iterNum));
                     break;
                 }
 
                 //Check if we've performed the max number of iterations
                 if (iterNum > MAX_LEARNING_ITERATIONS)
                 {
-                    Log.Debug(String.Format("Reached the maximum number of learning iterations ({0}), with error {1}", MAX_LEARNING_ITERATIONS, error));
+                    DefaultLog.Debug(String.Format("Reached the maximum number of learning iterations ({0}), with error {1}", MAX_LEARNING_ITERATIONS, error));
                     break;
                 }
                 iterNum++;
             }
             while (error > LEARNED_AT_ERROR);
 
-            Log.Info(String.Format("Data learned to an error of {0}", error));
+            DefaultLog.Info(String.Format("Data learned to an error of {0}", error));
         }
     }
 }

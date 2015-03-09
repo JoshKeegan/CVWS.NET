@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Detection
  * By Josh Keegan 22/04/2014
- * Last Edit 10/06/2014
+ * Last Edit 09/03/2015
  */
 
 using System;
@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash on Image w/ ImageMarkup.Image
 
 using AForge;
+using KLogNet;
 
 using ImageMarkup;
 using libCVWS.ImageAnalysis.WordsearchDetection;
@@ -30,7 +31,7 @@ namespace QuantitativeEvaluation
         //  (as some images may contain more than one wordsearch)
         internal static Dictionary<string, double> EvaluateReturnsWordsearch(List<Image> imagesIn)
         {
-            Log.Info("Starting to Evaluate Wordsearch Detection By Quadrilateral Detection and different methods of Wordsearch Segmentation");
+            DefaultLog.Info("Starting to Evaluate Wordsearch Detection By Quadrilateral Detection and different methods of Wordsearch Segmentation");
 
             //Remove any images that contain more than one wordsearch (in order to prevent their from being an unfair increased chance of finding one of them for that image)
             List<Image> images = new List<Image>();
@@ -71,14 +72,14 @@ namespace QuantitativeEvaluation
                 image.DeregisterInterestInBitmap();
             }
 
-            Log.Info("Completed evaluation of Wordsearch Detection by Quadrilateral detection and different methods of Wordsearch Segmentation");
+            DefaultLog.Info("Completed evaluation of Wordsearch Detection by Quadrilateral detection and different methods of Wordsearch Segmentation");
 
             return scores;        
         }
 
         private static double EvaluateReturnsWordsearch(List<Image> images, SegmentationAlgorithm segAlgorithm, bool removeSmallRowsAndCols)
         {
-            Log.Info("Evaluating Wordsearch Detection by best wordsearch returned . . .");
+            DefaultLog.Info("Evaluating Wordsearch Detection by best wordsearch returned . . .");
 
             int numCorrect = 0;
 
@@ -115,8 +116,8 @@ namespace QuantitativeEvaluation
                 image.DeregisterInterestInBitmap();
             }
 
-            Log.Info(String.Format("Found a Wordsearch for {0} / {1} Images correctly", numCorrect, images.Count));
-            Log.Info("Wordsearch Detection Evaluation Completed");
+            DefaultLog.Info(String.Format("Found a Wordsearch for {0} / {1} Images correctly", numCorrect, images.Count));
+            DefaultLog.Info("Wordsearch Detection Evaluation Completed");
 
             return (double)numCorrect / images.Count;
         }

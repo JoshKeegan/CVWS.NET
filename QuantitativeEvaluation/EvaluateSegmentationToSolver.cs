@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate System from Segmentation until Solver (the entire system except Wordsearch Detection)
  * By Josh Keegan 19/05/2014
- * Last Edit 20/05/2014
+ * Last Edit 09/03/2015
  */
 
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using KLogNet;
 
 using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;
@@ -22,7 +24,7 @@ namespace QuantitativeEvaluation
     {
         internal static Dictionary<string, double> Evaluate(List<WordsearchImage> wordsearchImages)
         {
-            Log.Info("Starting to Evaluate System stages from Segmentation to Solver . . .");
+            DefaultLog.Info("Starting to Evaluate System stages from Segmentation to Solver . . .");
 
             //Register an interest in the bitmaps of all the WordsearchImages (so that they remain in memory throughout)
             foreach(WordsearchImage wordsearchImage in wordsearchImages)
@@ -49,14 +51,14 @@ namespace QuantitativeEvaluation
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
-            Log.Info("Completed evaluate of System stages from Segmentation to Solver");
+            DefaultLog.Info("Completed evaluate of System stages from Segmentation to Solver");
 
             return scores;
         }
 
         private static double Evaluate(List<WordsearchImage> wordsearchImages, AlgorithmCombination algorithms)
         {
-            Log.Info("Evaluating System Stages from Segmentation to Solver . . .");
+            DefaultLog.Info("Evaluating System Stages from Segmentation to Solver . . .");
 
             int numCorrect = 0;
             List<WordsearchSolutionEvaluator> evaluators = new List<WordsearchSolutionEvaluator>();
@@ -73,7 +75,7 @@ namespace QuantitativeEvaluation
                 //Log Evaluation
                 evaluators.Add(evaluator);
 
-                Log.Info(evaluator.ToString());
+                DefaultLog.Info(evaluator.ToString());
 
                 if (evaluator.Correct)
                 {
@@ -84,7 +86,7 @@ namespace QuantitativeEvaluation
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
-            Log.Info(String.Format("System found all words correctly for {0} / {1} Wordsearch Images correctly", numCorrect, wordsearchImages.Count));
+            DefaultLog.Info(String.Format("System found all words correctly for {0} / {1} Wordsearch Images correctly", numCorrect, wordsearchImages.Count));
 
             //Calculate some extra statistics
             int numWordsearchesNoWordsFound = 0;
@@ -107,10 +109,10 @@ namespace QuantitativeEvaluation
                 }
             }
 
-            Log.Info(String.Format("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound));
-            Log.Info(String.Format("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures));
+            DefaultLog.Info(String.Format("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound));
+            DefaultLog.Info(String.Format("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures));
 
-            Log.Info("Segmentation to Solver Evaluation Completed");
+            DefaultLog.Info("Segmentation to Solver Evaluation Completed");
 
             return (double)numCorrect / wordsearchImages.Count;
         }

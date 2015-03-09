@@ -3,12 +3,14 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 11/06/2014
+ * Last Edit 09/03/2015
  */
 
 using System;
 using System.Collections.Generic;
 using System.IO;
+
+using KLogNet;
 
 using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;
@@ -46,7 +48,9 @@ namespace QuantitativeEvaluation
 
         static void Main(string[] args)
         {
-            //Initialise logging
+            //Initialise logging to the console &  a file
+            Log consoleLog = new ConsoleLog(LOG_LEVEL);
+            Log fileLog;
             bool dirCreated = false;
             if (!Directory.Exists(LOGS_DIR_PATH))
             {
@@ -57,39 +61,41 @@ namespace QuantitativeEvaluation
             int logAttempt = 0;
             while(true)
             {
-                string logName = String.Format("{0}/Quantitative_Evaluation_Log.{1}.{2:000}.log", LOGS_DIR_PATH, DateTime.Now.ToString("yyyy-MM-dd"), logAttempt);
+                string logName = String.Format("{0}/Quantitative_Evaluation_DefaultLog.{1}.{2:000}.log", LOGS_DIR_PATH, DateTime.Now.ToString("yyyy-MM-dd"), logAttempt);
                 if (!System.IO.File.Exists(logName))
                 {
-                    Log.Initialise(logName, LOG_LEVEL);
-                    Log.Info("Log Initialised");
-                    if (dirCreated)
-                    {
-                        Log.Warn("Logs Directory was not found, creating . . .");
-                    }
+                    fileLog = new FileLog(logName, LOG_LEVEL);
+                    DefaultLog.Info("Log Initialised");
                     break;
                 }
                 logAttempt++;
             }
+            DefaultLog.Log = new CompoundLog(consoleLog, fileLog);
+            if (dirCreated)
+            {
+                DefaultLog.Warn("Logs Directory was not found, creating . . .");
+            }
+
             //If the directories for storing Classifiers don't exist, make them now
             if (!Directory.Exists(CLASSIFIERS_PATH))
             {
-                Log.Info("Classifiers Directory didn't exist, creating . . .");
+                DefaultLog.Info("Classifiers Directory didn't exist, creating . . .");
                 Directory.CreateDirectory(CLASSIFIERS_PATH);
             }
             if (!Directory.Exists(NEURAL_NETWORKS_PATH))
             {
-                Log.Info("Neural Networks Path didn't exist, creating . . .");
+                DefaultLog.Info("Neural Networks Path didn't exist, creating . . .");
                 Directory.CreateDirectory(NEURAL_NETWORKS_PATH);
             }
 
             //Load the Wordsearch Database
-            Log.Info("Loading Wordsearch Database . . .");
+            DefaultLog.Info("Loading Wordsearch Database . . .");
             ImageMarkupDatabase.LoadDatabase();
-            Log.Info("Wordsearch Database Loaded");
+            DefaultLog.Info("Wordsearch Database Loaded");
 
             //TODO: Change to some pre-determined split rather than splitting at runtime
             //Split the Wordsearch Images into 3 groups: training, cross-validation & evaluation
-            Log.Info("Splitting Wordsearch Image data into Training, Cross-Validation & Evaluation data sets");
+            DefaultLog.Info("Splitting Wordsearch Image data into Training, Cross-Validation & Evaluation data sets");
             List<WordsearchImage> wordsearchImages = ImageMarkupDatabase.GetWordsearchImages();
 
             List<WordsearchImage> trainingWordsearchImages = new List<WordsearchImage>();
@@ -126,32 +132,32 @@ namespace QuantitativeEvaluation
                 }
             }
 
-            Log.Info("Data split into Training, Cross-Validation & Evalutaion data");
+            DefaultLog.Info("Data split into Training, Cross-Validation & Evalutaion data");
 
             //If we're evaluating neural networks
             if (EVALUATE_NEURAL_NETWORKS)
             {
                 //Evaluate all of the neural network combo's
-                Log.Info("Starting to evaluate all Neural Networks . . .");
+                DefaultLog.Info("Starting to evaluate all Neural Networks . . .");
                 IDictionary<string, NeuralNetworkEvaluator> neuralNetworkEvalResults =
                     EvaluateNeuralNetworks.evaluateNeuralNetworks(trainingWordsearchImages,
                     crossValidationWordsearchImages, evaluationWordsearchImages);
-                Log.Info("Evaluation of all Neural Networks completed");
+                DefaultLog.Info("Evaluation of all Neural Networks completed");
 
                 //Write out the evaluation results
                 if (!Directory.Exists(EVALUATION_RESULTS_DIR_PATH))
                 {
-                    Log.Info("Evaluation Results Directory didn't exist, creating . . .");
+                    DefaultLog.Info("Evaluation Results Directory didn't exist, creating . . .");
                     Directory.CreateDirectory(EVALUATION_RESULTS_DIR_PATH);
                 }
 
-                Log.Info("Writing out Neural Network Evaluation Results . . .");
+                DefaultLog.Info("Writing out Neural Network Evaluation Results . . .");
                 foreach (KeyValuePair<string, NeuralNetworkEvaluator> pair in neuralNetworkEvalResults)
                 {
                     string networkName = pair.Key;
                     ConfusionMatrix cm = pair.Value.ConfusionMatrix;
 
-                    Log.Info(String.Format("Network \"{0}\" misclassified {1}/{2}", networkName,
+                    DefaultLog.Info(String.Format("Network \"{0}\" misclassified {1}/{2}", networkName,
                         cm.NumMisclassifications, cm.TotalClassifications));
 
                     try
@@ -160,36 +166,36 @@ namespace QuantitativeEvaluation
                     }
                     catch (Exception e)
                     {
-                        Log.Error("Error writing Confusion Matrix to file " + EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
+                        DefaultLog.Error("Error writing Confusion Matrix to file " + EVALUATION_RESULTS_DIR_PATH + "/" + networkName + ".csv");
                         Console.WriteLine(e);
                     }
                 }
-                Log.Info("Neural Network Evaluation results written out successfully");
+                DefaultLog.Info("Neural Network Evaluation results written out successfully");
             }
             
             //If we're evaluating Wordsearch rotation correction
             if(EVALUATE_WORDSEARCH_ROTATION_CORRECTION)
             {
-                Log.Info("Starting to evaluate Wordsearch Rotation Correction");
+                DefaultLog.Info("Starting to evaluate Wordsearch Rotation Correction");
 
                 //Get the Feature Reduction Algorithm to be used
-                Log.Info("Loading Feature Extraction Algorithm . . .");
+                DefaultLog.Info("Loading Feature Extraction Algorithm . . .");
                 //Load a pre-trained feature reduction algorithm rather than training on the training data every time
                 FeatureExtractionPCA featureExtractionAlgorithm = (FeatureExtractionPCA)TrainableFeatureExtractionAlgorithm.Load(
                     FEATURE_EXTRACTORS_PATH + PCA_ALL_FEATURES_FILE_NAME + FEATURE_EXTRACTORS_FILE_EXTENSION);
-                Log.Info("Feature Extraction Algorithm Loaded");
+                DefaultLog.Info("Feature Extraction Algorithm Loaded");
 
                 //Get the classifier to be used
-                Log.Info("Loading Classifier . . .");
+                DefaultLog.Info("Loading Classifier . . .");
                 Classifier classifier = new AForgeActivationNeuralNetClassifier(featureExtractionAlgorithm, 
                     NEURAL_NETWORKS_PATH + "SingleLayer Sigmoid BkPropLearn PCAAllFeatures" + NEURAL_NETWORK_FILE_EXTENSION);
-                Log.Info("Classifier Loaded");
+                DefaultLog.Info("Classifier Loaded");
 
                 //Evaluate the wordsearch Image Rotation Correction
                 double rotationCorrectionRate = EvaluateWordsearchRotationCorrection.Evaluate(evaluationWordsearchImages, classifier);
-                Log.Info(String.Format("Wordsearch Rotation Correction returned the correct answer {0}% of the time", rotationCorrectionRate * 100));
+                DefaultLog.Info(String.Format("Wordsearch Rotation Correction returned the correct answer {0}% of the time", rotationCorrectionRate * 100));
 
-                Log.Info("Wordsearch Rotation Correction Evaluation complete");
+                DefaultLog.Info("Wordsearch Rotation Correction Evaluation complete");
             }
 
             //If we're evaluating Wordsearch Segmentation
@@ -201,16 +207,16 @@ namespace QuantitativeEvaluation
                  * are fresh data and can be used for evaluation
                  */
 
-                Log.Info("Starting to evaluate Wordsearch Segmentation");
+                DefaultLog.Info("Starting to evaluate Wordsearch Segmentation");
 
                 //Evaluate by the number of rows and cols returned
                 Dictionary<string, double> scoresByNumRowsCols = EvaluateWordsearchSegmentation.EvaluateByNumRowsAndCols(wordsearchImages);
 
                 //Print out scores
-                Log.Info("Scores for Evaluation by Number of Rows and Cols");
+                DefaultLog.Info("Scores for Evaluation by Number of Rows and Cols");
                 printScores(scoresByNumRowsCols);
 
-                Log.Info("Wordsearch Segmentation Evaluation complete");
+                DefaultLog.Info("Wordsearch Segmentation Evaluation complete");
             }
 
             //If we're evaluating Wordsearch Recognition
@@ -222,15 +228,15 @@ namespace QuantitativeEvaluation
                  * that they are fresh data and can be used for evaluation
                  */
 
-                Log.Info("Starting to evaluate Wordsearch Recognition");
+                DefaultLog.Info("Starting to evaluate Wordsearch Recognition");
 
                 Dictionary<string, double> scores = EvaluateWordsearchDetection.EvaluateReturnsWordsearch(ImageMarkupDatabase.GetImages());
 
                 //Print out scores
-                Log.Info("Scores for Evaluation based on a single wordsearch returned (the best candidate)");
+                DefaultLog.Info("Scores for Evaluation based on a single wordsearch returned (the best candidate)");
                 printScores(scores);
 
-                Log.Info("Wordsearch Recognition Evaluation Complete");
+                DefaultLog.Info("Wordsearch Recognition Evaluation Complete");
             }
 
             //If we're evaluating the Full System
@@ -241,7 +247,7 @@ namespace QuantitativeEvaluation
                  * from the training or cross-validation data sets
                  */
 
-                Log.Info("Building the collection of Evaluation Images . . .");
+                DefaultLog.Info("Building the collection of Evaluation Images . . .");
 
                 //Compile a list of the hashes of the Images that contain each WordsearchImage in the training & cross-validation data sets
                 HashSet<string> usedImageHashes = new HashSet<string>();
@@ -263,31 +269,31 @@ namespace QuantitativeEvaluation
                     }
                 }
 
-                Log.Info("Collection of Evaluation Images built");
+                DefaultLog.Info("Collection of Evaluation Images built");
 
-                Log.Info("Starting to Evaluate the Full System");
+                DefaultLog.Info("Starting to Evaluate the Full System");
 
                 Dictionary<string, double> scores = EvaluateFullSystem.Evaluate(evaluationImages);
 
                 //Print out scores
-                Log.Info("Scores for Evaluation of the Full System");
+                DefaultLog.Info("Scores for Evaluation of the Full System");
                 printScores(scores);
 
-                Log.Info("Full System Evaluation Complete");
+                DefaultLog.Info("Full System Evaluation Complete");
             }
 
             //If we're evaluating the stages after Wordsearch Detection (Segmentation to Solver)
             if(EVALUATE_STAGES_SEGMENTATION_TO_SOLVER)
             {
-                Log.Info("Starting to Evaluate the stages from Segmentation until Solving");
+                DefaultLog.Info("Starting to Evaluate the stages from Segmentation until Solving");
 
                 Dictionary<string, double> scores = EvaluateSegmentationToSolver.Evaluate(evaluationWordsearchImages);
 
                 //Print out scores
-                Log.Info("Scores for Evaluation of the stages Segmentation to Solver");
+                DefaultLog.Info("Scores for Evaluation of the stages Segmentation to Solver");
                 printScores(scores);
 
-                Log.Info("Evaluation of stages Segmentation to Solving complete");
+                DefaultLog.Info("Evaluation of stages Segmentation to Solving complete");
             }
         }
 
@@ -298,7 +304,7 @@ namespace QuantitativeEvaluation
                 string algorithm = kvp.Key;
                 double score = kvp.Value;
 
-                Log.Info(String.Format("Algorithm \"{0}\" returned the correct answer {1}% of the time", algorithm, score * 100));
+                DefaultLog.Info(String.Format("Algorithm \"{0}\" returned the correct answer {1}% of the time", algorithm, score * 100));
             }
         }
     }

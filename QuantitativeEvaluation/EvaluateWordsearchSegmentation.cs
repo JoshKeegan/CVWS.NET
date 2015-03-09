@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Segmentation
  * By Josh Keegan 03/04/2014
- * Last Edit 10/06/2014
+ * Last Edit 09/03/2015
  */
 
 using System;
@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using KLogNet;
 
 using ImageMarkup;
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
@@ -34,7 +36,7 @@ namespace QuantitativeEvaluation
 
         internal static Dictionary<string, double> EvaluateByNumRowsAndCols(List<WordsearchImage> wordsearchImages)
         {
-            Log.Info("Starting to Evaluate all Wordsearch Image Segmentation Algorithms based on the number of rows & cols they return");
+            DefaultLog.Info("Starting to Evaluate all Wordsearch Image Segmentation Algorithms based on the number of rows & cols they return");
 
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
@@ -54,7 +56,7 @@ namespace QuantitativeEvaluation
                 }
             }
 
-            Log.Info("Completed evaluation of all Wordsearch Image Segmentation Algorithms based on the number of rows and cols they return");
+            DefaultLog.Info("Completed evaluation of all Wordsearch Image Segmentation Algorithms based on the number of rows and cols they return");
 
             return scores;
         }
@@ -62,7 +64,7 @@ namespace QuantitativeEvaluation
         //returns score & score after removing erroenously small rows and cols (null if segmentation algorithm doesn't support this)
         private static Tuple<double, double?> EvaluateByNumRowsAndCols(List<WordsearchImage> wordsearchImages, SegmentationAlgorithm segAlgorithm)
         {
-            Log.Info("Evaluating Wordsearch Image Segmentation by number of rows and cols returned . . .");
+            DefaultLog.Info("Evaluating Wordsearch Image Segmentation by number of rows and cols returned . . .");
 
             int numCorrect = 0;
             int numCorrectRemoveSmallRowsAndCols = 0;
@@ -99,18 +101,18 @@ namespace QuantitativeEvaluation
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
-            Log.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly", numCorrect, wordsearchImages.Count));
+            DefaultLog.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly", numCorrect, wordsearchImages.Count));
 
             double score = (double)numCorrect / wordsearchImages.Count;
             double? scoreRemoveSmallRowsAndCols = null;
             if(segAlgorithm is SegmentationAlgorithmByStartEndIndices)
             {
                 scoreRemoveSmallRowsAndCols = (double)numCorrectRemoveSmallRowsAndCols / wordsearchImages.Count;
-                Log.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly after removing small rows and cols", 
+                DefaultLog.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly after removing small rows and cols", 
                     numCorrectRemoveSmallRowsAndCols, wordsearchImages.Count));
             }
 
-            Log.Info("Wordsearch Image Segmentation Evaluation Completed");
+            DefaultLog.Info("Wordsearch Image Segmentation Evaluation Completed");
 
             return Tuple.Create(score, scoreRemoveSmallRowsAndCols);
         }
