@@ -157,8 +157,8 @@ namespace QuantitativeEvaluation
                     string networkName = pair.Key;
                     ConfusionMatrix cm = pair.Value.ConfusionMatrix;
 
-                    DefaultLog.Info(String.Format("Network \"{0}\" misclassified {1}/{2}", networkName,
-                        cm.NumMisclassifications, cm.TotalClassifications));
+                    DefaultLog.Info("Network \"{0}\" misclassified {1}/{2}", networkName,
+                        cm.NumMisclassifications, cm.TotalClassifications);
 
                     try
                     {
@@ -193,7 +193,7 @@ namespace QuantitativeEvaluation
 
                 //Evaluate the wordsearch Image Rotation Correction
                 double rotationCorrectionRate = EvaluateWordsearchRotationCorrection.Evaluate(evaluationWordsearchImages, classifier);
-                DefaultLog.Info(String.Format("Wordsearch Rotation Correction returned the correct answer {0}% of the time", rotationCorrectionRate * 100));
+                DefaultLog.Info("Wordsearch Rotation Correction returned the correct answer {0}% of the time", rotationCorrectionRate * 100);
 
                 DefaultLog.Info("Wordsearch Rotation Correction Evaluation complete");
             }
@@ -304,7 +304,7 @@ namespace QuantitativeEvaluation
                 string algorithm = kvp.Key;
                 double score = kvp.Value;
 
-                DefaultLog.Info(String.Format("Algorithm \"{0}\" returned the correct answer {1}% of the time", algorithm, score * 100));
+                DefaultLog.Info("Algorithm \"{0}\" returned the correct answer {1}% of the time", algorithm, score * 100);
             }
         }
     }

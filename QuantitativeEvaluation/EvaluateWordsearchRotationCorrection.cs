@@ -69,7 +69,7 @@ namespace QuantitativeEvaluation
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
-            DefaultLog.Info(String.Format("Returned {0}/{1} Wordsearch Rotations Correctly", numCorrect, numTotal));
+            DefaultLog.Info("Returned {0}/{1} Wordsearch Rotations Correctly", numCorrect, numTotal);
 
             DefaultLog.Info("Wordsearch Image Rotation Evaluation Completed");
 

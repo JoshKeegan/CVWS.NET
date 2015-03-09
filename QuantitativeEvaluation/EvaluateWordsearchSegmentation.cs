@@ -101,15 +101,15 @@ namespace QuantitativeEvaluation
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
-            DefaultLog.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly", numCorrect, wordsearchImages.Count));
+            DefaultLog.Info("Returned {0}/{1} Wordsearch Segmentations Correctly", numCorrect, wordsearchImages.Count);
 
             double score = (double)numCorrect / wordsearchImages.Count;
             double? scoreRemoveSmallRowsAndCols = null;
             if(segAlgorithm is SegmentationAlgorithmByStartEndIndices)
             {
                 scoreRemoveSmallRowsAndCols = (double)numCorrectRemoveSmallRowsAndCols / wordsearchImages.Count;
-                DefaultLog.Info(String.Format("Returned {0}/{1} Wordsearch Segmentations Correctly after removing small rows and cols", 
-                    numCorrectRemoveSmallRowsAndCols, wordsearchImages.Count));
+                DefaultLog.Info("Returned {0}/{1} Wordsearch Segmentations Correctly after removing small rows and cols", 
+                    numCorrectRemoveSmallRowsAndCols, wordsearchImages.Count);
             }
 
             DefaultLog.Info("Wordsearch Image Segmentation Evaluation Completed");

@@ -86,7 +86,7 @@ namespace QuantitativeEvaluation
                 wordsearchImage.DeregisterInterestInBitmap();
             }
 
-            DefaultLog.Info(String.Format("System found all words correctly for {0} / {1} Wordsearch Images correctly", numCorrect, wordsearchImages.Count));
+            DefaultLog.Info("System found all words correctly for {0} / {1} Wordsearch Images correctly", numCorrect, wordsearchImages.Count);
 
             //Calculate some extra statistics
             int numWordsearchesNoWordsFound = 0;
@@ -109,8 +109,8 @@ namespace QuantitativeEvaluation
                 }
             }
 
-            DefaultLog.Info(String.Format("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound));
-            DefaultLog.Info(String.Format("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures));
+            DefaultLog.Info("In {0} wordsearches no words were found correctly at all", numWordsearchesNoWordsFound);
+            DefaultLog.Info("Average F-Measure (when not NaN): {0}", fMeasureSum / numValidFMeasures);
 
             DefaultLog.Info("Segmentation to Solver Evaluation Completed");
 

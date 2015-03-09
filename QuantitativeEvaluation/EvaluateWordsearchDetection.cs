@@ -116,7 +116,7 @@ namespace QuantitativeEvaluation
                 image.DeregisterInterestInBitmap();
             }
 
-            DefaultLog.Info(String.Format("Found a Wordsearch for {0} / {1} Images correctly", numCorrect, images.Count));
+            DefaultLog.Info("Found a Wordsearch for {0} / {1} Images correctly", numCorrect, images.Count);
             DefaultLog.Info("Wordsearch Detection Evaluation Completed");
 
             return (double)numCorrect / images.Count;
