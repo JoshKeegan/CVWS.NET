@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Rotation Correction
  * By Josh Keegan 25/03/2014
- * Last Edit 09/03/2015
+ * Last Edit 10/03/2015
  */
 
 using System;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AForge.Imaging.Filters;
-using KLogNet;
+using KLog;
 
 using libCVWS.BaseObjectExtensions;
 using ImageMarkup;

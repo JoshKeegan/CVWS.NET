@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate System from Segmentation until Solver (the entire system except Wordsearch Detection)
  * By Josh Keegan 19/05/2014
- * Last Edit 09/03/2015
+ * Last Edit 10/03/2015
  */
 
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using KLogNet;
+using KLog;
 
 using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;

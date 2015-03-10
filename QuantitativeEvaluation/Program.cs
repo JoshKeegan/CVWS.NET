@@ -3,14 +3,14 @@
  * Quantitative Evaluation
  * Program Entry Point
  * By Josh Keegan 08/03/2013
- * Last Edit 09/03/2015
+ * Last Edit 10/03/2015
  */
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-using KLogNet;
+using KLog;
 
 using ImageMarkup;
 using QuantitativeEvaluation.Evaluators;

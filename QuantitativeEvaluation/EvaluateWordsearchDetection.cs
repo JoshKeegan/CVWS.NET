@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Wordsearch Detection
  * By Josh Keegan 22/04/2014
- * Last Edit 09/03/2015
+ * Last Edit 10/03/2015
  */
 
 using System;
@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash on Image w/ ImageMarkup.Image
 
 using AForge;
-using KLogNet;
+using KLog;
 
 using ImageMarkup;
 using libCVWS.ImageAnalysis.WordsearchDetection;

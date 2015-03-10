@@ -3,7 +3,7 @@
  * Quantitative Evaluate
  * Evaluate Full System
  * By Josh Keegan 26/04/2014
- * Last Edit 09/03/2015
+ * Last Edit 10/03/2015
  */
 
 using System;
@@ -16,7 +16,7 @@ using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash 
 
 using AForge;
 using AForge.Imaging.Filters;
-using KLogNet;
+using KLog;
 
 using libCVWS.BaseObjectExtensions;
 using ImageMarkup;

@@ -3,7 +3,7 @@
  * Quantitative Evaluation
  * Evaluate Neural Networks
  * By Josh Keegan 11/03/2014
- * Last Edit 09/03/2015
+ * Last Edit 10/03/2015
  * 
  * Note that if the data has changed between runs, it won't work with trainiable feature extraction 
  *  techniques as the previous trained system will get overwritten (could be changed in the future 
@@ -23,7 +23,7 @@ using System.IO;
 using AForge.Imaging.Filters;
 using AForge.Neuro;
 using AForge.Neuro.Learning;
-using KLogNet;
+using KLog;
 
 using ImageMarkup;
 using libCVWS;
