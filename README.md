@@ -1,7 +1,7 @@
 # CVWS.NET: Computer Vision Wordsearch Solver .NET #
 [![Build status](https://ci.appveyor.com/api/projects/status/4cdjs7lbjl3tfo5y?svg=true)](https://ci.appveyor.com/project/JoshKeegan/cvws-net)  
   
-A Computer Vision system capable of detecting word searches and using Atificial Intelligence techniques to solve them. It is open source (GPLv3 license), written in C# .NET and uses the [AForge.NET](http://www.aforgenet.com/) and [Accord.NET](http://accord-framework.net/) frameworks.
+A Computer Vision system capable of detecting word searches and using Artificial Intelligence techniques to solve them. It is open source (GPLv3 license), written in C# .NET and uses the [AForge.NET](http://www.aforgenet.com/) and [Accord.NET](http://accord-framework.net/) frameworks.
 
 The project is released as libraries containing all of the code necessary to integrate a word search solver into your own software, and also as a fully functional desktop application which was built for demonstration. These can be found on the Downloads page.
 
