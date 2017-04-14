@@ -1,9 +1,9 @@
 ﻿/*
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Quantitative Evaluation
- * Evaluate Wordsearch Detection
- * By Josh Keegan 22/04/2014
- * Last Edit 10/03/2015
+ * Evaluate Overall Wordsearch Detection (Candidates Detection & Candidate Vetting combined)
+ * Authors:
+ *  Josh Keegan 22/04/2014
  */
 
 using System;
@@ -15,9 +15,11 @@ using System.Threading.Tasks;
 using Bitmap = System.Drawing.Bitmap; //Bitmap only, else there will be a clash on Image w/ ImageMarkup.Image
 
 using AForge;
+
 using KLog;
 
 using ImageMarkup;
+
 using libCVWS.ImageAnalysis.WordsearchDetection;
 using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
@@ -25,15 +27,54 @@ using libCVWS.Maths;
 
 namespace QuantitativeEvaluation
 {
-    internal static class EvaluateWordsearchDetection
+    internal static class EvaluateOverallWordsearchDetection
     {
+        #region Constants
+
+        internal static readonly Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>
+            CANDIDATE_DETECTION_ALGORITHMS = new Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>()
+            {
+                {"Quadrilateral Detection", new WordsearchCandidateDetectionQuadrilateralRecognition()}
+            };
+
+        internal static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm> CANDIDATE_VETTING_ALGORITHMS =
+            // Generate dictionary for algorithms using segmentation
+            EvaluateWordsearchSegmentation.SEGMENTATION_ALGORITHMS.SelectMany(
+                    kvp =>
+                    {
+                        string algName = "By Segmentation " + kvp.Key;
+
+                        List<KeyValuePair<string, IWordsearchCandidateVettingAlgorithm>> toRet =
+                            new List<KeyValuePair<string, IWordsearchCandidateVettingAlgorithm>>();
+
+                        // Add segmentation algorithm without removing small rows and cols
+                        toRet.Add(new KeyValuePair<string, IWordsearchCandidateVettingAlgorithm>(algName,
+                            new WordsearchCandidateVettingBySegmentation(kvp.Value, false)));
+
+                        // If the segmentation algorithm supports having the small rowws and cols removed from the segmentation,
+                        //  evaluate that variant too
+                        if (kvp.Value is SegmentationAlgorithmByStartEndIndices)
+                        {
+                            toRet.Add(new KeyValuePair<string, IWordsearchCandidateVettingAlgorithm>(
+                                algName + " (RemoveSmallRowsAndCols)",
+                                new WordsearchCandidateVettingBySegmentation(kvp.Value, true)));
+                        }
+
+                        return toRet;
+                    })
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+        #endregion
+
         //Evaluate the wordsearch detection system by checking that for each image it returns one of the wordsearches contained within
         //  (as some images may contain more than one wordsearch)
         internal static Dictionary<string, double> EvaluateReturnsWordsearch(List<Image> imagesIn)
         {
-            DefaultLog.Info("Starting to Evaluate Wordsearch Detection By Quadrilateral Detection and different methods of Wordsearch Segmentation");
+            DefaultLog.Info("Starting to Evaluate Overall Wordsearch Detection By Quadrilateral Detection and different methods of Wordsearch Segmentation");
 
             //Remove any images that contain more than one wordsearch (in order to prevent their from being an unfair increased chance of finding one of them for that image)
+            // TODO: Should we keep these & expect them to find both?
+            //  This would be possible now that we get ranked results by vetting rather than just the top 1.
             List<Image> images = new List<Image>();
             foreach(Image image in imagesIn)
             {
@@ -51,18 +92,23 @@ namespace QuantitativeEvaluation
 
             Dictionary<string, double> scores = new Dictionary<string, double>();
 
-            //Get the score for each segmentation algorithm (currently only ones that use row/col start & end points are supported, although this is actually all of them ATM)
-            foreach(KeyValuePair<string, SegmentationAlgorithm> kvp in EvaluateWordsearchSegmentation.SEGMENTATION_ALGORITHMS)
+            // Evaluate each combination of candidate detection and segmentation algorithms
+            foreach (KeyValuePair<string, IWordsearchCandidatesDetectionAlgorithm> candidatesDetectionKvp in
+                CANDIDATE_DETECTION_ALGORITHMS)
             {
-                string name = kvp.Key;
-                SegmentationAlgorithm algorithm = kvp.Value;
+                string candidatesDetectionName = candidatesDetectionKvp.Key;
+                IWordsearchCandidatesDetectionAlgorithm candidatesDetectionAlgorithm = candidatesDetectionKvp.Value;
 
-                scores.Add(name, EvaluateReturnsWordsearch(images, algorithm, false));
-                
-                //If this segmentation algorithm supports having the small rows and cols removed from the segmentation, evaluate that too
-                if(algorithm is SegmentationAlgorithmByStartEndIndices)
+                foreach (KeyValuePair<string, IWordsearchCandidateVettingAlgorithm> candidateVettingKvp in
+                    CANDIDATE_VETTING_ALGORITHMS)
                 {
-                    scores.Add(name + " (RemoveSmallRowsAndCols)", EvaluateReturnsWordsearch(images, algorithm, true));
+                    string candidateVettingName = candidateVettingKvp.Key;
+                    IWordsearchCandidateVettingAlgorithm candidateVettingAlgorithm = candidateVettingKvp.Value;
+
+                    scores.Add(
+                        String.Format("Candidates Detection \"{0}\", Vetting \"{1}\"", candidatesDetectionName,
+                            candidateVettingName),
+                        evaluateReturnsWordsearch(images, candidatesDetectionAlgorithm, candidateVettingAlgorithm));
                 }
             }
 
@@ -77,7 +123,9 @@ namespace QuantitativeEvaluation
             return scores;        
         }
 
-        private static double EvaluateReturnsWordsearch(List<Image> images, SegmentationAlgorithm segAlgorithm, bool removeSmallRowsAndCols)
+        private static double evaluateReturnsWordsearch(List<Image> images,
+            IWordsearchCandidatesDetectionAlgorithm detectionAlgorithm,
+            IWordsearchCandidateVettingAlgorithm vettingAlgorithm)
         {
             DefaultLog.Info("Evaluating Wordsearch Detection by best wordsearch returned . . .");
 
@@ -86,18 +134,24 @@ namespace QuantitativeEvaluation
             //Test the algorithm on each Image
             foreach (Image image in images)
             {
-                //Register an interest in the Bitmap of the Image
+                // Register an interest in the Bitmap of the Image
                 image.RegisterInterestInBitmap();
 
-                Tuple<List<IntPoint>, Bitmap> bestCandidate = DetectionAlgorithm.ExtractBestWordsearch(image.Bitmap, segAlgorithm, removeSmallRowsAndCols);
-                
-                //If we found a valid best candidate
-                if (bestCandidate != null)
-                {
-                    //Check if the best candidate is a wordsearch in this image
-                    List<IntPoint> points = bestCandidate.Item1;
+                // Find all candidates in this image
+                WordsearchCandidate[] candidates = detectionAlgorithm.FindCandidates(image.Bitmap);
 
-                    if(IsWordsearch(points, image))
+                // If we found any candidates
+                if (candidates.Length != 0)
+                {
+                    // Vet the candidates, selecting the best one
+                    WordsearchCandidate bestCandidate = candidates
+                        .OrderByDescending(vettingAlgorithm.Score)
+                        .FirstOrDefault();
+
+                    // Check if the best candidate is a wordsearch in this image
+                    List<IntPoint> points = bestCandidate.OriginalImageCoords;
+
+                    if (isWordsearch(points, image))
                     {
                         numCorrect++;
                     }
@@ -108,11 +162,14 @@ namespace QuantitativeEvaluation
                 }
                 else //Otherwise we couldn't find anything that resembeled a quadrilateral (and could therefore be a wordsearch)
                 {
-                    
+
                 }
 
-                //Clean up
-                bestCandidate.Item2.Dispose();
+                // Clean up
+                foreach (WordsearchCandidate c in candidates)
+                {
+                    c.Dispose();
+                }
                 image.DeregisterInterestInBitmap();
             }
 
@@ -123,7 +180,7 @@ namespace QuantitativeEvaluation
         }
 
         //Check if some candidate list of points is a wordsearch in a marked up image
-        private static bool IsWordsearch(List<IntPoint> candidate, Image image)
+        private static bool isWordsearch(List<IntPoint> candidate, Image image)
         {
             foreach (WordsearchImage wordsearchImage in image.WordsearchImages)
             {

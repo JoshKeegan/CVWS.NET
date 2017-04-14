@@ -79,7 +79,11 @@
     <Compile Include="Exceptions\InvalidImageDimensionsException.cs" />
     <Compile Include="Exceptions\UnexpectedArrayDimensionsException.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\CandidateScorer.cs" />
-    <Compile Include="ImageAnalysis\WordsearchDetection\DetectionAlgorithm.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\IWordsearchCandidatesDetectionAlgorithm.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\IWordsearchCandidateVettingAlgorithm.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\WordsearchCandidate.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\WordsearchCandidateDetectionQuadrilateralRecognition.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\WordsearchCandidateVettingBySegmentation.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotation.cs" />
     <Compile Include="ImageAnalysis\WordsearchRotation\WordsearchRotationCorrection.cs" />
     <Compile Include="ClassifierInterfacing\AForgeActivationNeuralNetClassifier.cs" />

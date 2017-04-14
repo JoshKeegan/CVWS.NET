@@ -2,8 +2,8 @@
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * libCVWS
  * Draw Shapes class - various methods for drawing shapes (filling in gaps in AForge.NET)
- * By Josh Keegan 04/03/2014
- * Last Edit 16/05/2014
+ * Authors: 
+ *  Josh Keegan 04/03/2014
  */
 
 using System;
@@ -23,6 +23,8 @@ namespace libCVWS.Imaging
 {
     public static class DrawShapes
     {
+        #region Polygon
+
         public static Bitmap Polygon(Bitmap origImg, List<IntPoint> points)
         {
             return Polygon(origImg, points, DrawDefaults.DEFAULT_COLOUR);
@@ -50,5 +52,31 @@ namespace libCVWS.Imaging
 
             img.UnlockBits(imgData);
         }
+
+        #endregion
+
+        #region Polygons
+
+        public static Bitmap Polygons(Bitmap origImg, IEnumerable<List<IntPoint>> polygons)
+        {
+            Bitmap img = origImg.DeepCopy();
+            PolygonsInPlace(img, polygons);
+            return img;
+        }
+
+        public static void PolygonsInPlace(Bitmap img, IEnumerable<List<IntPoint>> polygons)
+        {
+            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.ReadWrite, img.PixelFormat);
+
+            foreach (List<IntPoint> polygon in polygons)
+            {
+                Drawing.Polygon(imgData, polygon, DrawDefaults.DEFAULT_COLOUR);
+            }
+
+            img.UnlockBits(imgData);
+        }
+
+        #endregion
     }
 }

@@ -2,8 +2,8 @@
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Demo GUI
  * Main Form (partial). Code to do all of the Image Processing
- * By Josh Keegan 12/05/2014
- * Last Edit 28/08/2014
+ * Authors:
+ *  Josh Keegan 12/05/2014
  */
 
 using System;
@@ -40,7 +40,8 @@ namespace DemoGUI
     {
         private enum ProcessingStage
         {
-            WordsearchDetection,
+            WordsearchCandidateDetection,
+            WordsearchCandidateVetting,
             WordsearchSegmentation,
             SegmentationPostProcessing,
             RotationCorrection,
@@ -60,7 +61,8 @@ namespace DemoGUI
         private static readonly Dictionary<ProcessingStage, string> PROCESSING_STAGE_NAMES = new Dictionary<ProcessingStage, string>()
         {
             //These names should be exactly the same as the ones in checkListProcessingStages
-            { ProcessingStage.WordsearchDetection, "Wordsearch Detection" },
+            { ProcessingStage.WordsearchCandidateDetection, "Wordsearch Candidate Detection" },
+            { ProcessingStage.WordsearchCandidateVetting, "Wordsearch Candidate Vetting" },
             { ProcessingStage.SegmentationPostProcessing, "Segmentation Post-Processing" },
             { ProcessingStage.WordsearchSegmentation, "Wordsearch Segmentation" },
             { ProcessingStage.RotationCorrection, "Rotation Correction" },
@@ -141,9 +143,18 @@ namespace DemoGUI
              * Get all of the selected Algorithms to be used for the processing
              */
             log("Loading Selected Algorithms . . .");
-            //Wordsearch Detection Segmentation Algorithm
-            SegmentationAlgorithm wordsearchDetectionSegmentationAlgorithm = 
+            // Wordsearch Candidate Detection Algorithm
+            // TODO: Alow for Algorithm to be selected in main menu
+            IWordsearchCandidatesDetectionAlgorithm wordsearchCandidateDetectionAlgorithm =
+                new WordsearchCandidateDetectionQuadrilateralRecognition();
+
+            //Wordsearch Candidate Vetting Segmentation Algorithm
+            // TODO: Support IWordsearchCandidateVettingAlgorithm so future non-segmentation based vetting algorithms will work too
+            SegmentationAlgorithm wordsearchVettingSegmentationAlgorithm = 
                 getSelectedSegmentationAlgorithm(wordsearchDetectionSegmentationToolStripMenuItem);
+            // TODO: Support option to remove small rowws & cols
+            IWordsearchCandidateVettingAlgorithm wordsearchCandidateVettingAlgorithm =
+                new WordsearchCandidateVettingBySegmentation(wordsearchVettingSegmentationAlgorithm);
 
             //Wordsearch Segmentation Algorithm
             SegmentationAlgorithm wordsearchSegmentationAlgorithm =
@@ -182,29 +193,53 @@ namespace DemoGUI
             string[] wordsToFind = getWordsToFind();
 
             /*
-             * Wordsearch Detection
+             * Wordsearch Candidate Detection
              */
-            //Show that we're starting Wordsearch Detection
-            setProcessingStageState(ProcessingStage.WordsearchDetection, CheckState.Indeterminate);
+            // Show that we're starting Wordsearch Candidate Detection
+            setProcessingStageState(ProcessingStage.WordsearchCandidateDetection, CheckState.Indeterminate);
 
-            //TODO: Get all candidates & their scores and show these in the image log
+            // Detect the candidates
+            WordsearchCandidate[] wordsearchCandidates = wordsearchCandidateDetectionAlgorithm.FindCandidates(img);
 
-            //Get the candidate most likely to be a Wordsearch
-            Tuple<List<IntPoint>, Bitmap> wordsearchImageTuple = DetectionAlgorithm.ExtractBestWordsearch(
-                img, wordsearchDetectionSegmentationAlgorithm);
+            log(String.Format("Found {0} wordsearch candidates", wordsearchCandidates.Length));
 
-            //If the system failed to find anything remotely resembling a wordsearch, fail now
-            if(wordsearchImageTuple == null)
+            // If we failed to find anything remotely resembling a worssearch, fail now
+            if (wordsearchCandidates.Length == 0)
             {
                 throw new ImageProcessingException("Wordsearch Detection could not find anything . . .");
             }
 
-            Bitmap wordsearchImage = wordsearchImageTuple.Item2;
+            log(DrawShapes.Polygons(img, wordsearchCandidates.Select(candidate => candidate.OriginalImageCoords)),
+                "Wordsearch Candidates");
 
-            log(wordsearchImage, "Extracted Wordsearch Image");
+            // Mark Wordsearch Candidate Detection as completed
+            setProcessingStageState(ProcessingStage.WordsearchCandidateDetection, CheckState.Checked);
 
-            //Mark Wordsearch Detection as completed
-            setProcessingStageState(ProcessingStage.WordsearchDetection, CheckState.Checked);
+            /*
+             * Wordsearch Candidate Vetting
+             */
+             // Show that we're starting Wordsearch Candidate Vetting
+            setProcessingStageState(ProcessingStage.WordsearchCandidateVetting, CheckState.Indeterminate);
+
+            Bitmap wordsearchImage = wordsearchCandidates
+                .OrderByDescending(candidate => wordsearchCandidateVettingAlgorithm.Score(candidate))
+                .First()
+                .Bitmap;
+
+            log(wordsearchImage, "Best Wordsearch Image");
+
+            // Clean up wordsearch candidates
+            foreach (WordsearchCandidate c in wordsearchCandidates)
+            {
+                // Don't dispose of the selected wordsearchImage, as we need to use that later
+                if (c.Bitmap != wordsearchImage)
+                {
+                    c.Dispose();
+                }
+            }
+
+            // Mark Wordsearch Candidate Vetting as completed
+            setProcessingStageState(ProcessingStage.WordsearchCandidateVetting, CheckState.Checked);
 
             /*
              * Wordsearch Segmentation

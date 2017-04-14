@@ -2,8 +2,8 @@
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Quantitative Evaluation
  * Program Entry Point
- * By Josh Keegan 08/03/2013
- * Last Edit 10/03/2015
+ * Authors:
+ *  Josh Keegan 08/03/2013
  */
 
 using System;
@@ -19,7 +19,7 @@ using libCVWS.ClassifierInterfacing.FeatureExtraction;
 
 namespace QuantitativeEvaluation
 {
-    class Program
+    public static class Program
     {
         //Constants
         private const string LOGS_DIR_PATH = "logs";
@@ -42,11 +42,11 @@ namespace QuantitativeEvaluation
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
-        private const bool EVALUATE_WORDSEARCH_DETECTION = false;
-        private const bool EVALUATE_FULL_SYSTEM = true;
+        private const bool EVALUATE_OVERALL_WORDSEARCH_DETECTION = true;
+        private const bool EVALUATE_FULL_SYSTEM = false;
         private const bool EVALUATE_STAGES_SEGMENTATION_TO_SOLVER = false;
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //Initialise logging to the console &  a file
             Log consoleLog = new ConsoleLog(LOG_LEVEL);
@@ -219,8 +219,8 @@ namespace QuantitativeEvaluation
                 DefaultLog.Info("Wordsearch Segmentation Evaluation complete");
             }
 
-            //If we're evaluating Wordsearch Recognition
-            if(EVALUATE_WORDSEARCH_DETECTION)
+            //If we're evaluating overall Wordsearch Detection (Candidates Detection & Candidate Vetting combined)
+            if (EVALUATE_OVERALL_WORDSEARCH_DETECTION)
             {
                 /*
                  * Note that here all Images are used for evaluation (essentially they are all in the evaluation data set)
@@ -228,15 +228,15 @@ namespace QuantitativeEvaluation
                  * that they are fresh data and can be used for evaluation
                  */
 
-                DefaultLog.Info("Starting to evaluate Wordsearch Recognition");
+                DefaultLog.Info("Starting to evaluate Overall Wordsearch Detection");
 
-                Dictionary<string, double> scores = EvaluateWordsearchDetection.EvaluateReturnsWordsearch(ImageMarkupDatabase.GetImages());
+                Dictionary<string, double> scores = EvaluateOverallWordsearchDetection.EvaluateReturnsWordsearch(ImageMarkupDatabase.GetImages());
 
                 //Print out scores
                 DefaultLog.Info("Scores for Evaluation based on a single wordsearch returned (the best candidate)");
                 printScores(scores);
 
-                DefaultLog.Info("Wordsearch Recognition Evaluation Complete");
+                DefaultLog.Info("Overall Wordsearch Detection Evaluation Complete");
             }
 
             //If we're evaluating the Full System
