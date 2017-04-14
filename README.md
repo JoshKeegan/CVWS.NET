@@ -6,7 +6,7 @@ A Computer Vision system capable of detecting word searches and using Artificial
 The project is released as libraries containing all of the code necessary to integrate a word search solver into your own software, and also as a fully functional desktop application which was built for demonstration. These can be found on the Downloads page.
 
 ## License ##
-Copyright (c) 2013-2014 Josh Keegan
+Copyright (c) 2013-2017 Josh Keegan
 
 This file is part of CVWS.NET (Computer Vision Wordsearch Solver .NET).
 
