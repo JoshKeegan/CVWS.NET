@@ -46,8 +46,9 @@
     <Reference Include="AForge.Neuro, Version=2.2.5.0, Culture=neutral, PublicKeyToken=2094f4ea39731d4f, processorArchitecture=MSIL">
       <HintPath>..\packages\AForge.Neuro.2.2.5\lib\AForge.Neuro.dll</HintPath>
     </Reference>
-    <Reference Include="KLog">
-      <HintPath>..\packages\KLog.NET.0.1.5547.22027\lib\KLog.dll</HintPath>
+    <Reference Include="KLog, Version=0.1.6236.26251, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KLog.NET.0.1.6236.26251\lib\KLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
