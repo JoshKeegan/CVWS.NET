@@ -21,7 +21,6 @@ using KLog;
 using ImageMarkup;
 
 using libCVWS.ImageAnalysis.WordsearchDetection;
-using libCVWS.ImageAnalysis.WordsearchSegmentation;
 using libCVWS.ImageAnalysis.WordsearchSegmentation.VariedRowColSize;
 using libCVWS.Maths;
 
@@ -34,7 +33,8 @@ namespace QuantitativeEvaluation
         internal static readonly Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>
             CANDIDATE_DETECTION_ALGORITHMS = new Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>()
             {
-                {"Quadrilateral Detection", new WordsearchCandidateDetectionQuadrilateralRecognition()}
+                { "Quadrilateral Detection", new WordsearchCandidateDetectionQuadrilateralRecognition() },
+                { "Lattice Construction", new WordsearchCandidateDetectionByLatticeConstruction() },
             };
 
         internal static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm> CANDIDATE_VETTING_ALGORITHMS =
