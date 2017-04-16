@@ -61,7 +61,7 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
                 // Log a visualisation of the blob recognition
                 if (imageLog != null)
                 {
-                    Bitmap blobRecognitionVis = DrawBlobRecognition.Draw(thresholdedImg, blobCounter);
+                    Bitmap blobRecognitionVis = DrawBlobRecognition.Draw(blobCounter, img.Width, img.Height);
                     imageLog.Log(blobRecognitionVis, "Candidate Detection: Blob Recognition");
                 }
 

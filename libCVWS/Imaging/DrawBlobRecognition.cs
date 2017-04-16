@@ -64,6 +64,16 @@ namespace libCVWS.Imaging
 
         #region Public Methods
 
+        /// <summary>
+        /// Draws the blob counter on to a blank bitmap
+        /// </summary>
+        public static Bitmap Draw(BlobCounter blobCounter, int width, int height)
+        {
+            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            DrawInPlace(bitmap, blobCounter);
+            return bitmap;
+        }
+
         public static Bitmap Draw(Bitmap imgIn, BlobCounter blobCounter)
         {
             Bitmap imgOut;
