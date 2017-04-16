@@ -88,7 +88,8 @@ namespace DemoGUI
             WORDSEARCH_CANDIDATES_DETECTION_ALGORITHMS =
                 new Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>()
                 {
-                    {"Quadrilateral Recognition", new WordsearchCandidateDetectionQuadrilateralRecognition()}
+                    { "Quadrilateral Recognition", new WordsearchCandidateDetectionQuadrilateralRecognition() },
+                    { "Lattice Construction", new WordsearchCandidateDetectionByLatticeConstruction() }
                 };
 
         private static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm>
