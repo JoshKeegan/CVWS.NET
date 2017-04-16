@@ -24,8 +24,8 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
         private const double CONNECTION_MAX_BLOB_DIMENSIONS_MULTIPLIER = 1.2;
 
         // connection distance criteria
-        private const float CONNECTION_MAX_DISTANCE_MULTIPLIER = 1.5f;
-        private const float CONNECTION_MIN_DISTANCE_MULTIPLIER = 0.75f;
+        private const float CONNECTION_MAX_DISTANCE_MULTIPLIER = 1.25f;
+        private const float CONNECTION_MIN_DISTANCE_MULTIPLIER = 0.8f;
 
         #endregion
 
