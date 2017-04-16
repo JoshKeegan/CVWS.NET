@@ -21,8 +21,8 @@ using System.Windows.Forms;
 using AForge;
 using AForge.Imaging.Filters;
 
-using libCVWS.BaseObjectExtensions;
 using libCVWS;
+using libCVWS.BaseObjectExtensions;
 using libCVWS.ClassifierInterfacing;
 using libCVWS.ClassifierInterfacing.FeatureExtraction;
 using libCVWS.ImageAnalysis.WordsearchDetection;
@@ -84,6 +84,47 @@ namespace DemoGUI
         private const string TRAINED_CLASSIFIER_FILE_EXTENSION = ".classifier";
         private const string TRAINED_FEATURE_EXTRACTOR_FILE_EXTENSION = ".featureExtraction";
 
+        private static readonly Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>
+            WORDSEARCH_CANDIDATES_DETECTION_ALGORITHMS =
+                new Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>()
+                {
+                    {"Quadrilateral Recognition", new WordsearchCandidateDetectionQuadrilateralRecognition()}
+                };
+
+        private static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm>
+            WORDSEARCH_CANDIDATE_VETTING_ALGORITHMS = new Dictionary<string, IWordsearchCandidateVettingAlgorithm>()
+            {
+                {
+                    "Segmentation: Blob Recognition",
+                    new WordsearchCandidateVettingBySegmentation(new SegmentByBlobRecognition())
+                },
+                {
+                    "Segmentation: Histogram Single Threshold",
+                    new WordsearchCandidateVettingBySegmentation(new SegmentByHistogramThresholdDarkPixels())
+                },
+                {
+                    "Segmentation: Histogram Two Thresholds from Percentile Rank",
+                    new WordsearchCandidateVettingBySegmentation(
+                        new SegmentByHistogramThresholdPercentileRankTwoThresholds())
+                },
+                {
+                    "Segmentation: Mean Dark Pixels",
+                    new WordsearchCandidateVettingBySegmentation(new SegmentByMeanDarkPixels())
+                },
+                {
+                    "Segmentation: Median Dark Pixels",
+                    new WordsearchCandidateVettingBySegmentation(new SegmentByMedianDarkPixels())
+                },
+                {
+                    "Segmentation: Percentile Two Thresholds",
+                    new WordsearchCandidateVettingBySegmentation(new SegmentByPercentileTwoThresholds())
+                },
+                {
+                    "Segmentation: Preselected Dark Pixel Threshold",
+                    new WordsearchCandidateVettingBySegmentation(new SegmentByThresholdDarkPixels())
+                }
+            };
+
         private static readonly Dictionary<string, SegmentationAlgorithm> WORDSEARCH_SEGMENTATION_ALGORITHMS = new Dictionary<string, SegmentationAlgorithm>()
         {
             { "Blob Recognition", new SegmentByBlobRecognition() },
@@ -109,7 +150,8 @@ namespace DemoGUI
             { "Single Layer Neural Network", typeof(AForgeActivationNeuralNetClassifier) }
         };
 
-        private static readonly Type DEFAULT_WORDSEARCH_DETECTION_SEGMENTATION = typeof(SegmentByMeanDarkPixels);
+        private static readonly Type DEFAULT_WORDSEARCH_CANDIDATE_DETECTION = typeof(WordsearchCandidateDetectionQuadrilateralRecognition);
+        private static readonly IWordsearchCandidateVettingAlgorithm DEFAULT_WORDSEARCH_CANDIDATE_VETTING = new WordsearchCandidateVettingBySegmentation(new SegmentByMeanDarkPixels());
         private static readonly Type DEFAULT_WORDSEARCH_SEGMENTATION = typeof(SegmentByBlobRecognition);
         private const SegmentationPostProcessing DEFAULT_SEGMENTATION_POST_PROCESSING = SegmentationPostProcessing.None;
         private const string DEFAULT_ROTATION_CORRECTION_FEATURE_EXTRACTION = "Principal Component Analysis (PCA) All Features"; //Feature Extraction as a stirng because there can be more than one opention per type
@@ -144,17 +186,13 @@ namespace DemoGUI
              */
             log("Loading Selected Algorithms . . .");
             // Wordsearch Candidate Detection Algorithm
-            // TODO: Alow for Algorithm to be selected in main menu
             IWordsearchCandidatesDetectionAlgorithm wordsearchCandidateDetectionAlgorithm =
-                new WordsearchCandidateDetectionQuadrilateralRecognition();
+                getSelectedWordsearchCandidatesDetectionAlgorithm(candidateSelectionToolStripMenuItem);
 
-            //Wordsearch Candidate Vetting Segmentation Algorithm
-            // TODO: Support IWordsearchCandidateVettingAlgorithm so future non-segmentation based vetting algorithms will work too
-            SegmentationAlgorithm wordsearchVettingSegmentationAlgorithm = 
-                getSelectedSegmentationAlgorithm(wordsearchDetectionSegmentationToolStripMenuItem);
-            // TODO: Support option to remove small rowws & cols
+            // Wordsearch Candidate Vetting Algorithm
+            // Get the 
             IWordsearchCandidateVettingAlgorithm wordsearchCandidateVettingAlgorithm =
-                new WordsearchCandidateVettingBySegmentation(wordsearchVettingSegmentationAlgorithm);
+                getSelectedWordsearchCandidateVettingAlgorithm(candidateRankingToolStripMenuItem);
 
             //Wordsearch Segmentation Algorithm
             SegmentationAlgorithm wordsearchSegmentationAlgorithm =
@@ -619,6 +657,38 @@ namespace DemoGUI
             throw new InvalidMenuItemSelectionException();
         }
 
+        private IWordsearchCandidatesDetectionAlgorithm getSelectedWordsearchCandidatesDetectionAlgorithm(
+            ToolStripMenuItem parent)
+        {
+            // Find the checked MenuItem
+            foreach (ToolStripMenuItem menuItem in parent.DropDownItems)
+            {
+                if (menuItem.Checked)
+                {
+                    return WORDSEARCH_CANDIDATES_DETECTION_ALGORITHMS[menuItem.Text];
+                }
+            }
+
+            // If we get this far, we couldn't find a checked MenuItem
+            throw new InvalidMenuItemSelectionException();
+        }
+
+        private IWordsearchCandidateVettingAlgorithm getSelectedWordsearchCandidateVettingAlgorithm(
+            ToolStripMenuItem parent)
+        {
+            // Find the checked MenuItem
+            foreach (ToolStripMenuItem menuItem in parent.DropDownItems)
+            {
+                if (menuItem.Checked)
+                {
+                    return WORDSEARCH_CANDIDATE_VETTING_ALGORITHMS[menuItem.Text];
+                }
+            }
+
+            // If we get this far, we couldn't find a checked MenuItem
+            throw new InvalidMenuItemSelectionException();
+        }
+
         //Get the SegmentationAlgorithm that is selected under the specified ToolStripMenuItem
         private SegmentationAlgorithm getSelectedSegmentationAlgorithm(ToolStripMenuItem parent)
         {
@@ -640,6 +710,36 @@ namespace DemoGUI
         {
             //Get a list of all of the menu items we start with and (may) need to be populated
             List<ToolStripMenuItem> baseMenuItems = getDescendentsOf(algorithmsToolStripMenuItem);
+
+            /*
+             * Populate Wordsearch Candidate Detection
+             */
+            IEnumerable<ToolStripMenuItem> wordsearchCandidateDetectionMenuItems =
+                baseMenuItems.Where(menuItem => menuItem.Text == "Candidate Detection");
+            // Add the Wordsearch Candidate Detection options to each Menu Item
+            foreach (ToolStripMenuItem menuItem in wordsearchCandidateDetectionMenuItems)
+            {
+                foreach (string txt in WORDSEARCH_CANDIDATES_DETECTION_ALGORITHMS.Keys)
+                {
+                    // Make the tool strip item
+                    menuItem.DropDownItems.Add(txt);
+                }
+            }
+
+            /*
+             * Populate Wordsearch Candidate Vetting
+             */
+            IEnumerable<ToolStripMenuItem> wordsearchCandidateVettingMenuItems =
+                baseMenuItems.Where(menuItem => menuItem.Text == "Candidate Vetting");
+            // Add the Wordsearch Candidate Vetting options to each Menu Item
+            foreach (ToolStripMenuItem menuItem in wordsearchCandidateVettingMenuItems)
+            {
+                foreach (string txt in WORDSEARCH_CANDIDATE_VETTING_ALGORITHMS.Keys)
+                {
+                    // Make the toop strip item
+                    menuItem.DropDownItems.Add(txt);
+                }
+            }
 
             /*
              * Populate Wordsearch Segmentation
@@ -705,14 +805,28 @@ namespace DemoGUI
             /*
              * Set the default options to checked
              */
-            //Wordsearch Detection Candidate Ranking
-            foreach(ToolStripMenuItem menuItem in wordsearchDetectionSegmentationToolStripMenuItem.DropDownItems)
+             // Wordsearch Candidate Detection
+            foreach (ToolStripMenuItem menuItem in candidateSelectionToolStripMenuItem.DropDownItems)
             {
-                //Get the type of the SegmentationAlgorithm object that this menu item represents
-                Type menuItemType = WORDSEARCH_SEGMENTATION_ALGORITHMS[menuItem.Text].GetType();
+                // Get the type of the algorithm this menu item represents
+                Type menuItemType = WORDSEARCH_CANDIDATES_DETECTION_ALGORITHMS[menuItem.Text].GetType();
+
+                // If this menu item represents the type that is set as the default, check it
+                if (menuItemType.Equals(DEFAULT_WORDSEARCH_CANDIDATE_DETECTION))
+                {
+                    menuItem.Checked = true;
+                    break; // Found what we're looking for, look no further
+                }
+            }
+
+            // Wordsearch Candidate Vetting
+            foreach(ToolStripMenuItem menuItem in candidateRankingToolStripMenuItem.DropDownItems)
+            {
+                IWordsearchCandidateVettingAlgorithm vettingAlg =
+                    WORDSEARCH_CANDIDATE_VETTING_ALGORITHMS[menuItem.Text];
                 
                 //If this menu item represents the type that is set as the default, check this menu item
-                if(menuItemType.Equals(DEFAULT_WORDSEARCH_DETECTION_SEGMENTATION))
+                if(vettingAlg.Equals(DEFAULT_WORDSEARCH_CANDIDATE_VETTING))
                 {
                     menuItem.Checked = true;
                     break; //Found what we were looking for, look no further

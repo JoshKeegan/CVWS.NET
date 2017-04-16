@@ -17,5 +17,8 @@ namespace libCVWS
     {
         public const int CHAR_WITH_WHITESPACE_WIDTH = 20;
         public const int CHAR_WITH_WHITESPACE_HEIGHT = 25;
+
+        internal const int PRIME1 = 23;
+        internal const int PRIME2 = 41;
     }
 }

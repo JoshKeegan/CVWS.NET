@@ -64,8 +64,41 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         public WordsearchCandidateVettingBySegmentation(SegmentationAlgorithm segAlg, bool removeSmallRowsAndCols = false)
         {
+            // Validation
+            if (segAlg == null)
+            {
+                throw new ArgumentNullException(nameof(segAlg));
+            }
+
             this.segAlg = segAlg;
             this.removeSmallRowsAndCols = removeSmallRowsAndCols;
+        }
+
+        #endregion
+
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            WordsearchCandidateVettingBySegmentation a = obj as WordsearchCandidateVettingBySegmentation;
+            if (a == null)
+            {
+                return false;
+            }
+
+            return a.removeSmallRowsAndCols == removeSmallRowsAndCols && 
+                // Just checks the type on Segmentation Algorithm. It's possible for an implementation
+                //  of SegmentationAlgorithm to have it's own settings, so should reall check segAlg.Equals(), 
+                //  but need to implement Equals on segmentation algorithms then!
+                a.segAlg.GetType() == segAlg.GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = Constants.PRIME1;
+            hash *= Constants.PRIME2 + removeSmallRowsAndCols.GetHashCode();
+            hash *= Constants.PRIME2 + segAlg.GetHashCode();
+            return hash;
         }
 
         #endregion

@@ -2,8 +2,8 @@
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * Demo GUI
  * Main Form, Business Logic
- * By Josh Keegan 09/05/2014
- * Last Edit 17/05/2014
+ * Authors:
+ *  Josh Keegan 09/05/2014
  */
 
 using System;
@@ -46,7 +46,7 @@ namespace DemoGUI
         private const string INPUT_IMAGE_LOG_LABEL = "Input";
 
         //Private Variables
-        private LinkedList<string> recentDirectories = new LinkedList<string>();
+        private readonly LinkedList<string> recentDirectories = new LinkedList<string>();
         private string currentDirectory = null;
         private string currentImageFileName = null;
         private Bitmap currentBitmap = null;

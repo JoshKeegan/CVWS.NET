@@ -44,9 +44,7 @@
             this.algorithmsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wordsearchDetectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.candidateSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.quadrilateralsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.candidateRankingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wordsearchDetectionSegmentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wordsearchSegmentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.segmentationPostProcessingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotationCorrectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -175,7 +173,7 @@
             this.autoSizeToolStripMenuItem,
             this.stretchImageToolStripMenuItem});
             this.imageViewToolStripMenuItem.Name = "imageViewToolStripMenuItem";
-            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.imageViewToolStripMenuItem.Text = "Image &View";
             // 
             // zoomToolStripMenuItem
@@ -239,35 +237,15 @@
             // 
             // candidateSelectionToolStripMenuItem
             // 
-            this.candidateSelectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.quadrilateralsToolStripMenuItem});
             this.candidateSelectionToolStripMenuItem.Name = "candidateSelectionToolStripMenuItem";
             this.candidateSelectionToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.candidateSelectionToolStripMenuItem.Text = "Candidate Detection";
             // 
-            // quadrilateralsToolStripMenuItem
-            // 
-            this.quadrilateralsToolStripMenuItem.Checked = true;
-            this.quadrilateralsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.quadrilateralsToolStripMenuItem.Name = "quadrilateralsToolStripMenuItem";
-            this.quadrilateralsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.quadrilateralsToolStripMenuItem.Text = "Quadrilaterals";
-            // 
             // candidateRankingToolStripMenuItem
             // 
-            this.candidateRankingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.wordsearchDetectionSegmentationToolStripMenuItem});
             this.candidateRankingToolStripMenuItem.Name = "candidateRankingToolStripMenuItem";
             this.candidateRankingToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.candidateRankingToolStripMenuItem.Text = "Candidate Vetting";
-            // 
-            // wordsearchDetectionSegmentationToolStripMenuItem
-            // 
-            this.wordsearchDetectionSegmentationToolStripMenuItem.Checked = true;
-            this.wordsearchDetectionSegmentationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.wordsearchDetectionSegmentationToolStripMenuItem.Name = "wordsearchDetectionSegmentationToolStripMenuItem";
-            this.wordsearchDetectionSegmentationToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.wordsearchDetectionSegmentationToolStripMenuItem.Text = "Wordsearch Segmentation";
             // 
             // wordsearchSegmentationToolStripMenuItem
             // 
@@ -723,9 +701,7 @@
         private System.Windows.Forms.ToolStripMenuItem algorithmsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wordsearchDetectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem candidateSelectionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem quadrilateralsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem candidateRankingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wordsearchDetectionSegmentationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rotationCorrectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wordsearchSegmentationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem probabilisticClassificationToolStripMenuItem;
