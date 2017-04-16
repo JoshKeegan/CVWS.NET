@@ -98,6 +98,16 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
                     }
                 }
 
+                // Log a visualisation of each lattice
+                if (imageLog != null)
+                {
+                    for (int i = 0; i < lattices.Count; i++)
+                    {
+                        Bitmap latticeVis = DrawBlobLattice.Draw(blobCounter, lattices[i], img.Width, img.Height);
+                        imageLog.Log(latticeVis, String.Format("Candidate Detection: Constructed Lattice #{0}", i));
+                    }
+                }
+
                 // Generate WordsearchCandidates from the lattices found
                 return generateWordsearchCandidates(lattices, img, blobCounter);
             }

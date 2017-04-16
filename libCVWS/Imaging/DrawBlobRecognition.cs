@@ -16,52 +16,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AForge.Imaging;
+
 using libCVWS.BaseObjectExtensions;
 
 namespace libCVWS.Imaging
 {
     public static class DrawBlobRecognition
     {
-        #region Constants
-
-        private static readonly Color[] COLOURS = new Color[]
-        {
-            Color.Red,
-            Color.Green,
-            Color.Blue,
-            Color.Yellow,
-            Color.Violet,
-            Color.Brown,
-            Color.Olive,
-            Color.Cyan,
-            Color.Magenta,
-            Color.Gold,
-            Color.Indigo,
-            Color.Ivory,
-            Color.HotPink,
-            Color.DarkRed,
-            Color.DarkGreen,
-            Color.DarkBlue,
-            Color.DarkSeaGreen,
-            Color.Gray,
-            Color.DarkKhaki,
-            Color.DarkGray,
-            Color.LimeGreen,
-            Color.Tomato,
-            Color.SteelBlue,
-            Color.SkyBlue,
-            Color.Silver,
-            Color.Salmon,
-            Color.SaddleBrown,
-            Color.RosyBrown,
-            Color.PowderBlue,
-            Color.Plum,
-            Color.PapayaWhip,
-            Color.Orange
-        };
-
-        #endregion
-
         #region Public Methods
 
         /// <summary>
@@ -122,7 +83,7 @@ namespace libCVWS.Imaging
                 {
                     if (labels[p] != 0)
                     {
-                        Color c = COLOURS[(labels[p] - 1) % COLOURS.Length];
+                        Color c = DrawDefaults.MULTIPLE_COLOURS[(labels[p] - 1) % DrawDefaults.MULTIPLE_COLOURS.Length];
 
                         // Uses AForge.NET defined constants to set each byte of the colour
                         ptr[RGB.R] = c.R;

@@ -123,6 +123,7 @@
     <Compile Include="Imaging\CharImgExtractor.cs" />
     <Compile Include="Imaging\CombineImages.cs" />
     <Compile Include="Imaging\Converters.cs" />
+    <Compile Include="Imaging\DrawBlobLattice.cs" />
     <Compile Include="Imaging\DrawBlobRecognition.cs" />
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />
