@@ -18,6 +18,7 @@ using AForge;
 using AForge.Imaging.Filters;
 
 using libCVWS.Imaging;
+using libCVWS.IntermediateImageLogging;
 
 namespace libCVWS.ImageAnalysis.WordsearchDetection
 {
@@ -32,7 +33,7 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         #region Implement IWordsearchCandidatesDetectionAlgorithm
 
-        public WordsearchCandidate[] FindCandidates(Bitmap image)
+        public WordsearchCandidate[] FindCandidates(Bitmap image, IntermediateImageLog imageLog = null)
         {
             double blobMinDimensionDbl = BLOB_MIN_DIMENSION_PERCENTAGE / 100;
             int minWidth = (int) Math.Ceiling(image.Width * blobMinDimensionDbl); // Round up, so that the integer comaprison minimum will always be correct

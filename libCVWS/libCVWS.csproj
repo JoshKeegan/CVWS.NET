@@ -123,6 +123,7 @@
     <Compile Include="Imaging\CharImgExtractor.cs" />
     <Compile Include="Imaging\CombineImages.cs" />
     <Compile Include="Imaging\Converters.cs" />
+    <Compile Include="Imaging\DrawBlobRecognition.cs" />
     <Compile Include="Imaging\DrawDefaults.cs" />
     <Compile Include="Imaging\DrawGrid.cs" />
     <Compile Include="Imaging\DrawShapes.cs" />
@@ -132,6 +133,8 @@
     <Compile Include="Imaging\ShapeFinder.cs" />
     <Compile Include="Imaging\SplitImage.cs" />
     <Compile Include="Exceptions\InvalidShapeException.cs" />
+    <Compile Include="IntermediateImageLogging\GenericIntermediateImageLog.cs" />
+    <Compile Include="IntermediateImageLogging\IntermediateImageLog.cs" />
     <Compile Include="Maths\Geometry.cs" />
     <Compile Include="Maths\Statistics\BimodalHistogram.cs" />
     <Compile Include="Maths\Statistics\Histogram.cs" />

@@ -13,6 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using libCVWS.IntermediateImageLogging;
+
 namespace libCVWS.ImageAnalysis.WordsearchDetection
 {
     public interface IWordsearchCandidatesDetectionAlgorithm
@@ -20,6 +22,6 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
         /// <summary>
         /// Finds all regions of an image that could be wordsearches
         /// </summary>
-        WordsearchCandidate[] FindCandidates(Bitmap image);
+        WordsearchCandidate[] FindCandidates(Bitmap image, IntermediateImageLog intermediateImageLog = null);
     }
 }

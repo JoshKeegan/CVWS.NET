@@ -18,7 +18,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using AForge;
 using AForge.Imaging.Filters;
 
 using libCVWS;
@@ -238,7 +237,8 @@ namespace DemoGUI
             setProcessingStageState(ProcessingStage.WordsearchCandidateDetection, CheckState.Indeterminate);
 
             // Detect the candidates
-            WordsearchCandidate[] wordsearchCandidates = wordsearchCandidateDetectionAlgorithm.FindCandidates(img);
+            WordsearchCandidate[] wordsearchCandidates =
+                wordsearchCandidateDetectionAlgorithm.FindCandidates(img, intermediateImageLog);
 
             log(String.Format("Found {0} wordsearch candidates", wordsearchCandidates.Length));
 

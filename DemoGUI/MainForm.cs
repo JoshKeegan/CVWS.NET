@@ -18,10 +18,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using libCVWS.BaseObjectExtensions;
 using libCVWS;
-
-using DemoGUI.Exceptions;
+using libCVWS.BaseObjectExtensions;
+using libCVWS.IntermediateImageLogging;
 
 namespace DemoGUI
 {
@@ -53,6 +52,7 @@ namespace DemoGUI
         private Dictionary<string, Bitmap> imageLog = null;
         private string defaultTxtWordsToFind;
         private Task processingTask = null;
+        private IntermediateImageLog intermediateImageLog;
 
         #region Object Construction & Form Initialisation
         public MainForm()
@@ -76,6 +76,9 @@ namespace DemoGUI
             {
                 processingStageStopwatches.Add(processingStage, new Stopwatch());
             }
+
+            // Set up an Intermediate Image Log, letting us see visualisations of internal stages of some algorithms
+            intermediateImageLog = new GenericIntermediateImageLog((image, name) => log(image, "Intermediate: " + name));
 
             //If the configuration from a previous run of the program can be loaded, use those settings
             if(Configuration.Load())

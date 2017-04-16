@@ -18,6 +18,7 @@ using AForge.Imaging.Filters;
 using AForge.Math.Geometry;
 
 using libCVWS.Imaging;
+using libCVWS.IntermediateImageLogging;
 
 namespace libCVWS.ImageAnalysis.WordsearchDetection
 {
@@ -36,7 +37,7 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         #region Implement IWordsearchCandidatesDetectionAlgorithm
 
-        public WordsearchCandidate[] FindCandidates(Bitmap img)
+        public WordsearchCandidate[] FindCandidates(Bitmap img, IntermediateImageLog imageLog = null)
         {
             using (Bitmap thresholdedImg = FilterCombinations.AdaptiveThreshold(img))
             {
@@ -56,8 +57,16 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
                     ObjectsOrder = ObjectsOrder.Size
                 };
                 blobCounter.ProcessImage(thresholdedImg);
+
+                // Log a visualisation of the blob recognition
+                if (imageLog != null)
+                {
+                    Bitmap blobRecognitionVis = DrawBlobRecognition.Draw(thresholdedImg, blobCounter);
+                    imageLog.Log(blobRecognitionVis, "Candidate Detection: Blob Recognition");
+                }
+
                 BlobMeta[] blobs = blobCounter.GetObjectsInformation().Select(b => new BlobMeta(b)).ToArray();
-                // TODO: exclude blobs by doing blob recognition on a log-res version of the image (e.g. 100x100).
+                // TODO: exclude blobs by doing blob recognition on a low-res version of the image (e.g. 100x100).
                 //  Regions of background noise will blur together in the low-res image, so any large blobs there
                 //  will be lots of small blobs in the full-res one. Those hundreds of small blobs can be excluded because
                 //  they overlap with the large blob in the low-res image, greatly reducing the search space

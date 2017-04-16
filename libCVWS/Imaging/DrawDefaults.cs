@@ -2,7 +2,8 @@
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * libCVWS
  * Draw Defaults class - default values used by Draw classes
- * By Josh Keegan 04/03/2014
+ * Authors:
+ *  Josh Keegan 04/03/2014
  */
 
 using System;
@@ -16,8 +17,8 @@ namespace libCVWS.Imaging
 {
     static class DrawDefaults
     {
-        public static Color DEFAULT_COLOUR = Color.Red;
-        public static Color DEFAULT_START_COLOUR = Color.Blue;
-        public static Color DEFAULT_END_COLOUR = Color.Red;
+        public static readonly Color DEFAULT_COLOUR = Color.Red;
+        public static readonly Color DEFAULT_START_COLOUR = Color.Blue;
+        public static readonly Color DEFAULT_END_COLOUR = Color.Red;
     }
 }
