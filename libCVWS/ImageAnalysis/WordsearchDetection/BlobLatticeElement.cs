@@ -194,31 +194,57 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
                 return true;
             }
 
-            // If there are no existing connections, we can't vet based on their angles
-            if (ConnectedTo.Count == 0)
+            // If there are no existing connections from this element, check them
+            if (ConnectedTo.Count > 0)
             {
-                return true;
+                // The point at the centre of these connections (this one)
+                Point currentPoint = Blob.Blob.CenterOfGravity;
+
+                // Calculate the angle to the proposed connection
+                double proposedConnectionAngle = currentPoint.AngleTo(proposedConnection.Blob.Blob.CenterOfGravity);
+
+                // Check the angle to each existing connection, making sure the proposed one isn't too close 
+                //  to an existing connection
+                foreach (BlobLatticeElement le in ConnectedTo)
+                {
+                    // Calculate angle of existing connection
+                    double existingConnectionAngle = currentPoint.AngleTo(le.Blob.Blob.CenterOfGravity);
+
+                    // Calculate difference between this connections angle and the proposed one
+                    double angleBetweenConnections = Math.Abs(existingConnectionAngle - proposedConnectionAngle);
+
+                    // Check if they're too close
+                    if (angleBetweenConnections < MIN_ANGLE_BETWEEN_CONNECTIONS_TO_THE_SAME_ELEMENT)
+                    {
+                        return false;
+                    }
+                }
             }
 
-            Point thisPoint = Blob.Blob.CenterOfGravity;
-
-            // Calculate the angle to the proposed connection
-            double proposedConnectionAngle = thisPoint.AngleTo(proposedConnection.Blob.Blob.CenterOfGravity);
-
-            // Check the angle to each existing connection, making sure the proposed one isn't too close 
-            //  to an existing connection
-            foreach (BlobLatticeElement le in ConnectedTo)
+            // If there are existing connections from the proposed element, check them
+            if (proposedConnection.ConnectedTo.Count > 0)
             {
-                // Calculate angle of existing connection
-                double existingConnectionAngle = thisPoint.AngleTo(le.Blob.Blob.CenterOfGravity);
+                // The point at the centre of these connections (the proposed one)
+                Point currentPoint = proposedConnection.Blob.Blob.CenterOfGravity;
 
-                // Calculate difference between this connections angle and the proposed one
-                double angleBetweenConnections = Math.Abs(existingConnectionAngle - proposedConnectionAngle);
+                // Calculate the angle to the proposed connection
+                double proposedConnectionAngle = currentPoint.AngleTo(Blob.Blob.CenterOfGravity);
 
-                // Check if they're too close
-                if (angleBetweenConnections < MIN_ANGLE_BETWEEN_CONNECTIONS_TO_THE_SAME_ELEMENT)
+                // Check the angle to each existing connection, making sure that the proposed one isn't too close
+                //  to an existing connection to the proposed point
+                foreach (BlobLatticeElement le in ConnectedTo)
                 {
-                    return false;
+                    // Calculate angle of existing connection
+                    double existingConnectionAngle = currentPoint.AngleTo(le.Blob.Blob.CenterOfGravity);
+
+                    // Calculate difference between this connections angle and the proposed one
+                    double angleBetweenConnections = Math.Abs(existingConnectionAngle - proposedConnectionAngle);
+
+                    // Check if they're too close
+                    if (angleBetweenConnections < MIN_ANGLE_BETWEEN_CONNECTIONS_TO_THE_SAME_ELEMENT)
+                    {
+                        return false;
+                    }
                 }
             }
 
