@@ -35,6 +35,12 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         #endregion
 
+        #region Public Variables
+
+        public readonly LatticeConstructionSettings Settings;
+
+        #endregion
+
         #region Implement IWordsearchCandidatesDetectionAlgorithm
 
         public WordsearchCandidate[] FindCandidates(Bitmap img, IntermediateImageLog imageLog = null)
@@ -115,12 +121,24 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         #endregion
 
+        #region Constructors
+
+        public WordsearchCandidateDetectionByLatticeConstruction(LatticeConstructionSettings settings)
+        {
+            Settings = settings;
+        }
+
+        public WordsearchCandidateDetectionByLatticeConstruction()
+            : this(new LatticeConstructionSettings()) {  }
+
+        #endregion
+
         #region Private Methods
 
-        private static BlobLatticeElement[] constructLattice(BlobMeta[] blobs, BlobMeta startingBlob)
+        private BlobLatticeElement[] constructLattice(BlobMeta[] blobs, BlobMeta startingBlob)
         {
             // Generate lattice elements for each blob
-            BlobLatticeElement[] possibleElements = blobs.Select(b => new BlobLatticeElement(b)).ToArray();
+            BlobLatticeElement[] possibleElements = blobs.Select(b => new BlobLatticeElement(b, Settings)).ToArray();
 
             // Find the lattice element for the starting blob
             BlobLatticeElement startingElement = possibleElements.First(ble => ble.Blob.Equals(startingBlob));
@@ -157,8 +175,19 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
             return toFindConnections.ToArray();
         }
 
-        private static bool vetLattice(BlobLatticeElement[] lattice)
+        private bool vetLattice(BlobLatticeElement[] lattice)
         {
+            return vetLatticeByNumElements(lattice);
+        }
+
+        private bool vetLatticeByNumElements(BlobLatticeElement[] lattice)
+        {
+            // If this vetting method is disabled, skip it
+            if (!Settings.LatticeVettingByNumElements)
+            {
+                return true;
+            }
+
             return lattice.Length >= MIN_LATTICE_ELEMENTS;
         }
 

@@ -81,6 +81,7 @@
     <Compile Include="Exceptions\UnexpectedArrayDimensionsException.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\BlobLatticeElement.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\BlobMeta.cs" />
+    <Compile Include="ImageAnalysis\WordsearchDetection\LatticeConstructionSettings.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\WordsearchCandidateDetectionByLatticeConstruction.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\CandidateScorer.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\IWordsearchCandidatesDetectionAlgorithm.cs" />

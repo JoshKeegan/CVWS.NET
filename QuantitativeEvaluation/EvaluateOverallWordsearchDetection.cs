@@ -33,8 +33,9 @@ namespace QuantitativeEvaluation
         internal static readonly Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>
             CANDIDATE_DETECTION_ALGORITHMS = new Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>()
             {
-                { "Quadrilateral Detection", new WordsearchCandidateDetectionQuadrilateralRecognition() },
-                { "Lattice Construction", new WordsearchCandidateDetectionByLatticeConstruction() },
+                //{ "Quadrilateral Detection", new WordsearchCandidateDetectionQuadrilateralRecognition() },
+                { "Lattice Construction (default)", new WordsearchCandidateDetectionByLatticeConstruction() },
+                { "Lattice Construction (with angle)", new WordsearchCandidateDetectionByLatticeConstruction(new LatticeConstructionSettings() { ElementConnectionVettingByAngle = true }) },
             };
 
         internal static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm> CANDIDATE_VETTING_ALGORITHMS =

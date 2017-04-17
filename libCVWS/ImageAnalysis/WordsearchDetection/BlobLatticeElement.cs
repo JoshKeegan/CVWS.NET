@@ -47,13 +47,16 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
         public bool QueuedForSearch = false;
         public bool Processed = false;
 
+        public LatticeConstructionSettings Settings;
+
         #endregion
 
         #region Constructors
 
-        public BlobLatticeElement(BlobMeta blob)
+        public BlobLatticeElement(BlobMeta blob, LatticeConstructionSettings settings)
         {
             Blob = blob;
+            Settings = settings;
         }
 
         #endregion
@@ -157,6 +160,12 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         private bool vetConnectionDimensions(BlobLatticeElement proposedConnection)
         {
+            // If this vetting method is disabled, skip it
+            if (!Settings.ElementConnectionVettingByDimensions)
+            {
+                return true;
+            }
+
             // Get this blob's dimensions
             int thisWidth = Blob.Blob.Rectangle.Width;
             int thisHeight = Blob.Blob.Rectangle.Height;
@@ -179,6 +188,12 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         private bool vetConnectionAngle(BlobLatticeElement proposedConnection)
         {
+            // If this vetting method is disabled, skip it
+            if (!Settings.ElementConnectionVettingByAngle)
+            {
+                return true;
+            }
+
             // If there are no existing connections, we can't vet based on their angles
             if (ConnectedTo.Count == 0)
             {
