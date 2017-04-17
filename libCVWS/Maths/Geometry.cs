@@ -2,8 +2,8 @@
  * CVWS.NET: Computer Vision Wordsearch Solver .NET
  * libCVWS
  * Maths.Geometry class
- * By Josh Keegan 05/03/2014
- * Last Edit 08/03/2014
+ * Authors:
+ *  Josh Keegan 05/03/2014
  */
 
 using System;
@@ -177,6 +177,16 @@ namespace libCVWS.Maths
         public static bool IsQuadrilateral(IntPoint[] points)
         {
             return points.Length == 4;
+        }
+
+        public static double NormaliseAngle(double a)
+        {
+            a %= Math.PI * 2;
+            if (a < 0)
+            {
+                a += Math.PI * 2;
+            }
+            return a;
         }
     }
 }

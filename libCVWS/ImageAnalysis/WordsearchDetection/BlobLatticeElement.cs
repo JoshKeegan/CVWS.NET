@@ -11,6 +11,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using AForge;
+
+using libCVWS.BaseObjectExtensions;
+
 namespace libCVWS.ImageAnalysis.WordsearchDetection
 {
     internal class BlobLatticeElement
@@ -26,6 +30,9 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
         // connection distance criteria
         private const float CONNECTION_MAX_DISTANCE_MULTIPLIER = 1.25f;
         private const float CONNECTION_MIN_DISTANCE_MULTIPLIER = 0.8f;
+
+        // connection angle criteria
+        private const double MIN_ANGLE_BETWEEN_CONNECTIONS_TO_THE_SAME_ELEMENT = Math.PI / 4;
 
         #endregion
 
@@ -107,15 +114,13 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
         private bool vetConnection(BlobLatticeElement proposedConnection, out bool tooFar)
         {
             // TODO: Should one of the criteria be the number of connections the proposed connection already has?
-            return vetConnectionDistance(proposedConnection, out tooFar) && vetConnectionDimensions(proposedConnection);
+            return vetConnectionDistance(proposedConnection, out tooFar) && 
+                   vetConnectionAngle(proposedConnection) &&
+                   vetConnectionDimensions(proposedConnection);
         }
 
         private bool vetConnectionDistance(BlobLatticeElement proposedConnection, out bool tooFar)
         {
-            // DEBUG: DISABLE METHOD
-            //tooFar = false;
-            //return true;
-
             // If there are no existing connections, we can't vet based on the distance
             if (ConnectedTo.Count == 0)
             {
@@ -170,6 +175,40 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
             //  Only require one dimension to be in the allowed range
             return (targetWidth >= minWidth && targetWidth <= maxWidth) ||
                    (targetHeight >= minHeight && targetHeight <= maxHeight);
+        }
+
+        private bool vetConnectionAngle(BlobLatticeElement proposedConnection)
+        {
+            // If there are no existing connections, we can't vet based on their angles
+            if (ConnectedTo.Count == 0)
+            {
+                return true;
+            }
+
+            Point thisPoint = Blob.Blob.CenterOfGravity;
+
+            // Calculate the angle to the proposed connection
+            double proposedConnectionAngle = thisPoint.AngleTo(proposedConnection.Blob.Blob.CenterOfGravity);
+
+            // Check the angle to each existing connection, making sure the proposed one isn't too close 
+            //  to an existing connection
+            foreach (BlobLatticeElement le in ConnectedTo)
+            {
+                // Calculate angle of existing connection
+                double existingConnectionAngle = thisPoint.AngleTo(le.Blob.Blob.CenterOfGravity);
+
+                // Calculate difference between this connections angle and the proposed one
+                double angleBetweenConnections = Math.Abs(existingConnectionAngle - proposedConnectionAngle);
+
+                // Check if they're too close
+                if (angleBetweenConnections < MIN_ANGLE_BETWEEN_CONNECTIONS_TO_THE_SAME_ELEMENT)
+                {
+                    return false;
+                }
+            }
+
+            // If we get this far, then none of the angles were too close, so it's passed this stage of vetting
+            return true;
         }
 
         #endregion

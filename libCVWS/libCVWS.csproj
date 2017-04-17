@@ -76,6 +76,7 @@
     <Compile Include="BaseObjectExtensions\CollectionExtensionsInt.cs" />
     <Compile Include="BaseObjectExtensions\CollectionExtensionsUint.cs" />
     <Compile Include="BaseObjectExtensions\ImageExtensions.cs" />
+    <Compile Include="BaseObjectExtensions\PointExtensions.cs" />
     <Compile Include="Exceptions\InvalidImageDimensionsException.cs" />
     <Compile Include="Exceptions\UnexpectedArrayDimensionsException.cs" />
     <Compile Include="ImageAnalysis\WordsearchDetection\BlobLatticeElement.cs" />

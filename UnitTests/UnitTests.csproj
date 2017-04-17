@@ -63,6 +63,7 @@
     <Compile Include="libCVWS\BaseObjectExtensions\2dArrayExtensionsUintTests.cs" />
     <Compile Include="libCVWS\BaseObjectExtensions\ImageExtensionsTests.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="libCVWS\BaseObjectExtensions\PointExtensionsTests.cs" />
     <Compile Include="libCVWS\Maths\Statistics\StatsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="libCVWS\ImageAnalysis\WordsearchSegmentation\SegmentationTests.cs" />

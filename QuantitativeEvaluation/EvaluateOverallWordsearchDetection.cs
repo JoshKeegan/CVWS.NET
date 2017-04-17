@@ -38,6 +38,15 @@ namespace QuantitativeEvaluation
             };
 
         internal static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm> CANDIDATE_VETTING_ALGORITHMS =
+            new Dictionary<string, IWordsearchCandidateVettingAlgorithm>()
+            {
+                {
+                    "By Segmentation: Mean Dark Pixels",
+                    new WordsearchCandidateVettingBySegmentation(new SegmentByMeanDarkPixels())
+                }
+            };
+
+        /*internal static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm> CANDIDATE_VETTING_ALGORITHMS =
             // Generate dictionary for algorithms using segmentation
             EvaluateWordsearchSegmentation.SEGMENTATION_ALGORITHMS.SelectMany(
                     kvp =>
@@ -62,7 +71,7 @@ namespace QuantitativeEvaluation
 
                         return toRet;
                     })
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);*/
 
         #endregion
 
