@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AForgeAlgorithms\OptimisedGrahamConvexHull.cs" />
     <Compile Include="BaseObjectExtensions\2dArrayExtensions.cs" />
     <Compile Include="BaseObjectExtensions\2dArrayExtensionsUint.cs" />
     <Compile Include="BaseObjectExtensions\BitmapExtensions.cs" />

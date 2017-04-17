@@ -16,7 +16,7 @@ using AForge;
 using AForge.Imaging;
 using AForge.Imaging.Filters;
 using AForge.Math.Geometry;
-
+using libCVWS.AForgeAlgorithms;
 using libCVWS.Imaging;
 using libCVWS.IntermediateImageLogging;
 
@@ -201,7 +201,7 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
                 List<IntPoint> points = lattice.SelectMany(le => blobCounter.GetBlobsEdgePoints(le.Blob.Blob)).ToList();
 
                 // Calculate the convex hull for this lattice using a Graham Scan
-                GrahamConvexHull grahamScan = new GrahamConvexHull();
+                IConvexHullAlgorithm grahamScan = new OptimisedGrahamConvexHull();
                 List<IntPoint> convexHull = grahamScan.FindHull(points);
 
                 // Check to see if it's quadrilateral
