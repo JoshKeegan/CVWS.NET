@@ -19,6 +19,13 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
         #region Blob Lattice Connection Vetting
 
         /// <summary>
+        /// Whether to vet proposed new connections between elements by checking whether the proposed
+        /// element already has the target number of connections.
+        /// If enabled, no element can possibly have more than the target number of connections.
+        /// </summary>
+        public bool ElementsConnectionVettingByProposedAlreadySaturated = false;
+
+        /// <summary>
         /// Whether to vet proposed new connections between elements by checking the angle
         /// between the two elements isn't too similar to the angle of another existing connection.
         /// Relies on the fact that each connected character in a wordsearch is 90 degrees apart

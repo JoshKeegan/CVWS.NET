@@ -116,10 +116,25 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
         private bool vetConnection(BlobLatticeElement proposedConnection, out bool tooFar)
         {
-            // TODO: Should one of the criteria be the number of connections the proposed connection already has?
-            return vetConnectionDistance(proposedConnection, out tooFar) && 
+            // Default (if we don't run vetConnectionDistance) should be to assume we haven't gone to far, so that
+            //  we keep looking
+            tooFar = false;
+
+            return vetConnectionProposedAlreadySaturated(proposedConnection) &&
+                   vetConnectionDistance(proposedConnection, out tooFar) && 
                    vetConnectionAngle(proposedConnection) &&
                    vetConnectionDimensions(proposedConnection);
+        }
+
+        private bool vetConnectionProposedAlreadySaturated(BlobLatticeElement proposedConnection)
+        {
+            // If this vetting method is disabled, skip it
+            if (!Settings.ElementsConnectionVettingByProposedAlreadySaturated)
+            {
+                return true;
+            }
+
+            return proposedConnection.ConnectedTo.Count < SEARCH_FOR_NUM_LATTICE_CONNECTIONS;
         }
 
         private bool vetConnectionDistance(BlobLatticeElement proposedConnection, out bool tooFar)
