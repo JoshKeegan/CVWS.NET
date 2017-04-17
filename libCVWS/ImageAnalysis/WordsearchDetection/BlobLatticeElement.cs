@@ -222,7 +222,8 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
             }
 
             // If there are existing connections from the proposed element, check them
-            if (proposedConnection.ConnectedTo.Count > 0)
+            // Disabled for consistency with other vetting & doesn't appear to be helpful. Perhaps make a setting flag for this?
+            /*if (proposedConnection.ConnectedTo.Count > 0)
             {
                 // The point at the centre of these connections (the proposed one)
                 Point currentPoint = proposedConnection.Blob.Blob.CenterOfGravity;
@@ -246,7 +247,7 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
                         return false;
                     }
                 }
-            }
+            }*/
 
             // If we get this far, then none of the angles were too close, so it's passed this stage of vetting
             return true;
