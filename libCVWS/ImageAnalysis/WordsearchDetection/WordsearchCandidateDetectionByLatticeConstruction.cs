@@ -18,6 +18,7 @@ using AForge.Imaging.Filters;
 using AForge.Math.Geometry;
 
 using libCVWS.AForgeAlgorithms;
+using libCVWS.BaseObjectExtensions;
 using libCVWS.Imaging;
 using libCVWS.IntermediateImageLogging;
 
@@ -154,6 +155,13 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
                 using (Bitmap lowRes = resizeFilter.Apply(img))
                 using (Bitmap thresholdedLowRes = FilterCombinations.AdaptiveThreshold(lowRes))
                 {
+                    // Log the low res images
+                    if (imageLog != null)
+                    {
+                        imageLog.Log(lowRes.DeepCopy(), "Candidate Detection: Low-res image");
+                        imageLog.Log(thresholdedLowRes.DeepCopy(), "Candidate Detection: Low-res thresholded");
+                    }
+
                     // Blob recognition requires blobs to be white & background to be black
                     Invert invertFilter = new Invert();
                     invertFilter.ApplyInPlace(thresholdedLowRes);
@@ -228,7 +236,7 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 
                         Bitmap remainingBlobsVis = DrawBlobRecognition.DrawSpecifiedBlobs(blobCounter, img.Width,
                             img.Height, blobArr.Select(b => b.ID));
-                        imageLog.Log(remainingBlobsVis, "Blobs remaining after very noisy ones removed");
+                        imageLog.Log(remainingBlobsVis, "Candidate Detection: Blobs remaining after very noisy ones removed");
                     }
                 }
             }
