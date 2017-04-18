@@ -16,6 +16,19 @@ namespace libCVWS.ImageAnalysis.WordsearchDetection
 {
     public class LatticeConstructionSettings
     {
+        #region Blob Recognition
+
+        /// <summary>
+        /// Whether to discard very noisy regions of the image.
+        /// This is done by resizing the image to a very low resolution & performing blob recognition on it.
+        /// Very noisy areas of the high-res image should blur together into blobs in the low-res one.
+        /// Any large blobs in the low res image have blobs in the corresponding area of the full-res image
+        /// discarded.
+        /// </summary>
+        public bool RemoveVeryNoisyBlobs = true;
+
+        #endregion
+
         #region Blob Lattice Connection Vetting
 
         /// <summary>

@@ -80,10 +80,10 @@ namespace libCVWS.Imaging
             //  This is necessary because not all blobs in the blob counter will be in this lattice
             //  and we want the index because we want to use as much of the colour pallette as possible
             //  before re-using a colour
-            Dictionary<int, int> blobsToDraw = new Dictionary<int, int>();
+            Dictionary<int, Color> blobsToDraw = new Dictionary<int, Color>();
             for (int i = 0; i < lattice.Length; i++)
             {
-                blobsToDraw.Add(lattice[i].Blob.Blob.ID, i);
+                blobsToDraw.Add(lattice[i].Blob.Blob.ID, BLOB_COLOURS[i % BLOB_COLOURS.Length]);
             }
 
             // Lock image for read write so we can alter it
@@ -91,31 +91,7 @@ namespace libCVWS.Imaging
                 ImageLockMode.ReadWrite, img.PixelFormat);
             UnmanagedImage unmanaged = new UnmanagedImage(imgData);
 
-            int extraBytesPerRow = unmanaged.Stride - (img.Width * 3);
-
-            unsafe
-            {
-                byte* ptr = (byte*) unmanaged.ImageData.ToPointer();
-
-                // for each row
-                for (int y = 0, p = 0; y < img.Height; y++)
-                {
-                    // for each pixel
-                    for (int x = 0; x < img.Width; x++, ptr += 3, p++)
-                    {
-                        if (labels[p] != 0 && blobsToDraw.ContainsKey(labels[p]))
-                        {
-                            Color c = BLOB_COLOURS[blobsToDraw[labels[p]] % BLOB_COLOURS.Length];
-
-                            // Uses AForge.NET defined constants to set each byte of the colour
-                            ptr[RGB.R] = c.R;
-                            ptr[RGB.G] = c.G;
-                            ptr[RGB.B] = c.B;
-                        }
-                    }
-                    ptr += extraBytesPerRow;
-                }
-            }
+            DrawBlobRecognition.drawInPlace(unmanaged, blobCounter, blobsToDraw);
 
             // Draw connections between lattice elements
             //  Note that each line will be drawn twice. This could be avoided by tracking which connections we've drawn if this ever needed optimising

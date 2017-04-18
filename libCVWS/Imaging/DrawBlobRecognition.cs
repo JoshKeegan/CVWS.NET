@@ -54,7 +54,7 @@ namespace libCVWS.Imaging
             return imgOut;
         }
 
-        public static unsafe void DrawInPlace(Bitmap img, BlobCounter blobCounter)
+        public static void DrawInPlace(Bitmap img, BlobCounter blobCounter)
         {
             // Labelling requires an RGB image
             if (img.PixelFormat == PixelFormat.Format8bppIndexed)
@@ -67,23 +67,85 @@ namespace libCVWS.Imaging
                 ImageLockMode.ReadWrite, img.PixelFormat);
             UnmanagedImage unmanaged = new UnmanagedImage(imgData);
 
+            drawInPlace(unmanaged, blobCounter);
+
+            // Unlock the image data again
+            img.UnlockBits(imgData);
+        }
+
+        public static Bitmap DrawSpecifiedBlobs(BlobCounter blobCounter, int width, int height, IEnumerable<int> blobIds)
+        {
+            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            DrawSpecifiedBlobsInPlace(bitmap, blobCounter, blobIds);
+            return bitmap;
+        }
+
+        public static void DrawSpecifiedBlobsInPlace(Bitmap img, BlobCounter blobCounter, IEnumerable<int> blobIds)
+        {
+            // Labelling requires an RGB image
+            if (img.PixelFormat == PixelFormat.Format8bppIndexed)
+            {
+                throw new ArgumentException("Image pixel format must support colours", nameof(img));
+            }
+
+            // Draw the specified blobs, using all colours
+            Dictionary<int, Color> blobsToDraw = new Dictionary<int, Color>();
+            int i = 0;
+            foreach (int blobId in blobIds)
+            {
+                blobsToDraw.Add(blobId, DrawDefaults.MULTIPLE_COLOURS[i % DrawDefaults.MULTIPLE_COLOURS.Length]);
+                i++;
+            }
+
+            // Lock image for read write so we can alter it
+            BitmapData imgData = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.ReadWrite, img.PixelFormat);
+            UnmanagedImage unmanaged = new UnmanagedImage(imgData);
+
+            drawInPlace(unmanaged, blobCounter, blobsToDraw);
+
+            // Unlock the image data again
+            img.UnlockBits(imgData);
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal static void drawInPlace(UnmanagedImage unmanaged, BlobCounter blobCounter)
+        {
+            // Draw all blobs, using all colours
+            Blob[] blobs = blobCounter.GetObjectsInformation();
+            Dictionary<int, Color> blobsToDraw = new Dictionary<int, Color>();
+            for (int i = 0; i < blobs.Length; i++)
+            {
+                blobsToDraw.Add(blobs[i].ID, DrawDefaults.MULTIPLE_COLOURS[i % DrawDefaults.MULTIPLE_COLOURS.Length]);
+            }
+
+            drawInPlace(unmanaged, blobCounter, blobsToDraw);
+        }
+
+        internal static unsafe void drawInPlace(UnmanagedImage unmanaged, BlobCounter blobCounter,
+            IDictionary<int, Color> blobsToDraw)
+        {
             // Get object labels. Each blob get a unique label & this is an array for each pixel
             //  in the image with a label saying which blob it belongs to, or 0 if no blob.
             int[] labels = blobCounter.ObjectLabels;
 
-            int extraBytesPerRow = unmanaged.Stride - (img.Width * 3);
+            int extraBytesPerCol = unmanaged.Stride - (unmanaged.Width * 3);
 
             byte* ptr = (byte*) unmanaged.ImageData.ToPointer();
 
-            // for each row
-            for (int y = 0, p = 0; y < img.Height; y++)
+            // for each col
+            for (int y = 0, p = 0; y < unmanaged.Height; y++)
             {
                 // for each pixel
-                for (int x = 0; x < img.Width; x++, ptr += 3, p++)
+                for (int x = 0; x < unmanaged.Width; x++, ptr += 3, p++)
                 {
-                    if (labels[p] != 0)
+                    int blobId = labels[p];
+                    if (blobId != 0 && blobsToDraw.ContainsKey(blobId))
                     {
-                        Color c = DrawDefaults.MULTIPLE_COLOURS[(labels[p] - 1) % DrawDefaults.MULTIPLE_COLOURS.Length];
+                        Color c = blobsToDraw[blobId];
 
                         // Uses AForge.NET defined constants to set each byte of the colour
                         ptr[RGB.R] = c.R;
@@ -91,11 +153,8 @@ namespace libCVWS.Imaging
                         ptr[RGB.B] = c.B;
                     }
                 }
-                ptr += extraBytesPerRow;
+                ptr += extraBytesPerCol;
             }
-
-            // Unlock the image data again
-            img.UnlockBits(imgData);
         }
 
         #endregion
