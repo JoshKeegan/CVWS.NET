@@ -67,6 +67,7 @@
     <Compile Include="EvaluateNeuralNetworks.cs" />
     <Compile Include="EvaluateSegmentationToSolver.cs" />
     <Compile Include="EvaluateOverallWordsearchDetection.cs" />
+    <Compile Include="EvaluateWordsearchCandidatesDetection.cs" />
     <Compile Include="EvaluateWordsearchRotationCorrection.cs" />
     <Compile Include="EvaluateWordsearchSegmentation.cs" />
     <Compile Include="Evaluators\Evaluator.cs" />

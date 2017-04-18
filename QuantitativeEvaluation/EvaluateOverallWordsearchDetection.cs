@@ -33,21 +33,11 @@ namespace QuantitativeEvaluation
         internal static readonly Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>
             CANDIDATE_DETECTION_ALGORITHMS = new Dictionary<string, IWordsearchCandidatesDetectionAlgorithm>()
             {
-                //{ "Quadrilateral Detection", new WordsearchCandidateDetectionQuadrilateralRecognition() },
+                { "Quadrilateral Detection", new WordsearchCandidateDetectionQuadrilateralRecognition() },
                 { "Lattice Construction (default)", new WordsearchCandidateDetectionByLatticeConstruction() },
-                { "Lattice Construction (with angle)", new WordsearchCandidateDetectionByLatticeConstruction(new LatticeConstructionSettings() { ElementConnectionVettingByAngle = true }) },
             };
 
         internal static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm> CANDIDATE_VETTING_ALGORITHMS =
-            new Dictionary<string, IWordsearchCandidateVettingAlgorithm>()
-            {
-                {
-                    "By Segmentation: Mean Dark Pixels",
-                    new WordsearchCandidateVettingBySegmentation(new SegmentByMeanDarkPixels())
-                }
-            };
-
-        /*internal static readonly Dictionary<string, IWordsearchCandidateVettingAlgorithm> CANDIDATE_VETTING_ALGORITHMS =
             // Generate dictionary for algorithms using segmentation
             EvaluateWordsearchSegmentation.SEGMENTATION_ALGORITHMS.SelectMany(
                     kvp =>
@@ -72,7 +62,7 @@ namespace QuantitativeEvaluation
 
                         return toRet;
                     })
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);*/
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
         #endregion
 
@@ -80,7 +70,7 @@ namespace QuantitativeEvaluation
         //  (as some images may contain more than one wordsearch)
         internal static Dictionary<string, double> EvaluateReturnsWordsearch(List<Image> imagesIn)
         {
-            DefaultLog.Info("Starting to Evaluate Overall Wordsearch Detection By Quadrilateral Detection and different methods of Wordsearch Segmentation");
+            DefaultLog.Info("Starting to Evaluate Overall Wordsearch Detection");
 
             //Remove any images that contain more than one wordsearch (in order to prevent their from being an unfair increased chance of finding one of them for that image)
             // TODO: Should we keep these & expect them to find both?
@@ -128,7 +118,7 @@ namespace QuantitativeEvaluation
                 image.DeregisterInterestInBitmap();
             }
 
-            DefaultLog.Info("Completed evaluation of Wordsearch Detection by Quadrilateral detection and different methods of Wordsearch Segmentation");
+            DefaultLog.Info("Completed evaluation of Overall Wordsearch Detection");
 
             return scores;        
         }

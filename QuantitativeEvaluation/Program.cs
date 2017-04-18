@@ -42,7 +42,8 @@ namespace QuantitativeEvaluation
         private const bool EVALUATE_NEURAL_NETWORKS = false;
         private const bool EVALUATE_WORDSEARCH_ROTATION_CORRECTION = false;
         private const bool EVALUATE_WORDSEARCH_SEGMENTATION = false;
-        private const bool EVALUATE_OVERALL_WORDSEARCH_DETECTION = true;
+        private const bool EVALUATE_WORDSEARCH_CANDIDATES_DETECTION = true;
+        private const bool EVALUATE_OVERALL_WORDSEARCH_DETECTION = false;
         private const bool EVALUATE_FULL_SYSTEM = false;
         private const bool EVALUATE_STAGES_SEGMENTATION_TO_SOLVER = false;
 
@@ -217,6 +218,27 @@ namespace QuantitativeEvaluation
                 printScores(scoresByNumRowsCols);
 
                 DefaultLog.Info("Wordsearch Segmentation Evaluation complete");
+            }
+
+            // If we're evaluating Wordsearch Candidates Detection
+            if (EVALUATE_WORDSEARCH_CANDIDATES_DETECTION)
+            {
+                /*
+                 * Note that here all Images are used for evaluation (essentially they are all in the evaluation data set)
+                 * This is because the training & cross validation data haven't been used to develop the algorithms, meaning
+                 * that they are fresh data and can be used for evaluation
+                 */
+
+                DefaultLog.Info("Starting to evaluate Wordsearch Candidates Detection");
+
+                Dictionary<string, double> scores =
+                    EvaluateWordsearchCandidatesDetection.EvaluateDetectsWordsearch(ImageMarkupDatabase.GetImages());
+
+                // Print out scores
+                DefaultLog.Info("Scores for Evaluation based on whether any true positive of the wordsearch in each image was returned");
+                printScores(scores);
+
+                DefaultLog.Info("Wordsearch Candidates Detection Evaluation Complete");
             }
 
             //If we're evaluating overall Wordsearch Detection (Candidates Detection & Candidate Vetting combined)
