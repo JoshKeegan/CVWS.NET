@@ -7,7 +7,7 @@ githubUser: JoshKeegan
 githubRepo: CVWS.NET
 
 # Analytics
-analyticsKey: UA-53659461-2
+gtmKey: G-G7NN4570XR
 
 # Jekyll Settings
 markdown: redcarpet
